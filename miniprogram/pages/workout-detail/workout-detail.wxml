@@ -1,0 +1,27 @@
+<nav-bar mode="back"></nav-bar>
+<view class="page page-pad-bar" wx:if="{{w}}">
+  <view wx:if="{{w.name}}" class="sub">{{w.name}}</view>
+  <view class="row"><text class="h1">{{w.date}}</text><text class="tag tag-gray" style="margin-left:16rpx">已完成</text></view>
+  <view class="sub" style="margin-top:8rpx">{{w.time}}</view>
+  <view class="row stats"><view wx:for="{{w.stats}}" wx:key="k" class="stat"><view class="sv num">{{item.v}}</view><view class="cap">{{item.k}}</view></view></view>
+  <view wx:if="{{detailMissing}}" class="sub danger">训练详情丢失</view>
+  <view wx:for="{{w.exercises}}" wx:for-item="ex" wx:key="id" class="section">
+    <view class="row" bindtap="openEx" data-eid="{{ex.exerciseId}}" data-unknown="{{ex.unknown}}">
+      <text class="h2">{{ex.name}}</text>
+      <text wx:if="{{ex.unknown}}" class="tag tag-gray" style="margin-left:12rpx">未知动作</text>
+      <text wx:elif="{{ex.part}}" class="tag tag-line" style="margin-left:12rpx">{{ex.part}}</text>
+    </view>
+    <view wx:if="{{ex.note}}" class="sub" style="margin-top:8rpx">{{ex.note}}</view>
+    <view class="row th cap hairline-b"><text class="c1">组</text><text class="c2">重量 kg</text><text class="c2">次数</text><text class="c3">容量</text></view>
+    <view wx:for="{{ex.sets}}" wx:for-item="s" wx:key="id" class="row tr hairline-b {{s.done?'':'faded'}}">
+      <text class="c1 {{s.warm?'warm':''}}">{{s.no}}</text><text class="c2 num">{{s.w}}</text><text class="c2 num">{{s.r}}</text><text class="c3 num sub">{{s.vol}}</text>
+    </view>
+  </view>
+  <view wx:if="{{w.note}}" class="section"><view class="cap">备注</view><view style="margin-top:8rpx">{{w.note}}</view></view>
+</view>
+<empty-state wx:if="{{missing}}" title="训练不存在或已删除"></empty-state>
+<view class="bar" wx:if="{{w}}">
+  <btn type="danger" size="bar" style="width:200rpx" bind:press="remove">删除</btn><view class="gap"></view>
+  <btn type="primary" size="bar" style="flex:1" bind:press="edit">编辑训练</btn>
+</view>
+<view class="bar" wx:if="{{missing}}"><btn type="danger" size="bar" style="flex:1" bind:press="remove">删除这条训练</btn></view>

@@ -1,0 +1,62 @@
+<nav-bar mode="tab" title="训练"></nav-bar>
+<view class="page page-pad-tab">
+  <month-calendar year="{{year}}" month="{{month}}" selected="{{selected}}" today="{{today}}" marks="{{marks}}" info="{{info}}" view="{{calView}}" rich legend collapsible bind:select="onSelect" bind:shift="onShift" bind:today="onToday" bind:toggle="onToggle"></month-calendar>
+  <view class="hairline-b"></view>
+
+  <view wx:if="{{draft}}" class="banner"><text class="sub" style="color:var(--c-ink)">{{draft.text}}</text><text class="accent hit" style="font-weight:600;padding-left:24rpx" bindtap="continueDraft">继续</text></view>
+
+  <view class="day-head row">
+    <text class="h2">{{sel.label}}</text>
+    <text wx:if="{{sel.isTraining}}" class="tag tag-gray" style="margin-left:16rpx">已完成</text>
+    <text wx:elif="{{sel.isRest}}" class="tag tag-rest" style="margin-left:16rpx">休息日</text>
+  </view>
+
+  <!-- 所选日汇总卡：大号关键数 -->
+  <view wx:if="{{cards.length}}" class="sum">
+    <view wx:if="{{day.totalMin}}" class="sum-total row between">
+      <view class="sum-k">总时长<text wx:if="{{day.totalNote}}" class="cap">（{{day.totalNote}}）</text></view>
+      <view class="row"><text class="sum-big num">{{day.totalMin}}</text><text class="sum-unit">分钟</text></view>
+    </view>
+    <view wx:if="{{day.strength}}" class="sum-block">
+      <view class="row"><text class="tag tag-solid">力量</text><text class="sum-title ell">{{day.strength.parts}}</text></view>
+      <view class="stats row"><view wx:for="{{day.strength.stats}}" wx:for-item="s" wx:key="k" class="stat"><view class="sv num">{{s.v}}</view><view class="cap">{{s.k}}</view></view></view>
+    </view>
+    <view wx:if="{{day.aerobic}}" class="sum-block">
+      <view class="row"><text class="tag tag-aero">有氧</text><text class="sum-title ell">{{day.aerobic.names}}</text></view>
+      <view class="stats row"><view wx:for="{{day.aerobic.stats}}" wx:for-item="s" wx:key="k" class="stat"><view class="sv num">{{s.v}}</view><view class="cap">{{s.k}}</view></view></view>
+    </view>
+  </view>
+
+  <view wx:if="{{cards.length}}" class="rec-title cap">当日记录 · {{cards.length}}</view>
+  <view wx:for="{{cards}}" wx:key="id" class="rec">
+    <card tappable bind:press="openCard" data-id="{{item.id}}" data-kind="{{item.kind}}">
+      <view class="row between">
+        <view class="row flex1" style="min-width:0">
+          <text class="tag {{item.kind==='aerobic'?'tag-aero':'tag-gray'}}" style="margin-right:12rpx;flex-shrink:0">{{item.kind==='aerobic'?'有氧':'力量'}}</text>
+          <text class="rec-name ell">{{item.title}}</text>
+        </view>
+        <text wx:if="{{item.duration}}" class="cap" style="flex-shrink:0;margin-left:12rpx">{{item.duration}} 分钟</text>
+      </view>
+      <view class="sub num rec-meta">{{item.meta}}</view>
+      <block wx:if="{{item.kind!=='aerobic'}}">
+        <view wx:if="{{item.detailMissing}}" class="cap" style="padding-top:12rpx">训练详情丢失</view>
+        <view wx:for="{{item.top}}" wx:for-item="t" wx:key="name" class="row between ex-line"><text class="flex1 ell">{{t.name}}</text><text class="sub num">{{t.text}}</text></view>
+        <view wx:if="{{item.more}}" class="cap" style="padding-top:8rpx">等 {{item.more + 3}} 个动作</view>
+      </block>
+    </card>
+  </view>
+
+  <block wx:if="{{!cards.length}}">
+    <empty-state wx:if="{{sel.kind==='future'}}" compact title="还没到这一天"></empty-state>
+    <empty-state wx:elif="{{sel.kind==='today'}}" compact title="{{monthEmpty?'这个月还没有训练':'今天还没有训练'}}" action="开始训练" bind:action="pickNew"></empty-state>
+    <block wx:elif="{{sel.isRest}}">
+      <empty-state compact title="这天是休息日" sub="休息也是训练的一部分" action="补录训练" bind:action="pickNew"></empty-state>
+      <view class="unrest"><text class="sub hit" bindtap="unmarkRest">取消休息日</text></view>
+    </block>
+    <empty-state wx:else compact title="这天没有训练" sub="可以补录力量或有氧，或标记为休息日" action="补录 / 标记休息" bind:action="pickPast"></empty-state>
+  </block>
+
+  <!-- 已有卡片时提供快捷「新建有氧」 -->
+  <view wx:if="{{cards.length && sel.kind!=='future' && !readOnly}}" class="aero-link" bindtap="newAerobic"><text class="sub accent">+ 新建有氧</text></view>
+</view>
+<view class="fab {{sel.kind==='future'||readOnly?'disabled':''}}" bindtap="pickNew">+</view>

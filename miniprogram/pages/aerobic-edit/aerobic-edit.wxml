@@ -1,0 +1,45 @@
+<nav-bar mode="close" title="{{id?'编辑有氧':'新建有氧'}}" custom-back bind:back="onBack"></nav-bar>
+<view class="page page-pad-bar">
+  <view class="field hairline-b"><text class="field-label">日期</text><text class="flex1" style="text-align:right;color:var(--c-text-2)">{{dateLabel}}</text></view>
+
+  <picker mode="selector" range="{{types}}" range-key="name" value="{{typeIndex}}" bindchange="onType">
+    <view class="field hairline-b"><text class="field-label">类型<text class="req">*</text></text><text class="flex1" style="text-align:right">{{types[typeIndex].name}} ›</text></view>
+  </picker>
+
+  <block wx:if="{{isCustom}}">
+    <view class="field hairline-b {{errors.activityName?'err':''}}">
+      <text class="field-label">名称<text class="req">*</text></text>
+      <input class="flex1" style="text-align:right" maxlength="20" value="{{form.activityName}}" placeholder="如：战绳" bindinput="onName"/>
+    </view>
+    <view wx:if="{{errors.activityName}}" class="err-text">{{errors.activityName}}</view>
+  </block>
+
+  <view class="section">
+    <view class="cap">快捷时长</view>
+    <view class="row" style="margin-top:16rpx;flex-wrap:wrap">
+      <view wx:for="{{quick}}" wx:key="*this" class="chip {{form.durationMin==item?'on':''}}" style="margin-bottom:12rpx" data-d="{{item}}" bindtap="onQuick">{{item}} 分</view>
+    </view>
+  </view>
+
+  <view class="field hairline-b {{errors.durationMin?'err':''}}">
+    <text class="field-label">时长<text class="req">*</text></text>
+    <input class="field-input num" type="number" value="{{form.durationMin}}" placeholder="分钟" bindinput="onDuration" bindblur="onDurationBlur"/>
+    <text class="field-unit">分钟</text>
+  </view>
+  <view wx:if="{{errors.durationMin}}" class="err-text">{{errors.durationMin}}</view>
+
+  <view class="field hairline-b {{errors.estimatedKcal?'err':''}}">
+    <text class="field-label">热量</text>
+    <input class="field-input num" type="number" value="{{form.estimatedKcal}}" placeholder="kcal" bindinput="onKcal" bindblur="onKcalBlur"/>
+    <text class="field-unit">kcal</text>
+  </view>
+  <view wx:if="{{errors.estimatedKcal}}" class="err-text">{{errors.estimatedKcal}}</view>
+  <view class="hint">{{kcalHint}}</view>
+  <view class="hint muted">{{refNote}} · 可手改热量</view>
+
+  <view class="field hairline-b" style="margin-top:16rpx">
+    <text class="field-label">备注</text>
+    <input class="flex1" style="text-align:right" maxlength="200" value="{{form.note}}" placeholder="选填" bindinput="onNote"/>
+  </view>
+</view>
+<view class="bar"><btn size="bar" style="flex:1" loading="{{saving}}" bind:press="save">保存</btn></view>

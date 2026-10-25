@@ -1,0 +1,11 @@
+:host { display: block; }
+.btn { display: flex; align-items: center; justify-content: center; border-radius: var(--r-control); font-size: 32rpx; font-weight: 600; box-sizing: border-box; padding: 0 24rpx; }
+.inline { display: inline-flex; }
+.btn-page { height: 96rpx; } .btn-bar { height: 112rpx; } .btn-ghost.btn-page { height: 80rpx; }
+.btn-primary { background: var(--c-ink); color: var(--c-white); }
+.btn-secondary { background: var(--c-white); color: var(--c-ink); border: 1px solid var(--c-ink); }
+.btn-ghost { background: var(--c-bg-2); color: var(--c-ink); font-weight: 400; }
+.btn-danger { background: var(--c-white); color: var(--c-danger); border: 1px solid var(--c-line); }
+.btn-text { background: transparent; color: var(--c-ink); min-height: 88rpx; height: auto; padding: 0; }
+.is-disabled { background: var(--c-disabled) !important; color: var(--c-white) !important; border-color: var(--c-disabled) !important; }
+.pressed { opacity: .7; }

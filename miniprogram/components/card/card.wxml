@@ -1,0 +1,1 @@
+<view class="card {{pad?'pad':''}}" hover-class="{{tappable?'pressed':''}}" bindtap="onTap"><slot></slot></view>

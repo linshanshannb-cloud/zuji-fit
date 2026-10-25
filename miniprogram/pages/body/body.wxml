@@ -1,0 +1,44 @@
+<nav-bar mode="tab" title="身体数据"></nav-bar>
+<view class="page page-pad-tab">
+  <view class="seg"><view class="seg-item {{view==='chart'?'on':''}}" bindtap="setView" data-v="chart">图表</view><view class="seg-item {{view==='calendar'?'on':''}}" bindtap="setView" data-v="calendar">日历</view></view>
+
+  <block wx:if="{{view==='chart'}}">
+    <scroll-view scroll-x class="chips"><view wx:for="{{metrics}}" wx:key="key" class="chip {{field===item.key?'on':''}}" bindtap="setField" data-k="{{item.key}}">{{item.label}}</view></scroll-view>
+    <view class="row between" style="align-items:flex-end">
+      <view wx:if="{{cur}}">
+        <view class="row" style="align-items:baseline"><text class="display num">{{cur.value}}</text><text class="sub" style="margin-left:8rpx">{{unit}}</text></view>
+        <view class="cap">{{cur.date}}<text wx:if="{{cur.delta}}"> · 较上次 {{cur.delta}} {{unit}}</text></view>
+      </view>
+    </view>
+    <view class="row range-row"><view class="seg range-seg"><view wx:for="{{ranges}}" wx:key="label" class="seg-item {{range===item.v?'on':''}}" bindtap="setRange" data-v="{{item.v}}">{{item.label}}</view></view></view>
+    <view class="chart-box {{chartMode==='single'?'compact':''}}">
+      <line-chart wx:if="{{chartMode==='line'||chartMode==='single-chart'}}" series="{{series}}" unit="{{unit}}" height="{{360}}"></line-chart>
+      <view wx:if="{{chartMode==='single-chart'}}" class="cap" style="text-align:center;padding-top:8rpx">再记录一次就能看到趋势</view>
+      <view wx:if="{{chartMode==='single'}}" class="single-hint cap">只有 1 条{{label}}记录，再记录一次就能看到趋势</view>
+      <empty-state wx:if="{{empty}}" compact title="{{empty.title}}" action="{{empty.action}}" bind:action="onEmpty"></empty-state>
+    </view>
+    <block wx:if="{{rows.length}}">
+      <view class="row between section"><text class="h2">记录</text><text wx:if="{{rows.length>3}}" class="sub hit" style="padding-left:24rpx" bindtap="toggleAll">{{showAll?'收起':'全部 ›'}}</text></view>
+      <block wx:for="{{rows}}" wx:key="id"><view wx:if="{{showAll || index < 3}}" class="li hairline-b" bindtap="edit" bindlongpress="removeRow" data-id="{{item.id}}">
+        <text class="flex1">{{item.date}}</text><text class="num" style="font-weight:600">{{item.value}} {{unit}}</text>
+        <text class="cap num delta">{{item.delta}}</text><text class="chev">›</text>
+      </view></block>
+      <view class="cap" style="padding-top:12rpx">长按记录可删除</view>
+    </block>
+  </block>
+
+  <block wx:else>
+    <month-calendar year="{{year}}" month="{{month}}" selected="{{selected}}" today="{{today}}" marks="{{marks}}" variant="value" bind:select="onSelect" bind:shift="onShift" bind:today="onToday"></month-calendar>
+    <view class="section">
+      <card wx:if="{{selCard}}">
+        <view class="row between"><text class="h2">{{selLabel}}</text><text class="sub hit" style="padding-left:24rpx" bindtap="edit" data-id="{{selCard.id}}">编辑</text></view>
+        <view class="row" style="margin-top:24rpx"><view wx:for="{{selCard.cells}}" wx:key="k" class="flex1"><view class="cap">{{item.k}}</view><view class="num cv">{{item.v}}<text class="cap"> {{item.u}}</text></view></view></view>
+        <view wx:if="{{selCard.note}}" class="sub" style="margin-top:16rpx">{{selCard.note}}</view>
+      </card>
+      <empty-state wx:elif="{{selKind==='future'}}" compact title="还没到这一天"></empty-state>
+      <empty-state wx:elif="{{selKind==='today'}}" compact title="这天没有记录" action="记录今天" bind:action="addFor"></empty-state>
+      <empty-state wx:else compact title="这天没有记录" action="补录这天" bind:action="addFor"></empty-state>
+    </view>
+  </block>
+</view>
+<view class="fab {{readOnly?'disabled':''}}" bindtap="add">+</view>

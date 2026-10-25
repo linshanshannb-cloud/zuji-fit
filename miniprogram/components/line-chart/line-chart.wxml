@@ -1,0 +1,4 @@
+<view class="wrap" style="height:{{height}}rpx">
+  <canvas type="2d" id="c" class="c" style="height:{{height}}rpx" bindtouchstart="onTouch" bindtouchmove="onTouch" bindtouchend="onEnd"></canvas>
+  <view wx:if="{{bubble}}" class="bubble" style="left:{{bubble.left}}px; top:{{bubble.top}}px">{{bubble.text}}</view>
+</view>

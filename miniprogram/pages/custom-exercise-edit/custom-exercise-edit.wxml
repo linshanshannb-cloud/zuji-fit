@@ -1,0 +1,29 @@
+<nav-bar mode="close" title="{{id?'编辑自定义动作':'新建自定义动作'}}" custom-back bind:back="onBack"></nav-bar>
+<view class="page page-pad-bar">
+  <view class="field hairline-b {{errors.nameZh?'err':''}}">
+    <text class="field-label">名称<text class="req">*</text></text>
+    <input class="flex1" style="text-align:right" maxlength="30" value="{{form.nameZh}}" placeholder="如：弹力带划船" bindinput="onName" focus="{{focus}}"/>
+  </view>
+  <view wx:if="{{errors.nameZh}}" class="err-text">{{errors.nameZh}}</view>
+
+  <view class="section">
+    <view class="field-label">训练部位<text class="req">*</text></view>
+    <view class="part-grid">
+      <view wx:for="{{parts}}" wx:key="key" class="chip {{partKey===item.key?'on':''}}" data-k="{{item.key}}" bindtap="onPart">{{item.zh}}</view>
+    </view>
+    <view wx:if="{{errors.bodyPart}}" class="err-text" style="text-align:left">{{errors.bodyPart}}</view>
+  </view>
+
+  <view class="section">
+    <view class="field-label">器械</view>
+    <view class="part-grid">
+      <view wx:for="{{equipments}}" wx:key="value" class="chip {{form.equipment===item.value?'on':''}}" data-v="{{item.value}}" bindtap="onEquip">{{item.zh}}</view>
+    </view>
+    <view class="hint">选填，默认自重；保存后可在动作库 / 力量训练里选用</view>
+  </view>
+
+  <view wx:if="{{id}}" class="del-wrap">
+    <text class="danger hit" bindtap="onDelete">删除此动作</text>
+  </view>
+</view>
+<view class="bar"><btn size="bar" style="flex:1" loading="{{saving}}" bind:press="save">保存</btn></view>

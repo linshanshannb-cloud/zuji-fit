@@ -1,0 +1,15 @@
+<nav-bar mode="back"></nav-bar>
+<view class="page page-pad-bar" wx:if="{{a}}">
+  <view class="row"><text class="tag tag-aero">有氧</text><text class="tag tag-gray" style="margin-left:8rpx">{{a.typeName}}</text></view>
+  <view class="row" style="margin-top:12rpx"><text class="h1">{{a.name}}</text></view>
+  <view class="sub" style="margin-top:8rpx">{{a.date}}<text wx:if="{{a.created}}"> · {{a.created}}</text></view>
+  <view class="row stats"><view wx:for="{{a.stats}}" wx:key="k" class="stat"><view class="sv num">{{item.v}}</view><view class="cap">{{item.k}}</view></view></view>
+  <view class="hint muted">{{a.refNote}}</view>
+  <view wx:if="{{a.note}}" class="section"><view class="cap">备注</view><view style="margin-top:8rpx">{{a.note}}</view></view>
+</view>
+<empty-state wx:if="{{missing}}" title="有氧记录不存在或已删除"></empty-state>
+<view class="bar" wx:if="{{a}}">
+  <btn type="danger" size="bar" style="width:200rpx" bind:press="remove">删除</btn><view class="gap"></view>
+  <btn type="primary" size="bar" style="flex:1" bind:press="edit">编辑</btn>
+</view>
+<view class="bar" wx:if="{{missing}}"><btn type="danger" size="bar" style="flex:1" bind:press="remove">删除这条记录</btn></view>

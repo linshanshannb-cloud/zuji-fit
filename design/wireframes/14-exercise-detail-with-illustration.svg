@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812" font-family="PingFang SC, -apple-system, 'Helvetica Neue', sans-serif">
+  <title>14 动作详情（试点有图）</title>
+  <rect x="0" y="0" width="375" height="812" fill="#FFFFFF"/>
+  <text x="28" y="30" font-size="14" fill="#111111" font-weight="600">9:41</text>
+  <rect x="330" y="20" width="22" height="11" rx="3" fill="none" stroke="#111111" stroke-width="1"/>
+  <rect x="332" y="22" width="15" height="7" rx="1.5" fill="#111111"/>
+  <rect x="281" y="50" width="87" height="32" rx="16" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="324.5" y1="58" x2="324.5" y2="74" stroke="#E5E5E5" stroke-width="1"/>
+  <circle cx="298" cy="66" r="2" fill="#111111"/>
+  <circle cx="304" cy="66" r="3" fill="#111111"/>
+  <circle cx="310" cy="66" r="2" fill="#111111"/>
+  <circle cx="347" cy="66" r="7" fill="none" stroke="#111111" stroke-width="1.5"/>
+  <circle cx="347" cy="66" r="2.5" fill="#111111"/>
+  <path d="M24 58 L16 66 L24 74" stroke="#111111" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="0" y1="88" x2="375" y2="88" stroke="#E5E5E5" stroke-width="0.5"/>
+
+  <!-- 1:1 illustration area 343x343 -->
+  <rect x="16" y="104" width="343" height="343" rx="12" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <!-- simplified bench press line figure -->
+  <line x1="70" y1="280" x2="305" y2="280" stroke="#111111" stroke-width="2"/>
+  <line x1="90" y1="280" x2="90" y2="320" stroke="#111111" stroke-width="2"/>
+  <line x1="285" y1="280" x2="285" y2="320" stroke="#111111" stroke-width="2"/>
+  <ellipse cx="187" cy="250" rx="28" ry="18" fill="none" stroke="#111111" stroke-width="2"/>
+  <line x1="120" y1="250" x2="254" y2="250" stroke="#111111" stroke-width="2.5"/>
+  <circle cx="120" cy="250" r="14" fill="none" stroke="#111111" stroke-width="2"/>
+  <circle cx="254" cy="250" r="14" fill="none" stroke="#111111" stroke-width="2"/>
+  <line x1="160" y1="268" x2="160" y2="310" stroke="#111111" stroke-width="2"/>
+  <line x1="214" y1="268" x2="214" y2="310" stroke="#111111" stroke-width="2"/>
+  <line x1="160" y1="310" x2="214" y2="310" stroke="#111111" stroke-width="2"/>
+  <circle cx="187" cy="220" r="12" fill="none" stroke="#111111" stroke-width="2"/>
+  <text x="187.5" y="370" font-size="11" fill="#8C8C8C" text-anchor="middle">示意：白底线稿 · 750×750 · aspectFit</text>
+  <text x="16" y="98" font-size="9" fill="#2F80ED">有 illustration：1:1 示意图区；加载失败回退文字占位</text>
+
+  <text x="16" y="470" font-size="28" fill="#111111" font-weight="700">杠铃卧推</text>
+  <text x="16" y="494" font-size="14" fill="#8C8C8C">Barbell Bench Press</text>
+  <text x="16" y="528" font-size="12" fill="#8C8C8C">目标肌群</text>
+  <rect x="16" y="536" width="36" height="20" rx="4" fill="#111111"/>
+  <text x="34" y="550" font-size="12" fill="#FFFFFF" text-anchor="middle">胸肌</text>
+  <text x="120" y="528" font-size="12" fill="#8C8C8C">次要肌群</text>
+  <rect x="120.5" y="536.5" width="59" height="19" rx="4" fill="none" stroke="#111111" stroke-width="0.75"/>
+  <text x="150" y="550" font-size="12" fill="#111111" text-anchor="middle">肱三头肌</text>
+  <line x1="16" y1="572" x2="359" y2="572" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="598" font-size="12" fill="#8C8C8C">部位</text>
+  <text x="16" y="620" font-size="16" fill="#111111" font-weight="600">胸 · 胸部</text>
+  <text x="188" y="598" font-size="12" fill="#8C8C8C">器械</text>
+  <text x="188" y="620" font-size="16" fill="#111111" font-weight="600">杠铃</text>
+  <text x="16" y="648" font-size="17" fill="#111111" font-weight="700">动作步骤</text>
+  <text x="16" y="676" font-size="15" fill="#FF5A1F" font-weight="700">01</text>
+  <text x="48" y="676" font-size="14" fill="#111111">平躺在长凳上，双脚平放在地上…</text>
+
+  <rect x="0" y="694" width="375" height="118" fill="#FFFFFF"/>
+  <line x1="0" y1="694" x2="375" y2="694" stroke="#E5E5E5" stroke-width="0.5"/>
+  <rect x="16" y="708" width="343" height="56" rx="8" fill="#111111"/>
+  <text x="187.5" y="741.5" font-size="16" fill="#FFFFFF" font-weight="600" text-anchor="middle">加入当前训练</text>
+  <rect x="120.5" y="799" width="134" height="5" rx="2.5" fill="#111111"/>
+  <rect x="0.5" y="0.5" width="374" height="811" fill="none" stroke="#D0D0D0" stroke-width="1"/>
+</svg>

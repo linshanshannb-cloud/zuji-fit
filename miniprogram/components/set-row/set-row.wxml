@@ -1,0 +1,14 @@
+<view class="sr {{set.done?'done':''}} {{readonly?'ro':''}}" bindlongpress="onLong">
+  <view class="no" bindtap="onType"><text class="{{set.type==='warmup'?'warm':''}}">{{set.type==='warmup'?'热':label}}</text></view>
+  <view class="stp w">
+    <view class="pm" data-f="weightKg" data-d="-1" bindtap="onStep" catchlongpress="onStepLong" bindtouchend="onStepEnd">−</view>
+    <input class="val num {{w===''?'empty':''}}" type="digit" value="{{w}}" placeholder="{{bodyweight?'自重':'—'}}" placeholder-class="phc" data-f="weightKg" bindfocus="onFocus" bindblur="onBlur" catchlongpress="noop" disabled="{{readonly}}"/>
+    <view class="pm" data-f="weightKg" data-d="1" bindtap="onStep" catchlongpress="onStepLong" bindtouchend="onStepEnd">+</view>
+  </view>
+  <view class="stp r {{shake?'shake':''}}">
+    <view class="pm" data-f="reps" data-d="-1" bindtap="onStep" catchlongpress="onStepLong" bindtouchend="onStepEnd">−</view>
+    <input class="val num" type="number" value="{{r}}" placeholder="—" placeholder-class="phc" data-f="reps" bindfocus="onFocus" bindblur="onBlur" catchlongpress="noop" disabled="{{readonly}}"/>
+    <view class="pm" data-f="reps" data-d="1" bindtap="onStep" catchlongpress="onStepLong" bindtouchend="onStepEnd">+</view>
+  </view>
+  <view class="chk" bindtap="onDone"><view class="circle {{set.done?'on':''}}">{{set.done?'✓':''}}</view></view>
+</view>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812" font-family="PingFang SC, -apple-system, 'Helvetica Neue', sans-serif">
+  <title>09 动作详情（纯文字）</title>
+  <rect x="0" y="0" width="375" height="812" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="375" height="44" rx="0" fill="#FFFFFF"/>
+  <text x="28" y="30" font-size="14" fill="#111111" font-weight="600" text-anchor="start">9:41</text>
+  <rect x="330" y="20" width="22" height="11" rx="3" fill="none" stroke="#111111" stroke-width="1"/>
+  <rect x="332" y="22" width="15" height="7" rx="1.5" fill="#111111"/>
+  <rect x="281" y="50" width="87" height="32" rx="16" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="324.5" y1="58" x2="324.5" y2="74" stroke="#E5E5E5" stroke-width="1"/>
+  <circle cx="298" cy="66" r="2" fill="#111111"/>
+  <circle cx="304" cy="66" r="3" fill="#111111"/>
+  <circle cx="310" cy="66" r="2" fill="#111111"/>
+  <circle cx="347" cy="66" r="7" fill="none" stroke="#111111" stroke-width="1.5"/>
+  <circle cx="347" cy="66" r="2.5" fill="#111111"/>
+  <path d="M24 58 L16 66 L24 74" stroke="#111111" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="0" y1="88" x2="375" y2="88" stroke="#E5E5E5" stroke-width="0.5"/>
+  <rect x="16" y="104" width="343" height="120" rx="12" fill="#F7F7F7"/>
+  <text x="187.5" y="176" font-size="44" fill="#D6D6D6" font-weight="700" text-anchor="middle">卧推</text>
+  <text x="24" y="216" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">占位：浅灰块 + 名称大字，无图片/视频</text>
+  <text x="16" y="264" font-size="28" fill="#111111" font-weight="700" text-anchor="start">杠铃卧推</text>
+  <text x="16" y="288" font-size="14" fill="#8C8C8C" font-weight="400" text-anchor="start">Barbell Bench Press</text>
+  <text x="16" y="326" font-size="12" fill="#8C8C8C" font-weight="400" text-anchor="start">目标肌群</text>
+  <rect x="16" y="334" width="36" height="20" rx="4" fill="#111111"/>
+  <text x="34.0" y="348" font-size="12" fill="#FFFFFF" font-weight="400" text-anchor="middle">胸肌</text>
+  <text x="120" y="326" font-size="12" fill="#8C8C8C" font-weight="400" text-anchor="start">次要肌群</text>
+  <rect x="120.5" y="334.5" width="59" height="19" rx="4" fill="none" stroke="#111111" stroke-width="0.75"/>
+  <text x="150.0" y="348" font-size="12" fill="#111111" font-weight="400" text-anchor="middle">肱三头肌</text>
+  <rect x="186.5" y="334.5" width="47" height="19" rx="4" fill="none" stroke="#111111" stroke-width="0.75"/>
+  <text x="210.0" y="348" font-size="12" fill="#111111" font-weight="400" text-anchor="middle">三角肌</text>
+  <line x1="16" y1="374" x2="359" y2="374" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="402" font-size="12" fill="#8C8C8C" font-weight="400" text-anchor="start">部位</text>
+  <text x="16" y="424" font-size="16" fill="#111111" font-weight="600" text-anchor="start">胸 · 胸部</text>
+  <text x="188" y="402" font-size="12" fill="#8C8C8C" font-weight="400" text-anchor="start">器械</text>
+  <text x="188" y="424" font-size="16" fill="#111111" font-weight="600" text-anchor="start">杠铃</text>
+  <text x="16" y="450" font-size="12" fill="#8C8C8C" font-weight="400" text-anchor="start">类别</text>
+  <text x="16" y="472" font-size="16" fill="#111111" font-weight="600" text-anchor="start">力量</text>
+  <text x="188" y="450" font-size="12" fill="#8C8C8C" font-weight="400" text-anchor="start">我的最佳</text>
+  <text x="188" y="472" font-size="16" fill="#111111" font-weight="600" text-anchor="start">60kg × 8</text>
+  <line x1="187.5" y1="388" x2="187.5" y2="478" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="16" y1="486" x2="359" y2="486" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="520" font-size="17" fill="#111111" font-weight="700" text-anchor="start">动作步骤</text>
+  <text x="16" y="550" font-size="15" fill="#FF5A1F" font-weight="700" text-anchor="start">01</text>
+  <text x="48" y="550" font-size="14" fill="#111111" font-weight="400" text-anchor="start">平躺在长凳上，双脚平放在地上，背部紧贴长凳。</text>
+  <text x="16" y="580" font-size="15" fill="#FF5A1F" font-weight="700" text-anchor="start">02</text>
+  <text x="48" y="580" font-size="14" fill="#111111" font-weight="400" text-anchor="start">正手握住杠铃，握距略宽于肩宽。</text>
+  <text x="16" y="610" font-size="15" fill="#FF5A1F" font-weight="700" text-anchor="start">03</text>
+  <text x="48" y="610" font-size="14" fill="#111111" font-weight="400" text-anchor="start">将杠铃从架上提起，置于胸部正上方。</text>
+  <text x="16" y="640" font-size="15" fill="#FF5A1F" font-weight="700" text-anchor="start">04</text>
+  <text x="48" y="640" font-size="14" fill="#111111" font-weight="400" text-anchor="start">将杠铃慢慢降低到胸部，保持肘部内收。</text>
+  <text x="48" y="664" font-size="11" fill="#8C8C8C" font-weight="400" text-anchor="start">… 共 7 步；缺中文时显示英文 +“暂无中文”标签</text>
+  <text x="359" y="520" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="end">简介(description)为英文原文，v1 不展示</text>
+  <rect x="0" y="694" width="375" height="118" rx="0" fill="#FFFFFF"/>
+  <line x1="0" y1="694" x2="375" y2="694" stroke="#E5E5E5" stroke-width="0.5"/>
+  <rect x="120.5" y="799" width="134" height="5" rx="2.5" fill="#111111"/>
+  <rect x="16" y="708" width="343" height="56" rx="8" fill="#111111"/>
+  <text x="187.5" y="741.5" font-size="16" fill="#FFFFFF" font-weight="600" text-anchor="middle">加入当前训练</text>
+  <text x="16" y="688" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">有草稿：加入草稿末尾 + toast“已加入”；无草稿：新建今天的草稿并加入</text>
+  <rect x="0.5" y="0.5" width="374" height="811" fill="none" stroke="#D0D0D0" stroke-width="1"/>
+</svg>

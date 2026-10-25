@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>组迹 头像方案 B：逐组升高的轨迹</title>
+  <rect width="1024" height="1024" fill="#FF5A1F"/>
+  <rect x="300" y="560" width="96" height="196" rx="48" fill="#FFFFFF"/>
+  <rect x="464" y="448" width="96" height="308" rx="48" fill="#FFFFFF"/>
+  <rect x="628" y="336" width="96" height="420" rx="48" fill="#FFFFFF"/>
+  <circle cx="348" cy="456" r="34" fill="#FFFFFF"/>
+  <circle cx="512" cy="344" r="34" fill="#FFFFFF"/>
+</svg>

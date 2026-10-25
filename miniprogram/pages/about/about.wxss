@@ -1,0 +1,6 @@
+.about { padding-top: 16rpx; padding-bottom: 96rpx; }
+.about .h2 { margin-top: 40rpx; margin-bottom: 8rpx; }
+.p { font-size: var(--fs-sub); color: var(--c-text-2); line-height: 1.7; margin-top: 8rpx; }
+.mono { color: var(--c-ink); word-break: break-all; }
+.link { color: var(--c-accent); font-size: var(--fs-sub); }
+.lic { display: block; font-size: 20rpx; color: var(--c-text-3); white-space: pre-wrap; word-break: break-word; }

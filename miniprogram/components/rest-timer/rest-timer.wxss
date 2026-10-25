@@ -1,0 +1,11 @@
+.rt { position: fixed; left: 24rpx; right: 24rpx; z-index: 50; background: var(--c-ink); color: var(--c-white); border-radius: var(--r-card); padding: 20rpx 24rpx 12rpx; box-sizing: border-box; }
+.rt-bar { height: 6rpx; background: rgba(255,255,255,.18); border-radius: 3rpx; overflow: hidden; }
+.rt-fill { height: 100%; background: var(--c-accent); transition: width .25s linear; }
+.rt-row { display: flex; align-items: center; margin-top: 16rpx; }
+.rt-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.rt-title { font-size: 24rpx; color: rgba(255,255,255,.7); }
+.rt-time { font-size: 56rpx; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.rt-btn { height: 72rpx; min-width: 96rpx; padding: 0 16rpx; margin-left: 12rpx; border-radius: var(--r-control); border: 1px solid rgba(255,255,255,.3); display: flex; align-items: center; justify-content: center; font-size: 26rpx; box-sizing: border-box; }
+.rt-skip { background: var(--c-white); color: var(--c-ink); border-color: var(--c-white); font-weight: 600; }
+.rt-set { text-align: right; font-size: 22rpx; color: rgba(255,255,255,.55); padding-top: 8rpx; }
+.fin .rt-time { color: var(--c-accent); }

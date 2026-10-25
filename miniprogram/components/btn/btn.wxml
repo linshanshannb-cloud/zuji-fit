@@ -1,0 +1,1 @@
+<view class="btn btn-{{type}} btn-{{size}} {{disabled?'is-disabled':''}} {{block?'':'inline'}}" hover-class="{{disabled?'':'pressed'}}" bindtap="onTap"><text wx:if="{{loading}}">…</text><slot></slot></view>

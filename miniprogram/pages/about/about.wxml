@@ -1,0 +1,19 @@
+<nav-bar title="关于 / 数据来源"></nav-bar>
+<view class="page about">
+  <view class="h2">本小程序源码</view>
+  <view class="p">组迹以 GNU Affero General Public License v3.0（AGPL-3.0）开源，源码地址（长按可复制）：</view>
+  <text class="p mono" style="display:block" user-select>https://github.com/linshanshannb-cloud/zuji-fit</text>
+  <view class="h2">动作数据来源</view>
+  <view class="p">动作库中的文字资料（中英文名称、目标与辅助肌群、器械、动作步骤）来自开源项目 openGym：</view>
+  <view class="p mono" user-select>github.com/DuarteSantos8/openGym</view>
+  <view class="p">使用版本：commit e348fc1。</view>
+  <view class="h2">许可</view>
+  <view class="p">openGym 以 GNU Affero General Public License v3.0（AGPL-3.0）发布；其中源自 exercisedb 的部分另附 MIT 许可声明。版权声明：openGym — Copyright (C) 2026 Duarte Santos；源自 ExerciseDB v1（AscendAPI）的条目按 MIT 许可，Copyright (c) 2026 Hasan Emir Yıldırım。完整许可证文本随本小程序代码包分发（LICENSE-openGym.txt）。</view>
+  <view class="link hit" bindtap="toggle">{{full ? '收起许可证全文' : '查看许可证全文'}}</view>
+  <text wx:if="{{full}}" class="lic" user-select>{{license}}</text>
+  <view class="h2">修改说明</view>
+  <view class="p">本小程序对原始数据做了修改：只选取了部分动作与字段，进行了中文翻译与校对、重命名了少量中文名称，并整理了部位 / 器械 / 肌群的分类。其中 46 个动作的简介与步骤在 openGym 中只有英文，由本小程序自行译为中文。</view>
+  <view class="p">本小程序未使用 openGym 的任何图片、动图或视频素材；动作列表中的方块为占位图。</view>
+  <view class="h2">本地数据</view>
+  <view class="p">训练与身体数据只保存在本机微信存储中，不上传任何服务器。</view>
+</view>

@@ -1,0 +1,13 @@
+<nav-bar mode="close" title="{{id?'编辑记录':'记录身体数据'}}" custom-back bind:back="onBack"></nav-bar>
+<view class="page page-pad-bar">
+  <picker mode="date" end="{{today}}" value="{{form.date}}" bindchange="onDate"><view class="field hairline-b"><text class="field-label">日期</text><text class="flex1" style="text-align:right">{{dateLabel}} ›</text></view></picker>
+  <view class="field hairline-b {{errors.weightKg?'err':''}}"><text class="field-label">体重<text class="req">*</text></text><input class="field-input num" type="digit" focus="{{focus}}" adjust-position confirm-type="done" bindconfirm="save" value="{{form.weightKg}}" placeholder="—" data-k="weightKg" bindinput="onInput" bindblur="onBlur"/><text class="field-unit">kg</text></view>
+  <view wx:if="{{errors.weightKg}}" class="err-text">{{errors.weightKg}}</view>
+  <view class="field hairline-b {{errors.bodyFatPct?'err':''}}"><text class="field-label">体脂率</text><input class="field-input num" type="digit" value="{{form.bodyFatPct}}" placeholder="选填" data-k="bodyFatPct" bindinput="onInput" bindblur="onBlur"/><text class="field-unit">%</text></view>
+  <view wx:if="{{errors.bodyFatPct}}" class="err-text">{{errors.bodyFatPct}}</view>
+  <view class="field hairline-b {{errors.waistCm?'err':''}}"><text class="field-label">腰围</text><input class="field-input num" type="digit" value="{{form.waistCm}}" placeholder="选填" data-k="waistCm" bindinput="onInput" bindblur="onBlur"/><text class="field-unit">cm</text></view>
+  <view wx:if="{{errors.waistCm}}" class="err-text">{{errors.waistCm}}</view>
+  <view class="field hairline-b"><text class="field-label">备注</text><input class="flex1" style="text-align:right" maxlength="200" value="{{form.note}}" placeholder="选填" data-k="note" bindinput="onInput"/></view>
+  <view wx:if="{{id}}" style="margin-top:64rpx"><btn type="danger" bind:press="remove">删除这条记录</btn></view>
+</view>
+<view class="bar"><btn size="bar" style="flex:1" loading="{{saving}}" bind:press="save">保存</btn></view>

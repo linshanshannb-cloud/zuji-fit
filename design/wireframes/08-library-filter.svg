@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812" font-family="PingFang SC, -apple-system, 'Helvetica Neue', sans-serif">
+  <title>08 动作库：筛选面板</title>
+  <rect x="0" y="0" width="375" height="812" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="375" height="44" rx="0" fill="#FFFFFF"/>
+  <text x="28" y="30" font-size="14" fill="#111111" font-weight="600" text-anchor="start">9:41</text>
+  <rect x="330" y="20" width="22" height="11" rx="3" fill="none" stroke="#111111" stroke-width="1"/>
+  <rect x="332" y="22" width="15" height="7" rx="1.5" fill="#111111"/>
+  <rect x="281" y="50" width="87" height="32" rx="16" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="324.5" y1="58" x2="324.5" y2="74" stroke="#E5E5E5" stroke-width="1"/>
+  <circle cx="298" cy="66" r="2" fill="#111111"/>
+  <circle cx="304" cy="66" r="3" fill="#111111"/>
+  <circle cx="310" cy="66" r="2" fill="#111111"/>
+  <circle cx="347" cy="66" r="7" fill="none" stroke="#111111" stroke-width="1.5"/>
+  <circle cx="347" cy="66" r="2.5" fill="#111111"/>
+  <text x="16" y="75" font-size="24" fill="#111111" font-weight="700" text-anchor="start">动作库</text>
+  <text x="96" y="75" font-size="13" fill="#8C8C8C" font-weight="400" text-anchor="start">共 284 个</text>
+  <rect x="16" y="96" width="343" height="36" rx="8" fill="#F7F7F7"/>
+  <circle cx="34" cy="113" r="6" fill="none" stroke="#8C8C8C" stroke-width="1.5"/>
+  <line x1="38.5" y1="117.5" x2="42" y2="121" stroke="#8C8C8C" stroke-width="1.5"/>
+  <text x="50" y="119" font-size="14" fill="#BBBBBB" font-weight="400" text-anchor="start">搜索动作（中文/英文）</text>
+  <rect x="16.5" y="144.5" width="114" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="73.5" y="163.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">肌群：全部 ▾</text>
+  <rect x="0" y="180" width="375" height="632" rx="0" fill="#000000" fill-opacity="0.35"/>
+  <rect x="0" y="300" width="375" height="512" rx="16" fill="#FFFFFF"/>
+  <text x="187.5" y="336" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">筛选</text>
+  <text x="359" y="336" font-size="14" fill="#666666" font-weight="400" text-anchor="end">重置</text>
+  <text x="16" y="378" font-size="13" fill="#8C8C8C" font-weight="400" text-anchor="start">肌群（部位）</text>
+  <rect x="16.5" y="390.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="41.0" y="409.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">全部</text>
+  <rect x="74" y="390" width="37" height="30" rx="15" fill="#111111"/>
+  <text x="92.5" y="409.5" font-size="13" fill="#FFFFFF" font-weight="600" text-anchor="middle">胸</text>
+  <rect x="119.5" y="390.5" width="36" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="137.5" y="409.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">背</text>
+  <rect x="164.5" y="390.5" width="36" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="182.5" y="409.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">腿</text>
+  <rect x="209.5" y="390.5" width="36" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="227.5" y="409.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">肩</text>
+  <rect x="254.5" y="390.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="279.0" y="409.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">手臂</text>
+  <rect x="312.5" y="390.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="337.0" y="409.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">核心</text>
+  <text x="16" y="456" font-size="13" fill="#8C8C8C" font-weight="400" text-anchor="start">器械</text>
+  <rect x="16" y="468" width="50" height="30" rx="15" fill="#111111"/>
+  <text x="41.0" y="487.5" font-size="13" fill="#FFFFFF" font-weight="600" text-anchor="middle">全部</text>
+  <rect x="74.5" y="468.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="99.0" y="487.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">杠铃</text>
+  <rect x="132.5" y="468.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="157.0" y="487.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">哑铃</text>
+  <rect x="190.5" y="468.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="215.0" y="487.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">自重</text>
+  <rect x="248.5" y="468.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="273.0" y="487.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">绳索</text>
+  <rect x="16.5" y="506.5" width="75" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="54.0" y="525.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">固定器械</text>
+  <rect x="100.5" y="506.5" width="75" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="138.0" y="525.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">史密斯机</text>
+  <rect x="184.5" y="506.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="209.0" y="525.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">壶铃</text>
+  <rect x="242.5" y="506.5" width="49" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="267.0" y="525.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">负重</text>
+  <rect x="16.5" y="544.5" width="62" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="47.5" y="563.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">弹力带</text>
+  <rect x="87.5" y="544.5" width="75" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="125.0" y="563.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">曲杆杠铃</text>
+  <rect x="171.5" y="544.5" width="62" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="202.5" y="563.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">六角杠</text>
+  <rect x="242.5" y="544.5" width="101" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="293.0" y="563.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">45°腿举机</text>
+  <rect x="16.5" y="582.5" width="62" height="29" rx="15" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="47.5" y="601.5" font-size="13" fill="#666666" font-weight="400" text-anchor="middle">健腹轮</text>
+  <text x="16" y="638" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">选项来自 data/filters.json（bodyPart / equipment），单选；两组之间为“且”</text>
+  <rect x="0" y="694" width="375" height="118" rx="0" fill="#FFFFFF"/>
+  <line x1="0" y1="694" x2="375" y2="694" stroke="#E5E5E5" stroke-width="0.5"/>
+  <rect x="120.5" y="799" width="134" height="5" rx="2.5" fill="#111111"/>
+  <rect x="16" y="708" width="343" height="56" rx="8" fill="#111111"/>
+  <text x="187.5" y="741.5" font-size="16" fill="#FFFFFF" font-weight="600" text-anchor="middle">查看 35 个动作</text>
+  <rect x="0.5" y="0.5" width="374" height="811" fill="none" stroke="#D0D0D0" stroke-width="1"/>
+</svg>

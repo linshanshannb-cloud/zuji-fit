@@ -1,0 +1,952 @@
+{
+ "10329": {
+  "description": "大重量、高次数的单臂划船，允许少量身体借力，对背阔肌和握力很有帮助。",
+  "steps": [
+   "站在长凳一侧，一侧手和膝撑在凳上，另一只手握一只较重的哑铃。",
+   "让哑铃自然下垂，感受背阔肌被拉伸。",
+   "借助可控的惯性把哑铃划向髋部。",
+   "缓慢下放至完全拉伸。",
+   "全程保持背部平直。完成次数后换另一侧手臂。"
+  ],
+  "en": {
+   "description": "A heavy, high rep one-arm row with a little body momentum, great for lat and grip strength.",
+   "steps": [
+    "Stand beside a bench with one hand and knee supported on it and hold a heavy dumbbell.",
+    "Let the weight hang with a stretch in the lat.",
+    "Row the dumbbell to your hip using controlled momentum.",
+    "Lower slowly to a full stretch.",
+    "Keep your back flat. Finish the reps, then switch arms."
+   ]
+  }
+ },
+ "1047": {
+  "description": "窄握的高位下拉，把横杆拉到上胸部，锻炼背阔肌和肱二头肌。",
+  "steps": [
+   "坐在下拉器械上，将大腿固定在护垫下。",
+   "窄握横杆。",
+   "身体稍向后仰，把横杆拉到上胸部。",
+   "手肘向下发力，收紧背阔肌。",
+   "让横杆缓慢回升，直到手臂伸直。"
+  ],
+  "en": {
+   "description": "A lat pulldown with a narrow grip, pulling the bar to your upper chest. It trains the lats and biceps.",
+   "steps": [
+    "Sit at the pulldown station and secure your thighs under the pads.",
+    "Grab the bar with a close grip.",
+    "Lean back slightly and pull the bar down to your upper chest.",
+    "Drive your elbows down and squeeze your lats.",
+    "Let the bar rise slowly until your arms are straight."
+   ]
+  }
+ },
+ "1204": {
+  "description": "在高位滑轮上做单臂下拉，让两侧背阔肌分别独立发力。",
+  "steps": [
+   "在高位滑轮上装单手把手，面向配重片坐下。",
+   "单手握住把手，坐直。",
+   "将把手拉到胸部侧面，手肘朝髋部方向发力。",
+   "稍作停顿，然后让手臂缓慢回升。",
+   "完成次数后换另一侧。"
+  ],
+  "en": {
+   "description": "A single-arm pulldown on a high cable. It lets each side of the lats work on its own.",
+   "steps": [
+    "Attach a handle to a high pulley and sit facing the stack.",
+    "Grab the handle with one hand and sit tall.",
+    "Pull the handle down to the side of your chest, driving your elbow toward your hip.",
+    "Pause, then let your arm rise slowly.",
+    "Complete your reps and switch sides."
+   ]
+  }
+ },
+ "1503": {
+  "description": "在身前把弹力带向两侧拉开的简单动作，强化上背部和三角肌后束，有助于改善体态。",
+  "steps": [
+   "双手在身前肩高处握住弹力带，手臂伸直。",
+   "肋骨下沉，肩膀远离耳朵。",
+   "双手向两侧移动，把弹力带拉开。",
+   "动作末端收紧肩胛骨。",
+   "有控制地缓慢还原。"
+  ],
+  "en": {
+   "description": "A simple band move pulling the arms apart in front of you. It strengthens the upper back and rear shoulders and helps posture.",
+   "steps": [
+    "Hold a band in front of you at shoulder height with your arms straight.",
+    "Keep your ribs down and your shoulders away from your ears.",
+    "Pull the band apart by moving your hands out to the sides.",
+    "Squeeze your shoulder blades together at the end.",
+    "Return slowly with control."
+   ]
+  }
+ },
+ "2291": {
+  "description": "宽握的高位下拉，用于发展上背部宽阔的肌群。",
+  "steps": [
+   "坐在下拉器械上，将大腿固定在护垫下。",
+   "正手宽握横杆。",
+   "身体稍向后仰，把横杆拉到上胸部。",
+   "手肘向下、向后发力，夹紧肩胛骨。",
+   "控制横杆回升，直到手臂完全伸展。",
+   "避免躯干前后摆动。"
+  ],
+  "en": {
+   "description": "A pulldown with a wide grip that builds the broad muscles of the upper back.",
+   "steps": [
+    "Sit at the pulldown station and secure your thighs under the pads.",
+    "Grab the bar with a wide overhand grip.",
+    "Lean back slightly and pull the bar down to your upper chest.",
+    "Drive your elbows down and back, squeezing your shoulder blades.",
+    "Control the bar back up until your arms are fully extended.",
+    "Avoid swinging your torso."
+   ]
+  }
+ },
+ "3896": {
+  "description": "用弹力带进行的坐姿划船，锻炼中背部和背阔肌。",
+  "steps": [
+   "坐在地上双腿伸直，把弹力带套在脚上。",
+   "双手握住弹力带两端，手臂伸直。",
+   "坐直，挺胸。",
+   "手肘向后拉，夹紧肩胛骨。",
+   "缓慢伸直手臂。",
+   "肩膀保持远离耳朵。"
+  ],
+  "en": {
+   "description": "A seated row with a band that works the mid back and lats.",
+   "steps": [
+    "Sit on the floor with your legs extended and loop a band around your feet.",
+    "Hold the ends with your arms extended.",
+    "Sit tall with your chest up.",
+    "Pull your elbows back and squeeze your shoulder blades together.",
+    "Slowly extend your arms.",
+    "Keep your shoulders away from your ears."
+   ]
+  }
+ },
+ "6156": {
+  "description": "使用壶铃的俯身划船，锻炼背阔肌和中背部。",
+  "steps": [
+   "手握壶铃，保持背部平直、以髋为轴向前俯身。",
+   "手臂自然垂直向下。",
+   "将壶铃划向髋部。",
+   "把肩胛骨向后收紧。",
+   "缓慢下放。",
+   "完成次数后换另一侧手臂。"
+  ],
+  "en": {
+   "description": "A bent-over row using a kettlebell. It trains the lats and mid back.",
+   "steps": [
+    "Hold a kettlebell and hinge forward with a flat back.",
+    "Let your arm hang straight down.",
+    "Row the kettlebell toward your hip.",
+    "Squeeze your shoulder blade back.",
+    "Lower slowly.",
+    "Finish your reps, then switch arms."
+   ]
+  }
+ },
+ "1162": {
+  "description": "严格的杠铃站姿过头推举，增强肩部和肱三头肌力量。",
+  "steps": [
+   "在肩高处将杠铃出架，双手握距略宽于肩。",
+   "站直，双脚与髋同宽，收紧臀部。",
+   "把杠铃垂直向上推起，头部先略微后让、再回到杠铃下方。",
+   "在头顶锁定，杠铃位于足中上方。",
+   "有控制地把杠铃下放回锁骨位置。"
+  ],
+  "en": {
+   "description": "A strict standing overhead press with a barbell. It builds shoulder and triceps strength.",
+   "steps": [
+    "Unrack the bar at shoulder height, hands just outside your shoulders.",
+    "Stand tall with feet hip-width apart and squeeze your glutes.",
+    "Press the bar straight up, moving your head slightly back then through.",
+    "Lock out overhead with the bar over your mid-foot.",
+    "Lower the bar back to your collarbone with control."
+   ]
+  }
+ },
+ "1200": {
+  "description": "借助腿部快速下蹲和蹬伸完成的过头推举，可以用更大重量训练肩部和肱三头肌。",
+  "steps": [
+   "将杠铃置于上胸部，手肘略在杠铃前方。",
+   "屈膝下沉几厘米，躯干保持直立。",
+   "双腿向上蹬伸，顺势把杠铃推过头顶。",
+   "锁定时杠铃位于足中上方，然后放回胸前。",
+   "核心收紧，避免身体后仰。"
+  ],
+  "en": {
+   "description": "An overhead press helped by a quick leg dip and drive. It lets you handle heavier loads for the shoulders and triceps.",
+   "steps": [
+    "Hold the barbell at your upper chest with your elbows slightly in front of the bar.",
+    "Dip a few inches by bending your knees, keeping your torso upright.",
+    "Drive up through your legs and press the bar overhead.",
+    "Lock out with the bar over your mid foot, then lower it back to your chest.",
+    "Brace your core and avoid leaning back."
+   ]
+  }
+ },
+ "2921": {
+  "description": "抬高臀部的俯卧撑，发力方向更接近过头推，只用自身体重即可增强肩部力量。",
+  "steps": [
+   "从俯卧撑姿势开始，双脚向手的方向走近，抬高臀部形成倒 V 字。",
+   "手臂和背部保持伸直。",
+   "屈肘，使头顶朝地面下降。",
+   "推起直到手臂伸直。",
+   "全程收紧核心。"
+  ],
+  "en": {
+   "description": "A push-up with hips lifted high so you press more overhead. It builds shoulder strength using only your body weight.",
+   "steps": [
+    "Start in a push-up position, then walk your feet in and lift your hips into an inverted V.",
+    "Keep your arms and back straight.",
+    "Bend your elbows and lower the top of your head toward the floor.",
+    "Press back up until your arms are straight.",
+    "Keep your core tight throughout."
+   ]
+  }
+ },
+ "3914": {
+  "description": "在绳索器械上大开肘的划船，主练三角肌后束。",
+  "steps": [
+   "将绳索调到胸部高度，装上把手或绳索。",
+   "手臂伸直握住。",
+   "向后退一步，身体稍微后倾。",
+   "手肘向外张开，把把手拉向上胸部。",
+   "收紧三角肌后束。",
+   "缓慢还原。"
+  ],
+  "en": {
+   "description": "A row with wide elbows on the cable machine that targets the rear delts.",
+   "steps": [
+    "Set a cable at chest height with a handle or rope.",
+    "Hold it with your arms extended.",
+    "Step back and lean slightly.",
+    "Pull the handle toward your upper chest with your elbows flared out.",
+    "Squeeze your rear delts.",
+    "Return slowly."
+   ]
+  }
+ },
+ "5607": {
+  "description": "用弹力带做的面拉，锻炼三角肌后束和上背部。",
+  "steps": [
+   "把弹力带固定在头部高度，握住两端。",
+   "向后退步，让弹力带产生张力。",
+   "手肘抬高，把弹力带拉向面部。",
+   "夹紧肩胛骨。",
+   "缓慢还原。"
+  ],
+  "en": {
+   "description": "Face pull using a band to train the rear delts and upper back.",
+   "steps": [
+    "Anchor a band at head height and hold the ends.",
+    "Step back to create tension.",
+    "Pull the band toward your face, elbows high.",
+    "Squeeze your shoulder blades.",
+    "Return slowly."
+   ]
+  }
+ },
+ "5609": {
+  "description": "绳索面拉，发展三角肌后束并强化上背部。",
+  "steps": [
+   "将绳索调到上胸部高度，装上把手。",
+   "站直，向面部方向拉。",
+   "动作末端双手向两侧分开。",
+   "夹紧肩胛骨。",
+   "缓慢还原。"
+  ],
+  "en": {
+   "description": "Cable face pull to build the rear delts and strengthen the upper back.",
+   "steps": [
+    "Set a cable at upper chest height with a handle.",
+    "Stand tall and pull toward your face.",
+    "Spread your hands apart at the end.",
+    "Squeeze your shoulder blades.",
+    "Return slowly."
+   ]
+  }
+ },
+ "0781": {
+  "description": "前后分腿站立的下蹲，后脚位置固定不动，单侧分别锻炼股四头肌和臀部。",
+  "steps": [
+   "一脚在前一脚在后，大步距站立。",
+   "躯干直立，核心收紧。",
+   "双膝同时弯曲下蹲，直到后侧膝盖接近地面。",
+   "前脚脚跟发力站起。",
+   "完成全部次数后换腿。"
+  ],
+  "en": {
+   "description": "A staggered-stance squat where the back leg stays put. It works the quads and glutes one side at a time.",
+   "steps": [
+    "Stand in a long stride with one foot forward and the other back.",
+    "Keep your torso upright and core tight.",
+    "Bend both knees and lower until the back knee hovers just above the floor.",
+    "Press through the front heel to stand back up.",
+    "Finish all reps, then switch legs."
+   ]
+  }
+ },
+ "1060": {
+  "description": "上背靠在凳上、杠铃横放在髋部的臀桥，是练出强壮臀部的首选动作。",
+  "steps": [
+   "坐在地上，上背部靠在长凳边缘，将加了护垫的杠铃放在髋部上方。",
+   "双脚与髋同宽踩实，用脚跟发力。",
+   "抬起髋部，直到躯干与地面平行。",
+   "顶端收紧臀部，下巴微收。",
+   "有控制地放下髋部。",
+   "重复动作，避免下背部过度弓起。"
+  ],
+  "en": {
+   "description": "A bench-supported bridge with a barbell across your hips. It is a go-to move for building strong glutes.",
+   "steps": [
+    "Sit on the floor with your upper back against a bench and a padded barbell over your hips.",
+    "Plant your feet hip-width apart and drive through your heels.",
+    "Lift your hips until your torso is level with the floor.",
+    "Squeeze your glutes at the top and keep your chin tucked.",
+    "Lower your hips under control.",
+    "Repeat without arching your lower back."
+   ]
+  }
+ },
+ "1206": {
+  "description": "背对低位绳索做的髋铰链动作，锻炼臀部和腘绳肌，也有助于学会正确的屈髋模式。",
+  "steps": [
+   "在低位滑轮装上绳索，背对配重片站立，从双腿之间握住绳索。",
+   "向前走到绳索绷紧，膝盖微屈。",
+   "臀部向后推，让绳索从双腿间向后移动。",
+   "髋部向前顶，收紧臀部站直。",
+   "全程保持背部平直。"
+  ],
+  "en": {
+   "description": "A hip hinge facing away from a low cable. It builds the glutes and hamstrings and teaches a good hinge.",
+   "steps": [
+    "Attach a rope to a low pulley and face away from the stack, holding the rope between your legs.",
+    "Step forward until the cable is taut and bend your knees slightly.",
+    "Push your hips back, letting the rope travel behind you.",
+    "Drive your hips forward and squeeze your glutes to stand tall.",
+    "Keep your back flat throughout."
+   ]
+  }
+ },
+ "1543": {
+  "description": "经典的直腿硬拉，膝盖几乎伸直、以髋为轴屈身，很好地发展腘绳肌、臀部和下背部。",
+  "steps": [
+   "双脚与髋同宽站立，手握杠铃置于大腿前方。",
+   "膝盖保持微屈，臀部向后推。",
+   "让杠铃贴着腿下降，直到腘绳肌有明显拉伸感。",
+   "全程背部平直、挺胸。",
+   "髋部向前发力回到站立。"
+  ],
+  "en": {
+   "description": "The classic stiff-legged deadlift, hinging at the hips with nearly straight knees. A great builder for hamstrings, glutes and the lower back.",
+   "steps": [
+    "Stand holding a barbell in front of your thighs, feet hip-width apart.",
+    "Keep a slight bend in your knees and push your hips back.",
+    "Lower the bar along your legs until you feel a deep stretch in your hamstrings.",
+    "Keep your back flat and your chest proud the whole way.",
+    "Drive your hips forward to return to standing."
+   ]
+  }
+ },
+ "1595": {
+  "description": "在史密斯机固定轨道上做的前蹲，以直立躯干锻炼股四头肌。",
+  "steps": [
+   "将杠铃调到肩高，置于肩部前侧，手肘抬起。",
+   "解锁杠铃，双脚略向前站。",
+   "下蹲至大腿约与地面平行。",
+   "手肘保持抬高，挺胸。",
+   "脚跟发力站起，完成后挂回杠铃。"
+  ],
+  "en": {
+   "description": "A front squat with the bar guided by the smith machine. It trains the quads with an upright torso.",
+   "steps": [
+    "Set the bar at shoulder height and rest it on the front of your shoulders with elbows up.",
+    "Unrack it and step your feet slightly forward.",
+    "Squat down until your thighs are about parallel to the floor.",
+    "Keep your elbows high and your chest up.",
+    "Press through your heels to stand and rerack when done."
+   ]
+  }
+ },
+ "1597": {
+  "description": "使用史密斯机杠铃的直腿硬拉，固定轨道让你更专注于感受腘绳肌发力。",
+  "steps": [
+   "靠近史密斯机杠铃站立，双脚与髋同宽，正手握杠。",
+   "解锁杠铃，膝盖几乎伸直。",
+   "臀部向后推，让杠铃沿腿部下滑。",
+   "下降到腘绳肌有明显拉伸感。",
+   "收紧臀部站直。"
+  ],
+  "en": {
+   "description": "A stiff-legged deadlift using the smith machine bar. The fixed path lets you focus on feeling the hamstrings work.",
+   "steps": [
+    "Stand close to the smith bar with feet hip-width apart and grip the bar overhand.",
+    "Unrack it and keep your knees nearly straight.",
+    "Push your hips back and slide the bar down your legs.",
+    "Lower until you feel a deep stretch in your hamstrings.",
+    "Squeeze your glutes to stand tall."
+   ]
+  }
+ },
+ "2072": {
+  "description": "上背靠凳、抬起髋部的臀桥，专注于练出强壮的臀部。",
+  "steps": [
+   "坐在地上，上背部靠在长凳边缘，屈膝。",
+   "双脚平踩地面，与髋同宽。",
+   "脚跟发力抬起髋部，直到躯干与地面平行。",
+   "顶端收紧臀部。",
+   "缓慢放下并重复。"
+  ],
+  "en": {
+   "description": "A glute-focused bridge with the upper back on a bench, lifting the hips to build strong glutes.",
+   "steps": [
+    "Sit on the floor with your upper back against a bench and knees bent.",
+    "Plant your feet flat, hip-width apart.",
+    "Drive through your heels to lift your hips until your torso is level.",
+    "Squeeze your glutes at the top.",
+    "Lower slowly and repeat."
+   ]
+  }
+ },
+ "2146": {
+  "description": "臀推的器械版本，以固定运动轨迹为臀部加负荷。",
+  "steps": [
+   "坐上器械，上背部靠在靠垫上，把绑带横跨在髋部。",
+   "双脚平踩，约与髋同宽。",
+   "脚跟发力抬起髋部，直到躯干与大腿成一直线。",
+   "在顶端收紧臀部停留片刻。",
+   "有控制地下放并重复，下巴保持微收。"
+  ],
+  "en": {
+   "description": "A machine version of the hip thrust that loads the glutes with a fixed path of motion.",
+   "steps": [
+    "Sit on the machine with your upper back against the pad and the belt across your hips.",
+    "Plant your feet flat, about hip width apart.",
+    "Drive through your heels and lift your hips until your torso and thighs are in line.",
+    "Squeeze your glutes at the top for a moment.",
+    "Lower with control and repeat, keeping your chin tucked."
+   ]
+  }
+ },
+ "2267": {
+  "description": "坐姿器械腿举，有靠背支撑，通过向前蹬腿增强大腿和臀部力量。",
+  "steps": [
+   "调整座椅，坐好使背部紧贴靠垫。",
+   "双脚踩在踏板上，约与肩同宽。",
+   "脚跟发力蹬出，直到腿接近伸直。",
+   "不要锁死膝盖。",
+   "缓慢屈膝回到起始位置。",
+   "按计划次数重复。"
+  ],
+  "en": {
+   "description": "A seated machine leg press that drives the legs forward to build thigh and glute strength with back support.",
+   "steps": [
+    "Adjust the seat and sit with your back flat against the pad.",
+    "Place your feet on the platform about shoulder-width apart.",
+    "Push through your heels until your legs are nearly straight.",
+    "Do not lock your knees.",
+    "Bend your knees slowly to return.",
+    "Repeat for the planned reps."
+   ]
+  }
+ },
+ "2290": {
+  "description": "后脚垫高的单腿蹲，增强腿部力量和平衡能力。",
+  "steps": [
+   "双手各持一只哑铃，站在长凳前约一步距离处。",
+   "将后脚脚背搭在凳上。",
+   "垂直向下蹲，直到前侧大腿约与地面平行。",
+   "躯干直立，前膝与脚尖方向一致。",
+   "前脚脚跟发力站起。",
+   "完成全部次数后换腿。"
+  ],
+  "en": {
+   "description": "A single-leg squat with the back foot raised, building leg strength and balance.",
+   "steps": [
+    "Stand a stride length in front of a bench holding a dumbbell in each hand.",
+    "Rest the top of your back foot on the bench.",
+    "Lower straight down until your front thigh is about parallel to the floor.",
+    "Keep your torso upright and your front knee tracking over your toes.",
+    "Drive through your front heel to stand back up.",
+    "Finish all reps, then switch legs."
+   ]
+  }
+ },
+ "2471": {
+  "description": "双脚着地的徒手臀桥，强化臀部和腘绳肌。",
+  "steps": [
+   "仰卧，屈膝，双脚平踩地面。",
+   "双臂放在身体两侧。",
+   "脚跟发力抬起髋部。",
+   "使肩、髋、膝成一直线。",
+   "顶端收紧臀部。",
+   "缓慢放下并重复。"
+  ],
+  "en": {
+   "description": "A floor bridge with both feet down that strengthens the glutes and hamstrings.",
+   "steps": [
+    "Lie on your back with your knees bent and feet flat.",
+    "Place your arms by your sides.",
+    "Push through your heels to lift your hips.",
+    "Make a straight line from shoulders to knees.",
+    "Squeeze your glutes at the top.",
+    "Lower slowly and repeat."
+   ]
+  }
+ },
+ "3030": {
+  "description": "杠铃扛在背上、前后分腿站立的下蹲，单侧分别训练双腿，增强力量和平衡。",
+  "steps": [
+   "将杠铃横放在上背部，一只脚向前迈出。",
+   "大步距站立，躯干直立。",
+   "双膝弯曲，后侧膝盖朝地面下降。",
+   "前脚脚跟不离地，前膝位于脚的正上方。",
+   "前脚发力站起。",
+   "完成次数后换腿。"
+  ],
+  "en": {
+   "description": "A split-stance squat with a barbell on your back. It works each leg on its own and builds strength and balance.",
+   "steps": [
+    "Rest a barbell across your upper back and step one foot forward.",
+    "Stand with a long stride and your torso upright.",
+    "Bend both knees and lower your back knee toward the floor.",
+    "Keep your front heel down and your front knee over your foot.",
+    "Press through the front foot to rise.",
+    "Finish your reps, then switch legs."
+   ]
+  }
+ },
+ "3322": {
+  "description": "壶铃放在两脚之间的硬拉，适合新手，用于学习髋铰链并锻炼臀部和腘绳肌。",
+  "steps": [
+   "双脚与髋同宽站立，壶铃放在两脚之间。",
+   "臀部后推、屈膝，双手握住壶铃把手。",
+   "挺胸，背部平直。",
+   "双脚蹬地站直，收紧臀部。",
+   "以髋为轴俯身把壶铃放回地面，然后重复。"
+  ],
+  "en": {
+   "description": "A beginner friendly deadlift with a kettlebell between your feet. It teaches the hip hinge and builds glutes and hamstrings.",
+   "steps": [
+    "Stand with feet hip width apart and the kettlebell between your feet.",
+    "Push your hips back and bend your knees to grab the handle with both hands.",
+    "Keep your chest up and back flat.",
+    "Drive through your feet and stand tall, squeezing your glutes.",
+    "Hinge back down to set the kettlebell on the floor and repeat."
+   ]
+  }
+ },
+ "3335": {
+  "description": "加负重的臀桥，针对臀部；把哑铃放在髋部上增加阻力。",
+  "steps": [
+   "仰卧，屈膝，双脚平踩地面。",
+   "将哑铃横放在髋部上并扶稳。",
+   "脚跟发力，把髋部向天花板方向抬起。",
+   "顶端用力收紧臀部。",
+   "缓慢放下髋部并重复。"
+  ],
+  "en": {
+   "description": "A loaded hip bridge that targets your glutes. Resting a dumbbell on your hips adds resistance.",
+   "steps": [
+    "Lie on your back with knees bent and feet flat on the floor.",
+    "Hold a dumbbell across your hips.",
+    "Drive through your heels and lift your hips toward the ceiling.",
+    "Squeeze your glutes hard at the top.",
+    "Lower your hips slowly and repeat."
+   ]
+  }
+ },
+ "3593": {
+  "description": "经典杠铃深蹲，增强大腿和髋部力量。",
+  "steps": [
+   "将杠铃放在上背部，双脚与肩同宽站立。",
+   "收紧核心，挺胸。",
+   "臀部向后向下坐，直到大腿约与地面平行。",
+   "膝盖与脚尖方向一致。",
+   "双脚发力站直。"
+  ],
+  "en": {
+   "description": "The classic barbell squat that builds strength in the thighs and hips.",
+   "steps": [
+    "Set the bar on your upper back and stand with feet shoulder-width apart.",
+    "Brace your core and keep your chest up.",
+    "Sit your hips back and down until your thighs are about parallel to the floor.",
+    "Keep your knees tracking over your toes.",
+    "Drive through your feet to stand tall."
+   ]
+  }
+ },
+ "3948": {
+  "description": "基础的徒手深蹲，增强腿部力量和灵活性。",
+  "steps": [
+   "双脚与肩同宽站立。",
+   "双臂向前伸以保持平衡。",
+   "臀部向后向下坐，直到大腿与地面平行。",
+   "保持挺胸。",
+   "双脚发力站起。"
+  ],
+  "en": {
+   "description": "A basic bodyweight squat that builds leg strength and mobility.",
+   "steps": [
+    "Stand with feet shoulder-width apart.",
+    "Reach your arms forward for balance.",
+    "Sit your hips back and down until your thighs are parallel.",
+    "Keep your chest up.",
+    "Drive through your feet to stand."
+   ]
+  }
+ },
+ "4295": {
+  "description": "双手各持哑铃、一步接一步向前弓步，增强腿部、臀部力量和平衡。",
+  "steps": [
+   "站直，双手各持一只哑铃垂于体侧。",
+   "一条腿向前迈步，下蹲至双膝约成 90 度。",
+   "躯干直立，前膝位于脚踝正上方。",
+   "前脚发力，把后腿向前带出，迈入下一步。",
+   "两腿交替，完成预定步数。"
+  ],
+  "en": {
+   "description": "Lunging forward step after step with a dumbbell in each hand. It builds leg and glute strength and balance.",
+   "steps": [
+    "Stand tall holding a dumbbell in each hand at your sides.",
+    "Step forward with one leg and lower until both knees are about 90 degrees.",
+    "Keep your torso upright and your front knee over your ankle.",
+    "Push through the front foot and bring the back leg forward into the next step.",
+    "Alternate legs for the desired number of steps."
+   ]
+  }
+ },
+ "7589": {
+  "description": "跪姿绳索后踢腿，孤立训练臀部。",
+  "steps": [
+   "在低位绳索上套脚踝绑带，面向器械呈四点跪姿。",
+   "收紧核心，背部平直。",
+   "把套着绑带的腿向后上方踢出。",
+   "在顶端收紧臀部。",
+   "缓慢还原。",
+   "完成全部次数后换另一侧。"
+  ],
+  "en": {
+   "description": "A kneeling cable kickback that isolates the glutes.",
+   "steps": [
+    "Attach an ankle cuff to a low cable and kneel on hands and knees facing it.",
+    "Brace your core and keep your back flat.",
+    "Kick the cuffed leg back and up.",
+    "Squeeze at the top.",
+    "Return slowly.",
+    "Finish all reps, then switch sides."
+   ]
+  }
+ },
+ "7746": {
+  "description": "跪姿、双脚固定，身体缓慢向前倒下，是强度很高的腘绳肌力量训练。",
+  "steps": [
+   "跪在垫子上，让脚踝被牢牢固定住。",
+   "从膝盖到头部保持一条直线。",
+   "尽可能缓慢地向前倒下。",
+   "到底部时用双手撑住。",
+   "推回起始位置并重复。"
+  ],
+  "en": {
+   "description": "Kneel with your feet anchored and lower your body forward slowly. It is a demanding hamstring strengthener.",
+   "steps": [
+    "Kneel on a pad with your ankles held down firmly.",
+    "Keep your body straight from knees to head.",
+    "Lower forward as slowly as you can.",
+    "Catch yourself with your hands at the bottom.",
+    "Push back up and repeat."
+   ]
+  }
+ },
+ "0166": {
+  "description": "使用低位绳索的锤式弯举，对握方式同时锻炼肱二头肌和前臂肌群。",
+  "steps": [
+   "在低位滑轮上装绳索或把手，掌心相对握住。",
+   "站直，手肘贴在身体两侧。",
+   "把把手向肩部方向弯举。",
+   "顶端收紧。",
+   "缓慢下放直到手臂伸直。",
+   "上臂保持不动，避免身体摆动。"
+  ],
+  "en": {
+   "description": "A hammer-grip curl using a low cable. The neutral grip works the biceps and the forearm muscles together.",
+   "steps": [
+    "Attach a rope or handle to a low pulley and hold it with palms facing each other.",
+    "Stand tall with your elbows at your sides.",
+    "Curl the handles up toward your shoulders.",
+    "Squeeze at the top.",
+    "Lower slowly until your arms are straight.",
+    "Keep your upper arms still and avoid swinging."
+   ]
+  }
+ },
+ "0463": {
+  "description": "经典的前臂平板支撑，保持从头到脚跟成一条直线，增强核心耐力和稳定性。",
+  "steps": [
+   "俯卧，用前臂撑起身体，手肘位于肩膀正下方。",
+   "抬起髋部和膝盖离地，用脚尖支撑。",
+   "身体从头到脚跟保持一条直线。",
+   "收紧腹部和臀部。",
+   "保持 20–60 秒，均匀呼吸。",
+   "不要塌腰或撅臀。"
+  ],
+  "en": {
+   "description": "The classic forearm plank. Holding a straight line from head to heels builds core endurance and stability.",
+   "steps": [
+    "Lie face down and prop yourself on your forearms, elbows under your shoulders.",
+    "Lift your hips and knees off the floor, resting on your toes.",
+    "Keep your body in a straight line from head to heels.",
+    "Squeeze your abs and glutes.",
+    "Hold for 20-60 seconds while breathing steadily.",
+    "Don't let your hips sag or pike up."
+   ]
+  }
+ },
+ "0715": {
+  "description": "用单侧前臂支撑的侧向平板，增强腹斜肌和稳定躯干的肌群。",
+  "steps": [
+   "侧卧，手肘位于肩膀正下方，双腿并拢叠放。",
+   "抬起髋部，使身体从头到脚成一直线。",
+   "髋部保持抬高，颈部保持中立。",
+   "保持 20–45 秒。",
+   "有控制地放下，然后换另一侧。",
+   "不要让髋部下沉或向前转。"
+  ],
+  "en": {
+   "description": "A sideways plank balanced on one forearm. It builds strength in the obliques and the muscles that stabilise your trunk.",
+   "steps": [
+    "Lie on your side with your elbow under your shoulder and legs stacked.",
+    "Lift your hips so your body forms a straight line from head to feet.",
+    "Keep your hips high and your neck neutral.",
+    "Hold for 20-45 seconds.",
+    "Lower with control and switch sides.",
+    "Don't let your hips drop or roll forward."
+   ]
+  }
+ },
+ "1163": {
+  "description": "在地面上抬起伸直的双腿，针对下腹部的动作。",
+  "steps": [
+   "仰卧，双腿伸直，双手放在臀部下方。",
+   "下背部轻轻压向地面。",
+   "双腿并拢抬起，直到指向天花板。",
+   "缓慢放下，在离地面稍高处停住。",
+   "全程避免下背部弓起。"
+  ],
+  "en": {
+   "description": "A floor exercise that raises straight legs to hit the lower abs.",
+   "steps": [
+    "Lie on your back with legs straight and hands under your hips.",
+    "Press your lower back gently into the floor.",
+    "Lift your legs together until they point at the ceiling.",
+    "Lower them slowly, stopping just above the floor.",
+    "Keep your back from arching throughout."
+   ]
+  }
+ },
+ "1202": {
+  "description": "把绳索从胸前向正前方推出，同时抵抗被拉转的力量，训练核心的抗旋转能力。",
+  "steps": [
+   "将绳索调到胸部高度，身体侧对配重片站立。",
+   "双手在胸前握住把手，收紧核心。",
+   "把把手向正前方推出，直到手臂伸直。",
+   "保持一秒，躯干不要扭转。",
+   "收回胸前，完成一组后换另一侧。"
+  ],
+  "en": {
+   "description": "Pressing a cable straight out from your chest while resisting the pull to rotate. It trains anti-rotation core strength.",
+   "steps": [
+    "Set a cable at chest height and stand sideways to the stack.",
+    "Hold the handle at your chest with both hands and brace your core.",
+    "Press the handle straight out until your arms are extended.",
+    "Hold for a second without letting your torso twist.",
+    "Bring it back to your chest and finish the set, then switch sides."
+   ]
+  }
+ },
+ "1241": {
+  "description": "四点跪姿下伸展对侧手臂和腿，增强核心控制和背部稳定性。",
+  "steps": [
+   "四点跪姿开始，双手在肩膀正下方，膝盖在髋部正下方。",
+   "右臂向前伸直，同时左腿向后伸直。",
+   "保持髋部水平、背部平直。",
+   "停留片刻后还原。",
+   "换另一侧，交替进行。"
+  ],
+  "en": {
+   "description": "From hands and knees, you extend opposite arm and leg. It builds core control and back stability.",
+   "steps": [
+    "Start on all fours with hands under your shoulders and knees under your hips.",
+    "Extend your right arm forward and left leg back.",
+    "Keep your hips level and your back flat.",
+    "Hold for a moment, then return.",
+    "Repeat on the other side and alternate."
+   ]
+  }
+ },
+ "1246": {
+  "description": "体操风格的静态支撑，肩部和双腿同时离地，增强深层核心力量。",
+  "steps": [
+   "仰卧，双臂伸过头顶，双腿伸直。",
+   "下背部压向地面。",
+   "将肩部和双腿抬离地面几厘米。",
+   "保持这个姿势，均匀呼吸。",
+   "保持 20–30 秒后休息。"
+  ],
+  "en": {
+   "description": "A gymnastics-style hold with your shoulders and legs lifted. It builds deep core strength.",
+   "steps": [
+    "Lie on your back with your arms overhead and legs straight.",
+    "Press your lower back into the floor.",
+    "Lift your shoulders and legs a few inches off the ground.",
+    "Hold the shape and breathe steadily.",
+    "Hold for 20-30 seconds, then rest."
+   ]
+  }
+ },
+ "3890": {
+  "description": "悬垂抬腿的一种，膝盖上抬至触碰手肘，高强度锻炼腹部和髋屈肌。",
+  "steps": [
+   "双手牢固握住单杠悬垂。",
+   "收紧核心，屈膝。",
+   "把膝盖向手肘方向抬起。",
+   "顶端骨盆向上卷起。",
+   "缓慢放下，不要摆动。",
+   "重复至目标次数。"
+  ],
+  "en": {
+   "description": "A hanging leg raise where the knees travel up to the elbows, working the abs and hip flexors hard.",
+   "steps": [
+    "Hang from a pull-up bar with a firm grip.",
+    "Brace your core and tuck your knees.",
+    "Raise your knees up toward your elbows.",
+    "Curl your pelvis up at the top.",
+    "Lower slowly without swinging.",
+    "Repeat for the desired reps."
+   ]
+  }
+ },
+ "4093": {
+  "description": "用墙挡住健腹轮的滚轮前推，是更安全的腹部和核心训练方式。",
+  "steps": [
+   "面对墙壁跪下，健腹轮放在身前地面上。",
+   "握住把手，骨盆后倾（卷尾骨）。",
+   "向前滚动，直到滚轮碰到墙面。",
+   "收缩腹部把滚轮拉回。",
+   "背部保持平直，避免髋部下塌。"
+  ],
+  "en": {
+   "description": "An ab wheel rollout where a wall stops the wheel, making it a safer way to train your abs and core.",
+   "steps": [
+    "Kneel facing a wall with the ab wheel on the floor in front of you.",
+    "Grip the handles and tuck your pelvis under.",
+    "Roll forward until the wheel touches the wall.",
+    "Pull the wheel back by contracting your abs.",
+    "Keep your back flat and avoid sagging at the hips."
+   ]
+  }
+ },
+ "5107": {
+  "description": "在竖蹬架（罗马椅）上用前臂撑住身体抬腿，是经典的下腹训练动作。",
+  "steps": [
+   "前臂放在扶手垫上，背部紧贴靠垫。",
+   "双腿自然垂直向下。",
+   "屈膝或直腿抬起至髋部高度或更高。",
+   "在顶端稍作停顿。",
+   "缓慢放下双腿，不要摆动。"
+  ],
+  "en": {
+   "description": "Raise your legs while supported by the arm pads of a captain's chair. It is a classic lower-ab exercise.",
+   "steps": [
+    "Rest your forearms on the pads and press your back against the support.",
+    "Let your legs hang straight down.",
+    "Raise your knees or straight legs to hip height or higher.",
+    "Pause briefly at the top.",
+    "Lower your legs slowly without swinging."
+   ]
+  }
+ },
+ "6211": {
+  "description": "像蹬自行车一样的卷腹，每次将一侧手肘靠向对侧膝盖，锻炼腹直肌和腹斜肌。",
+  "steps": [
+   "仰卧，双手放在头部两侧。",
+   "抬起肩部，同时收起膝盖。",
+   "转体，使一侧手肘靠近对侧膝盖。",
+   "另一条腿伸直。",
+   "像蹬自行车一样左右交替。",
+   "下背部保持压在地面上。"
+  ],
+  "en": {
+   "description": "A pedalling crunch where you bring each elbow toward the opposite knee. It works the abs and obliques.",
+   "steps": [
+    "Lie on your back with your hands by your head.",
+    "Lift your shoulders and bring your knees up.",
+    "Twist to bring one elbow to the opposite knee.",
+    "Extend the other leg.",
+    "Switch sides in a pedalling motion.",
+    "Keep your lower back pressed down."
+   ]
+  }
+ },
+ "8025": {
+  "description": "双手持壶铃从高到低斜向穿过身体的转体劈砍，锻炼腹斜肌并发展旋转爆发力。",
+  "steps": [
+   "双手握住一只壶铃，双脚宽距站立。",
+   "起始时将壶铃举在一侧肩膀旁的高处。",
+   "转体并向下劈向对侧膝盖。",
+   "转身时后脚随之转动。",
+   "有控制地还原，然后换另一侧。"
+  ],
+  "en": {
+   "description": "A rotational chop holding a kettlebell from high to low across the body. It trains the obliques and builds rotational power.",
+   "steps": [
+    "Hold a kettlebell with both hands and stand with your feet wide.",
+    "Start with it high beside one shoulder.",
+    "Rotate and chop down to the opposite knee.",
+    "Pivot your back foot as you turn.",
+    "Return with control and switch sides."
+   ]
+  }
+ },
+ "8193": {
+  "description": "从低到高斜向穿过身体的绳索劈砍，锻炼腹斜肌并发展旋转爆发力。",
+  "steps": [
+   "将绳索调到低位，身体侧对配重片站立。",
+   "双手握住把手。",
+   "沿对角线向上斜拉穿过身体。",
+   "后脚随之转动，躯干旋转。",
+   "缓慢还原。完成一组后换另一侧。"
+  ],
+  "en": {
+   "description": "A cable chop that travels from low to high across your body. It trains the obliques and builds rotational power.",
+   "steps": [
+    "Set the cable low and stand side-on to the stack.",
+    "Hold the handle with both hands.",
+    "Pull it diagonally up across your body.",
+    "Pivot your back foot and rotate your torso.",
+    "Return slowly. Switch sides after your set."
+   ]
+  }
+ },
+ "9819": {
+  "description": "悬垂姿势下把膝盖抬向胸部，锻炼下腹部。",
+  "steps": [
+   "手臂伸直悬垂于单杠上。",
+   "收紧腹部，避免摆动。",
+   "把膝盖抬向胸部。",
+   "顶端骨盆向上后倾。",
+   "缓慢放下并重复。"
+  ],
+  "en": {
+   "description": "From a hang, you bring your knees up toward your chest to work the lower abs.",
+   "steps": [
+    "Hang from a pull-up bar with arms straight.",
+    "Brace your abs and avoid swinging.",
+    "Raise your knees toward your chest.",
+    "Tilt your pelvis up at the top.",
+    "Lower slowly and repeat."
+   ]
+  }
+ }
+}

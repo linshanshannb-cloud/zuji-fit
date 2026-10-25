@@ -1,0 +1,7 @@
+<view class="sc">
+  <view class="sc-del" style="opacity:{{x<0?1:0}}" catchtap="onDel">{{text}}</view>
+  <view class="sc-body {{anim?'anim':''}}" style="transform:translateX({{x}}px)"
+    bindtouchstart="ts" bindtouchmove="tm" bindtouchend="te" bindtouchcancel="te"><slot></slot>
+    <view wx:if="{{x<0}}" class="sc-cover" catchtap="close"></view>
+  </view>
+</view>

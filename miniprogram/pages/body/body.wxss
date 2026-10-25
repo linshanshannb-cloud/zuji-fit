@@ -1,0 +1,7 @@
+.display { font-size: var(--fs-display); font-weight: 700; line-height: 1.1; }
+.chart-box { margin-top: 24rpx; min-height: 360rpx; }
+.chart-box.compact { min-height: 0; }
+.single-hint { background: var(--c-bg-2); border-radius: var(--r-control); padding: var(--sp-3); text-align: center; }
+.delta { width: 120rpx; text-align: right; }
+.cv { font-size: 36rpx; font-weight: 600; }
+.range-row { justify-content: flex-end; margin-top: 16rpx; } .range-seg { width: 320rpx; }

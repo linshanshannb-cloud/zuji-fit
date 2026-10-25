@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812" font-family="PingFang SC, -apple-system, 'Helvetica Neue', sans-serif">
+  <title>04 新建/编辑训练（草稿，单手录入）</title>
+  <rect x="0" y="0" width="375" height="812" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="375" height="44" rx="0" fill="#FFFFFF"/>
+  <text x="28" y="30" font-size="14" fill="#111111" font-weight="600" text-anchor="start">9:41</text>
+  <rect x="330" y="20" width="22" height="11" rx="3" fill="none" stroke="#111111" stroke-width="1"/>
+  <rect x="332" y="22" width="15" height="7" rx="1.5" fill="#111111"/>
+  <rect x="281" y="50" width="87" height="32" rx="16" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="324.5" y1="58" x2="324.5" y2="74" stroke="#E5E5E5" stroke-width="1"/>
+  <circle cx="298" cy="66" r="2" fill="#111111"/>
+  <circle cx="304" cy="66" r="3" fill="#111111"/>
+  <circle cx="310" cy="66" r="2" fill="#111111"/>
+  <circle cx="347" cy="66" r="7" fill="none" stroke="#111111" stroke-width="1.5"/>
+  <circle cx="347" cy="66" r="2.5" fill="#111111"/>
+  <path d="M16 59 L30 73 M30 59 L16 73" stroke="#111111" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="0" y1="88" x2="375" y2="88" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="40" y="71" font-size="17" fill="#111111" font-weight="600" text-anchor="start">10月17日 周六</text>
+  <path d="M160 64 L164 68 L168 64" stroke="#111111" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="178" y="57" width="34" height="20" rx="4" fill="#FFF1EB"/>
+  <text x="195.0" y="71" font-size="11" fill="#FF5A1F" font-weight="600" text-anchor="middle">草稿</text>
+  <text x="272" y="72" font-size="10" fill="#8C8C8C" font-weight="400" text-anchor="end">已自动保存</text>
+  <line x1="0" y1="88" x2="375" y2="88" stroke="#E5E5E5" stroke-width="0.5"/>
+  <rect x="16" y="104" width="343" height="320" rx="12" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="30" y1="126" x2="42" y2="126" stroke="#BBBBBB" stroke-width="1.5"/>
+  <line x1="30" y1="131" x2="42" y2="131" stroke="#BBBBBB" stroke-width="1.5"/>
+  <line x1="30" y1="136" x2="42" y2="136" stroke="#BBBBBB" stroke-width="1.5"/>
+  <text x="54" y="137" font-size="17" fill="#111111" font-weight="700" text-anchor="start">杠铃卧推</text>
+  <rect x="130.5" y="122.5" width="22" height="19" rx="4" fill="none" stroke="#111111" stroke-width="0.75"/>
+  <text x="141.5" y="136" font-size="11" fill="#111111" font-weight="400" text-anchor="middle">胸</text>
+  <circle cx="330" cy="132" r="1.8" fill="#666666"/>
+  <circle cx="337" cy="132" r="1.8" fill="#666666"/>
+  <circle cx="323" cy="132" r="1.8" fill="#666666"/>
+  <text x="40" y="160" font-size="11" fill="#8C8C8C" font-weight="400" text-anchor="middle">组</text>
+  <text x="130" y="160" font-size="11" fill="#8C8C8C" font-weight="400" text-anchor="middle">重量 kg</text>
+  <text x="258" y="160" font-size="11" fill="#8C8C8C" font-weight="400" text-anchor="middle">次数</text>
+  <text x="334" y="160" font-size="11" fill="#8C8C8C" font-weight="400" text-anchor="middle">完成</text>
+  <rect x="17" y="168" width="341" height="50" rx="0" fill="#FCFCFC"/>
+  <rect x="28" y="182" width="24" height="22" rx="4" fill="#F7F7F7"/>
+  <text x="40" y="197" font-size="12" fill="#666666" font-weight="400" text-anchor="middle">热</text>
+  <rect x="68.5" y="171.5" width="123" height="43" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="83" y1="193" x2="95" y2="193" stroke="#111111" stroke-width="1.5"/>
+  <line x1="165" y1="193" x2="177" y2="193" stroke="#111111" stroke-width="1.5"/>
+  <line x1="171" y1="187" x2="171" y2="199" stroke="#111111" stroke-width="1.5"/>
+  <line x1="108" y1="181" x2="108" y2="205" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="152" y1="181" x2="152" y2="205" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="130.0" y="198" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">40</text>
+  <rect x="200.5" y="171.5" width="115" height="43" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="215" y1="193" x2="227" y2="193" stroke="#111111" stroke-width="1.5"/>
+  <line x1="289" y1="193" x2="301" y2="193" stroke="#111111" stroke-width="1.5"/>
+  <line x1="295" y1="187" x2="295" y2="199" stroke="#111111" stroke-width="1.5"/>
+  <line x1="240" y1="181" x2="240" y2="205" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="276" y1="181" x2="276" y2="205" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="258.0" y="198" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">10</text>
+  <circle cx="334" cy="193" r="14" fill="#FF5A1F"/>
+  <path d="M329 193 L332.5 197 L339.5 189" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="17" y="220" width="341" height="50" rx="0" fill="#FCFCFC"/>
+  <text x="40" y="250" font-size="16" fill="#111111" font-weight="600" text-anchor="middle">1</text>
+  <rect x="68.5" y="223.5" width="123" height="43" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="83" y1="245" x2="95" y2="245" stroke="#111111" stroke-width="1.5"/>
+  <line x1="165" y1="245" x2="177" y2="245" stroke="#111111" stroke-width="1.5"/>
+  <line x1="171" y1="239" x2="171" y2="251" stroke="#111111" stroke-width="1.5"/>
+  <line x1="108" y1="233" x2="108" y2="257" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="152" y1="233" x2="152" y2="257" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="130.0" y="250" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">60</text>
+  <rect x="200.5" y="223.5" width="115" height="43" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="215" y1="245" x2="227" y2="245" stroke="#111111" stroke-width="1.5"/>
+  <line x1="289" y1="245" x2="301" y2="245" stroke="#111111" stroke-width="1.5"/>
+  <line x1="295" y1="239" x2="295" y2="251" stroke="#111111" stroke-width="1.5"/>
+  <line x1="240" y1="233" x2="240" y2="257" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="276" y1="233" x2="276" y2="257" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="258.0" y="250" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">8</text>
+  <circle cx="334" cy="245" r="14" fill="#FF5A1F"/>
+  <path d="M329 245 L332.5 249 L339.5 241" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="40" y="302" font-size="16" fill="#111111" font-weight="600" text-anchor="middle">2</text>
+  <rect x="68.5" y="275.5" width="123" height="43" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="83" y1="297" x2="95" y2="297" stroke="#111111" stroke-width="1.5"/>
+  <line x1="165" y1="297" x2="177" y2="297" stroke="#111111" stroke-width="1.5"/>
+  <line x1="171" y1="291" x2="171" y2="303" stroke="#111111" stroke-width="1.5"/>
+  <line x1="108" y1="285" x2="108" y2="309" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="152" y1="285" x2="152" y2="309" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="130.0" y="302" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">60</text>
+  <rect x="200.5" y="275.5" width="115" height="43" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="215" y1="297" x2="227" y2="297" stroke="#111111" stroke-width="1.5"/>
+  <line x1="289" y1="297" x2="301" y2="297" stroke="#111111" stroke-width="1.5"/>
+  <line x1="295" y1="291" x2="295" y2="303" stroke="#111111" stroke-width="1.5"/>
+  <line x1="240" y1="285" x2="240" y2="309" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="276" y1="285" x2="276" y2="309" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="258.0" y="302" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">8</text>
+  <circle cx="334" cy="297" r="13.5" fill="none" stroke="#CCCCCC" stroke-width="1.5"/>
+  <text x="40" y="354" font-size="16" fill="#111111" font-weight="600" text-anchor="middle">3</text>
+  <rect x="68.5" y="327.5" width="123" height="43" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="83" y1="349" x2="95" y2="349" stroke="#111111" stroke-width="1.5"/>
+  <line x1="165" y1="349" x2="177" y2="349" stroke="#111111" stroke-width="1.5"/>
+  <line x1="171" y1="343" x2="171" y2="355" stroke="#111111" stroke-width="1.5"/>
+  <line x1="108" y1="337" x2="108" y2="361" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="152" y1="337" x2="152" y2="361" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="130.0" y="354" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">60</text>
+  <rect x="200.5" y="327.5" width="115" height="43" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="215" y1="349" x2="227" y2="349" stroke="#111111" stroke-width="1.5"/>
+  <line x1="289" y1="349" x2="301" y2="349" stroke="#111111" stroke-width="1.5"/>
+  <line x1="295" y1="343" x2="295" y2="355" stroke="#111111" stroke-width="1.5"/>
+  <line x1="240" y1="337" x2="240" y2="361" stroke="#E5E5E5" stroke-width="0.5"/>
+  <line x1="276" y1="337" x2="276" y2="361" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="258.0" y="354" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">8</text>
+  <circle cx="334" cy="349" r="13.5" fill="none" stroke="#CCCCCC" stroke-width="1.5"/>
+  <line x1="32" y1="380" x2="343" y2="380" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="187.5" y="408" font-size="15" fill="#111111" font-weight="600" text-anchor="middle">+ 加一组</text>
+  <line x1="205" y1="394" x2="220" y2="384" stroke="#2F80ED" stroke-width="0.75" stroke-dasharray="2 2"/>
+  <circle cx="205" cy="394" r="2" fill="#2F80ED"/>
+  <text x="220" y="388" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">沿用上一组数值</text>
+  <rect x="16" y="436" width="343" height="56" rx="12" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="30" y1="458" x2="42" y2="458" stroke="#BBBBBB" stroke-width="1.5"/>
+  <line x1="30" y1="463" x2="42" y2="463" stroke="#BBBBBB" stroke-width="1.5"/>
+  <line x1="30" y1="468" x2="42" y2="468" stroke="#BBBBBB" stroke-width="1.5"/>
+  <text x="54" y="469" font-size="17" fill="#111111" font-weight="700" text-anchor="start">哑铃侧平举</text>
+  <rect x="147.5" y="454.5" width="22" height="19" rx="4" fill="none" stroke="#111111" stroke-width="0.75"/>
+  <text x="158.5" y="468" font-size="11" fill="#111111" font-weight="400" text-anchor="middle">肩</text>
+  <circle cx="330" cy="464" r="1.8" fill="#666666"/>
+  <circle cx="337" cy="464" r="1.8" fill="#666666"/>
+  <circle cx="323" cy="464" r="1.8" fill="#666666"/>
+  <text x="343" y="484" font-size="12" fill="#8C8C8C" font-weight="400" text-anchor="end">3 组</text>
+  <text x="16" y="510" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">点组序号→切换 普通/热身；左滑组→删除（可撤销）；按住 ≡ 拖动排序</text>
+  <text x="16" y="524" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">步进：重量 ±2.5kg（长按连续），次数 ±1；点中间数字弹数字键盘</text>
+  <text x="16" y="538" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">勾选完成：次数≥1 才可勾；震动反馈 + 行变浅；不强制全部勾选</text>
+  <text x="16" y="552" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">点顶部日期 → “训练信息”面板：名称（默认“M月D日训练”）/ 日期 / 备注</text>
+  <text x="16" y="566" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">⋯ 菜单：动作备注 / 调整顺序 / 替换动作 / 删除动作</text>
+  <rect x="0" y="694" width="375" height="118" rx="0" fill="#FFFFFF"/>
+  <line x1="0" y1="694" x2="375" y2="694" stroke="#E5E5E5" stroke-width="0.5"/>
+  <rect x="120.5" y="799" width="134" height="5" rx="2.5" fill="#111111"/>
+  <rect x="16" y="708" width="120" height="56" rx="8" fill="#FFFFFF" stroke="#111111" stroke-width="1"/>
+  <text x="76.0" y="741.5" font-size="16" fill="#111111" font-weight="600" text-anchor="middle">+ 动作</text>
+  <rect x="148" y="708" width="211" height="56" rx="8" fill="#111111"/>
+  <text x="253.5" y="741.5" font-size="16" fill="#FFFFFF" font-weight="600" text-anchor="middle">完成训练</text>
+  <text x="16" y="688" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">拇指区：主操作固定底部，高 56px（112rpx）</text>
+  <rect x="0.5" y="0.5" width="374" height="811" fill="none" stroke="#D0D0D0" stroke-width="1"/>
+</svg>

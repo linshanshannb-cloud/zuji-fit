@@ -1,0 +1,289 @@
+[
+  {
+    "id": "0025",
+    "nameZh": "杠铃卧推",
+    "nameEn": "barbell bench press",
+    "bodyPart": "chest",
+    "bodyPartDetail": "chest",
+    "target": "chest",
+    "secondary": [
+      "triceps",
+      "delts"
+    ],
+    "equipment": "barbell",
+    "category": "strength",
+    "categoryZh": "力量",
+    "description": "The classic flat bench press. Lower the bar to your chest and press it up to build the chest, shoulders and triceps.",
+    "steps": [
+      "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+      "正手握住杠铃，握距略宽于肩宽。",
+      "将杠铃从架子上提起，并将其直接放在胸部上方，双臂完全伸展。",
+      "将杠铃慢慢降低到胸部，保持肘部内收。",
+      "当杠铃触及胸部时暂停片刻。",
+      "伸展双臂，将杠铃推回到起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "illustration": "assets/exercises/0025.png",
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  },
+  {
+    "id": "0027",
+    "nameZh": "杠铃俯身划船",
+    "nameEn": "barbell bent over row",
+    "bodyPart": "back",
+    "bodyPartDetail": "back",
+    "target": "upper_back",
+    "secondary": [
+      "biceps",
+      "forearms"
+    ],
+    "equipment": "barbell",
+    "category": "strength",
+    "categoryZh": "力量",
+    "description": "A hip-hinged row pulling the bar to your lower chest. A staple for the upper back and lats.",
+    "steps": [
+      "站立，双脚分开与肩同宽，膝盖稍微弯曲。",
+      "臀部向前弯曲，同时保持背部挺直、挺胸。",
+      "正手握住杠铃，双手间距略宽于肩宽。",
+      "通过收缩肩胛骨并挤压背部肌肉，将杠铃拉向下胸部。",
+      "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "illustration": "assets/exercises/0027.png",
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  },
+  {
+    "id": "0652",
+    "nameZh": "引体向上",
+    "nameEn": "pull-up",
+    "bodyPart": "back",
+    "bodyPartDetail": "back",
+    "target": "lats",
+    "secondary": [
+      "biceps",
+      "forearms"
+    ],
+    "equipment": "body_weight",
+    "category": "calisthenics",
+    "categoryZh": "自重训练",
+    "description": "You hang from a bar with an overhand grip and pull your chin above it. A classic builder for the lats and upper back.",
+    "steps": [
+      "悬挂在引体向上杆上，手掌背向自己，手臂完全伸展。",
+      "启动你的核心并将肩胛骨挤压在一起。",
+      "弯曲肘部并将胸部拉向杠铃杆，将身体向上拉向杠铃杆。",
+      "在动作的最高点暂停，然后慢慢降低身体回到起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "illustration": "assets/exercises/0652.png",
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  },
+  {
+    "id": "0334",
+    "nameZh": "哑铃侧平举",
+    "nameEn": "dumbbell lateral raise",
+    "bodyPart": "shoulders",
+    "bodyPartDetail": "shoulders",
+    "target": "delts",
+    "secondary": [
+      "traps"
+    ],
+    "equipment": "dumbbell",
+    "category": "strength",
+    "categoryZh": "力量",
+    "description": "The standard standing dumbbell lateral raise. Lifting the arms out to the sides builds the side delts.",
+    "steps": [
+      "双脚分开与肩同宽站立，双手各握一个哑铃，手掌朝向身体。",
+      "保持背部挺直并启动核心肌群。",
+      "将手臂向两侧抬起，直到与地板平行，保持肘部稍微弯曲。",
+      "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "illustration": "assets/exercises/0334.png",
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  },
+  {
+    "id": "0043",
+    "nameZh": "杠铃全蹲",
+    "nameEn": "barbell full squat",
+    "bodyPart": "legs",
+    "bodyPartDetail": "upper_legs",
+    "target": "glutes",
+    "secondary": [
+      "quads",
+      "hamstrings",
+      "calves",
+      "core"
+    ],
+    "equipment": "barbell",
+    "category": "strength",
+    "categoryZh": "力量",
+    "description": "A deep back squat with the bar across the upper back. Builds the quads, glutes and overall leg strength.",
+    "steps": [
+      "站立，双脚分开与肩同宽，脚趾稍微向外。",
+      "将杠铃放在上背部，将其放在斜方肌或三角肌后束上。",
+      "当你开始降低身体时，启动你的核心并保持胸部挺直。",
+      "弯曲膝盖和臀部，向后和向下推臀部，就像坐在椅子上一样。",
+      "放低身体，直到大腿与地面平行或稍低于地面。",
+      "保持膝盖与脚趾对齐，并将重量放在脚后跟上。",
+      "通过脚后跟站起来，伸展臀部和膝盖。",
+      "重复所需的重复次数。"
+    ],
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  },
+  {
+    "id": "0032",
+    "nameZh": "杠铃硬拉",
+    "nameEn": "barbell deadlift",
+    "bodyPart": "legs",
+    "bodyPartDetail": "upper_legs",
+    "target": "glutes",
+    "secondary": [
+      "hamstrings",
+      "lower_back"
+    ],
+    "equipment": "barbell",
+    "category": "strength",
+    "categoryZh": "力量",
+    "description": "Lift the bar from the floor by driving the hips and legs until you stand tall. Trains the glutes, hamstrings and back.",
+    "steps": [
+      "双脚分开与肩同宽站立，杠铃放在你面前的地面上。",
+      "弯曲膝盖并以臀部为铰链，降低躯干，正手握住杠铃，双手分开略宽于肩宽。",
+      "当你通过脚后跟将杠铃抬离地面时，保持背部挺直，胸部抬起，伸展臀部和膝盖。",
+      "当你站直时，挤压你的臀部并保持你的核心参与。",
+      "弯曲臀部和膝盖，将杠铃放回地面，保持背部挺直。",
+      "重复所需的重复次数。"
+    ],
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  },
+  {
+    "id": "0294",
+    "nameZh": "哑铃二头弯举",
+    "nameEn": "dumbbell biceps curl",
+    "bodyPart": "arms",
+    "bodyPartDetail": "upper_arms",
+    "target": "biceps",
+    "secondary": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "category": "strength",
+    "categoryZh": "力量",
+    "description": "The standard standing dumbbell biceps curl. You curl both weights up while keeping the upper arms still.",
+    "steps": [
+      "站直，双手各握一个哑铃，手掌朝前，双臂完全伸展。",
+      "保持上臂静止，呼气并弯举哑铃，同时收缩二头肌。",
+      "继续举重，直到二头肌完全收缩并且哑铃与肩部齐平。",
+      "挤压二头肌时，保持收缩位置短暂停顿。",
+      "吸气并慢慢开始将哑铃放回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  },
+  {
+    "id": "0860",
+    "nameZh": "绳索俯身臂屈伸",
+    "nameEn": "cable kickback",
+    "bodyPart": "arms",
+    "bodyPartDetail": "upper_arms",
+    "target": "triceps",
+    "secondary": [
+      "delts"
+    ],
+    "equipment": "cable",
+    "category": "strength",
+    "categoryZh": "力量",
+    "description": "A cable triceps kickback, hinging forward and extending the forearm back. It isolates the triceps.",
+    "steps": [
+      "面向缆绳机站立，双脚与肩同宽。",
+      "用右手握住电缆手柄并后退以在电缆中产生张力。",
+      "稍微弯曲膝盖，髋部向前转动，保持背部挺直。",
+      "保持上臂靠近身体，肘部弯曲成 90 度角。",
+      "向后伸展前臂，完全伸直手臂。",
+      "暂停片刻，然后慢慢回到起始位置。",
+      "重复所需的重复次数，然后换边。"
+    ],
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  },
+  {
+    "id": "0463",
+    "nameZh": "前平板支撑",
+    "nameEn": "front plank",
+    "bodyPart": "core",
+    "bodyPartDetail": "waist",
+    "target": "abs",
+    "secondary": [
+      "core",
+      "delts",
+      "glutes"
+    ],
+    "equipment": "body_weight",
+    "category": "isometric",
+    "categoryZh": "等长训练",
+    "description": "The classic forearm plank. Holding a straight line from head to heels builds core endurance and stability.",
+    "steps": [
+      "Lie face down and prop yourself on your forearms, elbows under your shoulders.",
+      "Lift your hips and knees off the floor, resting on your toes.",
+      "Keep your body in a straight line from head to heels.",
+      "Squeeze your abs and glutes.",
+      "Hold for 20-60 seconds while breathing steadily.",
+      "Don't let your hips sag or pike up."
+    ],
+    "illustration": "assets/exercises/0463.png",
+    "translationPending": true,
+    "untranslatedFields": [
+      "steps",
+      "description"
+    ]
+  },
+  {
+    "id": "0585",
+    "nameZh": "杠杆腿屈伸",
+    "nameEn": "lever leg extension",
+    "bodyPart": "legs",
+    "bodyPartDetail": "upper_legs",
+    "target": "quads",
+    "secondary": [
+      "hamstrings"
+    ],
+    "equipment": "leverage_machine",
+    "category": "strength",
+    "categoryZh": "力量",
+    "description": "Seated on a machine, you straighten your legs against a pad. A simple quad builder.",
+    "steps": [
+      "调整机器的座椅高度和靠背以适合您的身体。",
+      "坐在机器上，背部靠在靠背上，双脚放在脚垫上。",
+      "抓住手柄或侧杆以保持稳定性。",
+      "伸直膝盖，举起重物，向前伸展双腿。",
+      "在顶部暂停片刻，然后慢慢将重量放回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "translationPending": false,
+    "untranslatedFields": [
+      "description"
+    ]
+  }
+]

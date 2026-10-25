@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>组迹 头像方案 C3：半边杠铃，透视的圆形杠铃片，由小到大</title>
+  <rect width="1024" height="1024" fill="#FF5A1F"/>
+  <g transform="translate(-55.0 -57.3) scale(1.1140)">
+  <rect x="150.0" y="484.0" width="380.0" height="56.0" rx="28.0" fill="#FFFFFF"/>
+  <ellipse cx="258.0" cy="512" rx="31.2" ry="104" fill="#FFFFFF"/>
+  <rect x="232.0" y="408" width="26" height="208" fill="#FFFFFF"/>
+  <ellipse cx="232.0" cy="512" rx="38.2" ry="111" fill="#FF5A1F"/>
+  <ellipse cx="232.0" cy="512" rx="31.2" ry="104" fill="#FFFFFF"/>
+  <ellipse cx="232.0" cy="512" rx="19.3" ry="64.5" fill="none" stroke="#FF5A1F" stroke-width="7"/>
+  <ellipse cx="232.0" cy="512" rx="12.9" ry="28.9" fill="#FF5A1F"/>
+  <ellipse cx="232.0" cy="512" rx="6.9" ry="22.9" fill="#FFFFFF"/>
+  <ellipse cx="356.0" cy="512" rx="45.6" ry="152" fill="#FFFFFF"/>
+  <rect x="322.0" y="360" width="34" height="304" fill="#FFFFFF"/>
+  <ellipse cx="322.0" cy="512" rx="52.6" ry="159" fill="#FF5A1F"/>
+  <ellipse cx="322.0" cy="512" rx="45.6" ry="152" fill="#FFFFFF"/>
+  <ellipse cx="322.0" cy="512" rx="28.3" ry="94.2" fill="none" stroke="#FF5A1F" stroke-width="7"/>
+  <ellipse cx="322.0" cy="512" rx="16.0" ry="39.4" fill="#FF5A1F"/>
+  <ellipse cx="322.0" cy="512" rx="10.0" ry="33.4" fill="#FFFFFF"/>
+  <ellipse cx="480.0" cy="512" rx="61.8" ry="206" fill="#FFFFFF"/>
+  <rect x="436.0" y="306" width="44" height="412" fill="#FFFFFF"/>
+  <ellipse cx="436.0" cy="512" rx="68.8" ry="213" fill="#FF5A1F"/>
+  <ellipse cx="436.0" cy="512" rx="61.8" ry="206" fill="#FFFFFF"/>
+  <ellipse cx="436.0" cy="512" rx="38.3" ry="127.7" fill="none" stroke="#FF5A1F" stroke-width="7"/>
+  <ellipse cx="436.0" cy="512" rx="19.6" ry="51.3" fill="#FF5A1F"/>
+  <ellipse cx="436.0" cy="512" rx="13.6" ry="45.3" fill="#FFFFFF"/>
+  <rect x="512.0" y="452.0" width="40.0" height="120.0" rx="12.0" fill="#FFFFFF"/>
+  <rect x="552.0" y="493.0" width="318.0" height="38.0" rx="19.0" fill="#FFFFFF"/>
+  <rect x="660.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="682.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="704.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="726.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="748.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="770.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="792.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="814.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="836.0" y="500.0" width="7.0" height="24.0" rx="3.5" fill="#FF5A1F"/>
+  </g>
+</svg>

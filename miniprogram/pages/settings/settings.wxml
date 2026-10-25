@@ -1,0 +1,20 @@
+<nav-bar mode="back" title="设置"></nav-bar>
+<view class="page">
+  <view class="cap sec">组间歇</view>
+  <view class="row between hairline-b line">
+    <view><view class="nm">默认时长</view><view class="cap">完成一组后自动开始倒计时</view></view>
+    <view class="row">
+      <view class="pm {{dflt<=15?'off':''}}" bindtap="step" data-d="-15">−</view>
+      <text class="val num">{{dflt}}s</text>
+      <view class="pm {{dflt>=600?'off':''}}" bindtap="step" data-d="15">+</view>
+    </view>
+  </view>
+  <view class="cap sec">单独设置的动作（{{list.length}}）</view>
+  <view wx:if="{{!list.length}}" class="sub empty">在训练中点动作的「⋯ → 组间歇时长」可单独设置</view>
+  <swipe-cell wx:for="{{list}}" wx:key="id" text="恢复默认" data-id="{{item.id}}" bind:delete="swipeReset">
+    <view class="row between hairline-b line">
+      <text class="nm ell">{{item.name}}</text>
+      <view class="row"><text class="num">{{item.secs}}s</text><text class="sub lnk" bindtap="reset" data-id="{{item.id}}">恢复默认</text></view>
+    </view>
+  </swipe-cell>
+</view>

@@ -1,0 +1,6 @@
+.stats { padding: 32rpx 0 16rpx; }
+.stat { flex: 1; }
+.sv { font-size: 44rpx; font-weight: 700; line-height: 1.2; }
+.tag-aero { background: #FFE4D6; color: #C94412; }
+.hint.muted { font-size: 24rpx; color: var(--c-text-3); }
+.section { margin-top: 32rpx; }

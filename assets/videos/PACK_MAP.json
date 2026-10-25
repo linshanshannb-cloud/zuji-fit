@@ -1,0 +1,60 @@
+{
+  "packs": {
+    "packageVideoA": [
+      "0025",
+      "0047",
+      "0227",
+      "0576",
+      "0596",
+      "0334",
+      "0405",
+      "0602"
+    ],
+    "packageVideoB": [
+      "0198",
+      "0238",
+      "0292",
+      "0818",
+      "0861",
+      "0070",
+      "0294",
+      "0313",
+      "2188"
+    ],
+    "packageVideoC": [
+      "0085",
+      "0585",
+      "0597",
+      "0599",
+      "0739",
+      "1060",
+      "3593"
+    ]
+  },
+  "id2pack": {
+    "0025": "packageVideoA",
+    "0047": "packageVideoA",
+    "0227": "packageVideoA",
+    "0576": "packageVideoA",
+    "0596": "packageVideoA",
+    "0334": "packageVideoA",
+    "0405": "packageVideoA",
+    "0602": "packageVideoA",
+    "0198": "packageVideoB",
+    "0238": "packageVideoB",
+    "0292": "packageVideoB",
+    "0818": "packageVideoB",
+    "0861": "packageVideoB",
+    "0070": "packageVideoB",
+    "0294": "packageVideoB",
+    "0313": "packageVideoB",
+    "2188": "packageVideoB",
+    "0085": "packageVideoC",
+    "0585": "packageVideoC",
+    "0597": "packageVideoC",
+    "0599": "packageVideoC",
+    "0739": "packageVideoC",
+    "1060": "packageVideoC",
+    "3593": "packageVideoC"
+  }
+}

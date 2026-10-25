@@ -1,0 +1,9 @@
+node_modules/
+miniprogram_npm/
+project.private.config.json
+*.zip
+.DS_Store
+qa/devtools/
+qa/results/
+qa/DEVTOOLS_RUN.md
+.env*

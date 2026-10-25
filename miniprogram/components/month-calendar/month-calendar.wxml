@@ -1,0 +1,21 @@
+<view class="head row between">
+  <view class="row"><text class="ym">{{year}}年{{month}}月</text><view class="today-hit" bindtap="goToday"><text class="today-pill">今天</text></view></view>
+  <view class="row"><view class="arrow" aria-label="{{view==='week'?'上一周':'上一月'}}" bindtap="prev">‹</view><view class="arrow" aria-label="{{view==='week'?'下一周':'下一月'}}" bindtap="next">›</view></view>
+</view>
+<view class="week"><view wx:for="{{weekdays}}" wx:key="*this" class="wd">{{item}}</view></view>
+<view class="grid" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+  <view wx:for="{{cells}}" wx:key="date" class="cell v-{{variant}} {{rich&&variant==='dot'?'rich':''}} {{item.inMonth?'':'out'}} {{item.future?'future':''}} {{item.train?'train':''}} {{item.isToday?'today':''}} {{item.sel?'sel':''}}" bindtap="onPick" data-date="{{item.date}}">
+    <view class="n num">{{item.day}}</view>
+    <block wx:if="{{variant==='dot'}}">
+      <view wx:if="{{item.part}}" class="ctag ctag-part">{{item.part}}</view>
+      <view wx:if="{{item.aero}}" class="ctag ctag-aero">{{item.aero}}</view>
+      <view wx:if="{{item.rest}}" class="ci ci-r">休</view>
+      <view wx:elif="{{item.showDot}}" class="dot on"></view>
+    </block>
+    <view wx:else class="val num">{{item.mark}}</view>
+  </view>
+</view>
+<view wx:if="{{legend || collapsible}}" class="foot row between">
+  <view class="legend row"><block wx:if="{{legend}}"><view class="lg-box"><view class="ctag ctag-part">胸</view></view><text>力量</text><view class="lg-box"><view class="ctag ctag-aero">跑步</view></view><text>有氧</text><block wx:if="{{rich}}"><view class="lg-rest">休</view><text>休息</text></block><view class="lg-sel"></view><text>选中</text></block></view>
+  <view wx:if="{{collapsible}}" class="toggle hit" bindtap="onToggle"><text>{{view==='week'?'展开月历':'收起'}}</text><view class="chev {{view==='week'?'':'up'}}"></view></view>
+</view>

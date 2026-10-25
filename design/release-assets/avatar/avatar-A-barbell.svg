@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>组迹 头像方案 A：杠铃 + 训练日圆点</title>
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <rect x="232" y="482" width="560" height="44" rx="22" fill="#111111"/>
+  <rect x="262" y="372" width="64" height="264" rx="28" fill="#111111"/>
+  <rect x="338" y="412" width="44" height="184" rx="22" fill="#111111"/>
+  <rect x="698" y="372" width="64" height="264" rx="28" fill="#111111"/>
+  <rect x="642" y="412" width="44" height="184" rx="22" fill="#111111"/>
+  <circle cx="512" cy="680" r="34" fill="#FF5A1F"/>
+</svg>

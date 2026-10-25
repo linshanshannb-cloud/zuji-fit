@@ -1,0 +1,17 @@
+/* Fixed column widths, no shrinking: 72 + 8 + 240 + 8 + 200 + 8 + 88 = 624rpx <= card inner width (DESIGN §4.4, REVIEW M8) */
+.sr { display: flex; align-items: center; height: 104rpx; }
+.no { width: 72rpx; height: 88rpx; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: var(--fs-sm); font-weight: 600; }
+.warm { color: var(--c-text-2); background: var(--c-bg-2); border-radius: 8rpx; padding: 8rpx 12rpx; font-size: 24rpx; }
+.stp { display: flex; align-items: center; height: 88rpx; border: 1px solid var(--c-line); border-radius: var(--r-control); margin-left: 8rpx; box-sizing: border-box; flex-shrink: 0; }
+.stp.w { width: 240rpx; } .stp.r { width: 200rpx; }
+.pm { width: 72rpx; height: 88rpx; display: flex; align-items: center; justify-content: center; font-size: 36rpx; color: var(--c-text-2); flex-shrink: 0; }
+.stp.r .pm { width: 56rpx; }
+.ro .pm, .ro .chk { opacity: .35; }
+.val { flex: 1; text-align: center; font-size: var(--fs-num); font-weight: 600; min-width: 0; }
+.phc { color: var(--c-placeholder); font-weight: 400; font-size: var(--fs-sm); }
+.chk { width: 88rpx; height: 88rpx; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-left: 8rpx; }
+.circle { width: 56rpx; height: 56rpx; border-radius: 50%; border: 3rpx solid var(--c-check); box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: var(--c-white); font-size: 30rpx; transition: transform .2s ease-out; }
+.circle.on { background: var(--c-accent); border-color: var(--c-accent); animation: pop .2s ease-out; }
+@keyframes pop { from { transform: scale(.8); } to { transform: scale(1); } }
+.shake { animation: shake .3s; border-color: var(--c-danger); }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8rpx); } 75% { transform: translateX(8rpx); } }

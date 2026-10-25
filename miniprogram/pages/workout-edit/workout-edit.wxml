@@ -1,0 +1,78 @@
+<nav-bar mode="close" custom-back bind:back="onClose">
+  <view slot="center" class="row" bindtap="openInfo">
+    <text class="nav-date">{{narrow ? w.dateShort : w.dateLabel}} ▾</text>
+    <text wx:if="{{!narrow}}" class="tag ml-2 {{w.status==='draft'?'tag-accent':'tag-gray'}}">{{w.status==='draft'?'草稿':'已完成'}}</text>
+  </view>
+</nav-bar>
+<view class="page page-pad-bar" wx:if="{{w}}">
+  <view class="row between status-line">
+    <text class="cap">{{w.name || w.placeholder}} · {{w.summary}}</text>
+    <text class="cap save-st {{saveState==='failed'?'danger':''}}" bindtap="retry">{{narrow?(w.status==='draft'?'草稿 · ':'已完成 · '):''}}{{saveState==='failed'?(canRetry?'保存失败 · 重试':'保存失败'):(w.persisted?'已自动保存':'加入动作后自动保存')}}</text>
+  </view>
+
+  <empty-state wx:if="{{!cards.length}}" title="从动作库添加第一个动作" action="+ 添加动作" bind:action="addTap"></empty-state>
+
+  <!-- sort mode: collapsed rows with up/down -->
+  <block wx:if="{{sorting}}">
+    <view class="row between" style="margin:16rpx 0"><text class="sub">调整顺序</text><btn type="text" block="{{false}}" bind:press="sortDone">完成</btn></view>
+    <view wx:for="{{cards}}" wx:key="id" class="sort-row row">
+      <text class="flex1 h2 ell1">{{item.name}}</text>
+      <view class="mv {{index===0?'off':''}}" bindtap="moveUp" data-id="{{item.id}}" data-i="{{index}}">↑</view>
+      <view class="mv {{index===cards.length-1?'off':''}}" bindtap="moveDown" data-id="{{item.id}}" data-i="{{index}}">↓</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view wx:for="{{cards}}" wx:for-item="ex" wx:key="id" class="ex-card">
+      <swipe-cell disabled="{{readOnly}}" data-id="{{ex.id}}" bind:delete="swipeDelEx">
+      <view class="ex-head row">
+        <view class="flex1 row" bindtap="toggleCard" data-id="{{ex.id}}">
+          <text class="ex-name">{{ex.name}}</text>
+          <text wx:if="{{ex.unknown}}" class="tag tag-gray" style="margin-left:12rpx">未知动作</text>
+          <text wx:elif="{{ex.part}}" class="tag tag-line" style="margin-left:12rpx">{{ex.part}}</text>
+          <text wx:if="{{expanded!==ex.id}}" class="cap" style="margin-left:auto">{{ex.doneCount}}/{{ex.sets.length}} 组</text>
+        </view>
+        <view class="dots" bindtap="more" data-id="{{ex.id}}">⋯</view>
+      </view>
+      </swipe-cell>
+      <block wx:if="{{expanded===ex.id}}">
+        <view wx:if="{{ex.note}}" class="sub ex-note">{{ex.note}}</view>
+        <view class="row th cap"><text class="c-no">组</text><text class="c-w">重量 kg</text><text class="c-r">次数</text><text class="c-chk">完成</text></view>
+        <swipe-cell wx:for="{{ex.sets}}" wx:for-item="s" wx:key="id" disabled="{{readOnly}}" data-s="{{s.id}}" data-label="{{s.label}}" bind:delete="swipeDelSet">
+        <set-row set="{{s}}" label="{{s.label}}" bodyweight="{{ex.bodyweight}}" shake="{{shakeSet===s.id}}" readonly="{{readOnly}}"
+          data-s="{{s.id}}" data-we="{{ex.id}}" data-t="{{s.type}}" data-d="{{s.done}}"
+          bind:change="onSetChange" bind:toggletype="onToggleType" bind:toggledone="onToggleDone" bind:more="onSetMore"></set-row>
+        </swipe-cell>
+        <view class="row between">
+          <view class="add-set" bindtap="addSet" data-we="{{ex.id}}">+ 加一组</view>
+          <text class="cap rest-lnk" bindtap="restMenu" data-id="{{ex.id}}">组间歇 {{ex.restLabel}} ›</text>
+        </view>
+        <view wx:if="{{index===0 && !readOnly}}" class="cap hint">左滑或长按组可删除，长按可设为热身</view>
+      </block>
+    </view>
+    <view wx:if="{{w.status==='draft' && w.persisted}}" class="discard" bindtap="discard">放弃这次训练</view>
+  </block>
+</view>
+
+<view class="bar" wx:if="{{w && sorting}}">
+  <btn type="primary" size="bar" style="flex:1" bind:press="sortDone">完成排序</btn>
+</view>
+<view class="bar" wx:elif="{{w}}">
+  <btn type="secondary" size="bar" style="width:240rpx" disabled="{{readOnly}}" bind:press="addTap">+ 动作</btn><view class="gap"></view>
+  <btn wx:if="{{w.status==='draft'}}" type="primary" size="bar" style="flex:1" disabled="{{readOnly}}" bind:press="complete">完成训练</btn>
+  <btn wx:else type="primary" size="bar" style="flex:1" disabled="{{readOnly}}" bind:press="finishEditTap">完成编辑</btn>
+</view>
+<undo-toast id="undo" bottom="{{200}}" bind:undo="onUndo"></undo-toast>
+<rest-timer id="rest" bottom="{{180}}" bind:settings="onRestSettings"></rest-timer>
+
+<block wx:if="{{info}}">
+  <view class="mask" bindtap="closeInfo"></view>
+  <view class="sheet">
+    <view class="h2" style="margin-bottom:16rpx">训练信息</view>
+    <view class="field hairline-b"><text class="field-label">名称</text><input class="field-input" style="font-size:30rpx;font-weight:400" maxlength="30" placeholder="{{w.placeholder}}" value="{{form.name}}" data-k="name" bindinput="onInfoInput"/></view>
+    <picker mode="date" end="{{today}}" value="{{form.date}}" bindchange="onInfoDate"><view class="field hairline-b"><text class="field-label">日期</text><text class="flex1" style="text-align:right">{{form.dateLabel}} ›</text></view></picker>
+    <view class="field hairline-b"><text class="field-label">备注</text><input class="field-input" style="font-size:30rpx;font-weight:400" maxlength="500" placeholder="可选" value="{{form.note}}" data-k="note" bindinput="onInfoInput"/></view>
+    <view style="margin-top:32rpx"><btn bind:press="saveInfo">保存</btn></view>
+    <view wx:if="{{w.status==='draft' && w.persisted}}" class="discard" bindtap="discard">放弃这次训练</view>
+  </view>
+</block>

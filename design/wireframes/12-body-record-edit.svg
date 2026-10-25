@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812" font-family="PingFang SC, -apple-system, 'Helvetica Neue', sans-serif">
+  <title>12 新增/编辑身体数据</title>
+  <rect x="0" y="0" width="375" height="812" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="375" height="44" rx="0" fill="#FFFFFF"/>
+  <text x="28" y="30" font-size="14" fill="#111111" font-weight="600" text-anchor="start">9:41</text>
+  <rect x="330" y="20" width="22" height="11" rx="3" fill="none" stroke="#111111" stroke-width="1"/>
+  <rect x="332" y="22" width="15" height="7" rx="1.5" fill="#111111"/>
+  <rect x="281" y="50" width="87" height="32" rx="16" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <line x1="324.5" y1="58" x2="324.5" y2="74" stroke="#E5E5E5" stroke-width="1"/>
+  <circle cx="298" cy="66" r="2" fill="#111111"/>
+  <circle cx="304" cy="66" r="3" fill="#111111"/>
+  <circle cx="310" cy="66" r="2" fill="#111111"/>
+  <circle cx="347" cy="66" r="7" fill="none" stroke="#111111" stroke-width="1.5"/>
+  <circle cx="347" cy="66" r="2.5" fill="#111111"/>
+  <path d="M24 58 L16 66 L24 74" stroke="#111111" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="187.5" y="71" font-size="17" fill="#111111" font-weight="600" text-anchor="middle">编辑记录</text>
+  <line x1="0" y1="88" x2="375" y2="88" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="124" font-size="16" fill="#111111" font-weight="400" text-anchor="start">日期</text>
+  <text x="330" y="124" font-size="16" fill="#111111" font-weight="400" text-anchor="end">10月14日 周三</text>
+  <path d="M343 114 L348 119 L343 124" stroke="#BBBBBB" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="16" y1="146" x2="359" y2="146" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="162" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">日期可选今天及以前（补录）；未来日期不可选</text>
+  <text x="16" y="204" font-size="16" fill="#111111" font-weight="400" text-anchor="start">体重</text>
+  <text x="52" y="200" font-size="14" fill="#FF5A1F" font-weight="700" text-anchor="start">*</text>
+  <text x="300" y="205" font-size="20" fill="#111111" font-weight="600" text-anchor="end">69.0</text>
+  <text x="343" y="204" font-size="14" fill="#666666" font-weight="400" text-anchor="end">kg</text>
+  <line x1="16" y1="226" x2="359" y2="226" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="260" font-size="16" fill="#111111" font-weight="400" text-anchor="start">体脂率</text>
+  <text x="300" y="261" font-size="20" fill="#111111" font-weight="600" text-anchor="end">18.2</text>
+  <text x="343" y="260" font-size="14" fill="#666666" font-weight="400" text-anchor="end">%</text>
+  <line x1="16" y1="282" x2="359" y2="282" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="316" font-size="16" fill="#111111" font-weight="400" text-anchor="start">腰围</text>
+  <text x="300" y="317" font-size="16" fill="#BBBBBB" font-weight="400" text-anchor="end">选填</text>
+  <text x="343" y="316" font-size="14" fill="#666666" font-weight="400" text-anchor="end">cm</text>
+  <line x1="16" y1="338" x2="359" y2="338" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="372" font-size="16" fill="#111111" font-weight="400" text-anchor="start">备注</text>
+  <text x="300" y="373" font-size="16" fill="#BBBBBB" font-weight="400" text-anchor="end">选填，≤200 字</text>
+  <text x="343" y="372" font-size="14" fill="#666666" font-weight="400" text-anchor="end"></text>
+  <line x1="16" y1="394" x2="359" y2="394" stroke="#E5E5E5" stroke-width="0.5"/>
+  <text x="16" y="410" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">体重必填；体脂率、腰围选填；type=digit，保留 1 位小数</text>
+  <text x="16" y="440" font-size="12" fill="#8C8C8C" font-weight="400" text-anchor="start">校验示例</text>
+  <text x="16" y="478" font-size="16" fill="#111111" font-weight="400" text-anchor="start">体重</text>
+  <text x="52" y="474" font-size="14" fill="#FF5A1F" font-weight="700" text-anchor="start">*</text>
+  <text x="300" y="479" font-size="16" fill="#BBBBBB" font-weight="400" text-anchor="end">请输入</text>
+  <text x="343" y="478" font-size="14" fill="#666666" font-weight="400" text-anchor="end">kg</text>
+  <line x1="16" y1="500" x2="359" y2="500" stroke="#E5484D" stroke-width="1"/>
+  <text x="16" y="518" font-size="12" fill="#E5484D" font-weight="400" text-anchor="start">请填写体重</text>
+  <text x="16" y="544" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">选到已有记录的日期 → 自动载入该日记录转为编辑（每天最多 1 条）</text>
+  <rect x="0" y="638" width="375" height="174" rx="0" fill="#FFFFFF"/>
+  <line x1="0" y1="638" x2="375" y2="638" stroke="#E5E5E5" stroke-width="0.5"/>
+  <rect x="120.5" y="799" width="134" height="5" rx="2.5" fill="#111111"/>
+  <rect x="16" y="652" width="343" height="56" rx="8" fill="#111111"/>
+  <text x="187.5" y="685.5" font-size="16" fill="#FFFFFF" font-weight="600" text-anchor="middle">保存</text>
+  <rect x="16" y="716" width="343" height="48" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="187.5" y="745.5" font-size="15" fill="#E5484D" font-weight="500" text-anchor="middle">删除这条记录</text>
+  <text x="16" y="632" font-size="9" fill="#2F80ED" font-weight="400" text-anchor="start">新增时不显示“删除”；删除 → 确认弹窗</text>
+  <rect x="0.5" y="0.5" width="374" height="811" fill="none" stroke="#D0D0D0" stroke-width="1"/>
+</svg>

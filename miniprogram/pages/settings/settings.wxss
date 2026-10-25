@@ -1,0 +1,9 @@
+.sec { margin: 40rpx 0 8rpx; }
+.line { min-height: 112rpx; }
+.nm { font-size: 30rpx; font-weight: 600; }
+.ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 400rpx; }
+.pm { width: 72rpx; height: 72rpx; border-radius: var(--r-control); background: var(--c-bg-2); display: flex; align-items: center; justify-content: center; font-size: 36rpx; }
+.pm.off { color: var(--c-placeholder); }
+.val { width: 120rpx; text-align: center; font-size: 34rpx; font-weight: 700; }
+.lnk { margin-left: 24rpx; padding: 16rpx 0; }
+.empty { padding: 24rpx 0; }

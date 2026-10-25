@@ -1,0 +1,45 @@
+<nav-bar mode="back"></nav-bar>
+<view class="page page-pad-bar" wx:if="{{ex}}">
+  <!-- media: video → cover image → text placeholder -->
+  <view wx:if="{{ex.mediaMode==='video'}}" class="media" bindtap="togglePlay">
+    <video id="exVideo" class="vid" src="{{ex.videoSrc}}" autoplay loop muted controls="{{false}}" show-center-play-btn="{{false}}" enable-progress-gesture="{{false}}" object-fit="contain" binderror="onAnimError" bindplay="onPlay" bindpause="onPause"></video>
+    <view class="play-hint {{playing ? 'is-playing' : ''}}">{{playing ? '❚❚' : '▶'}}</view>
+  </view>
+  <view wx:elif="{{ex.mediaMode==='image'}}" class="media" bindtap="onCoverTap">
+    <image class="ill" src="{{ex.illSrc}}" mode="aspectFit" binderror="onIllError" />
+    <view wx:if="{{ex.videoSrc}}" class="play-hint">▶</view>
+  </view>
+  <view wx:else class="ph-big" bindtap="onCoverTap">{{ex.ph}}</view>
+  <view wx:if="{{ex.videoSrc}}" class="speed seg">
+    <view wx:for="{{rates}}" wx:key="*this" class="seg-item {{rate===item?'on':''}}" bindtap="setRate" data-r="{{item}}">{{item}}x</view>
+  </view>
+  <view class="row" style="margin-top:32rpx;flex-wrap:wrap"><text class="title">{{ex.nameZh}}</text><text wx:if="{{isCustom}}" class="tag tag-accent" style="margin-left:16rpx">自定</text><text wx:if="{{ex.pending}}" class="tag tag-gray" style="margin-left:16rpx">暂无中文</text></view>
+  <view class="sub" style="font-size:28rpx">{{ex.nameEn}}</view>
+  <view class="tags">
+    <view wx:if="{{ex.target}}" class="row tg"><text class="cap lab">目标肌群</text><text class="tag tag-solid">{{ex.target}}</text></view>
+    <view wx:if="{{ex.secondary.length}}" class="row tg" style="flex-wrap:wrap"><text class="cap lab">次要肌群</text><text wx:for="{{ex.secondary}}" wx:key="*this" class="tag tag-line" style="margin-bottom:8rpx">{{item}}</text></view>
+  </view>
+  <view class="grid hairline-t hairline-b">
+    <view wx:for="{{ex.info}}" wx:key="k" class="cell"><view class="cap">{{item.k}}</view><view class="cv num">{{item.v}}</view></view>
+  </view>
+  <view class="h2 section section-title">动作步骤</view>
+  <view wx:for="{{ex.steps}}" wx:key="no" class="row step"><text class="sno">{{item.no}}</text><text class="stx">{{item.text}}</text></view>
+  <view wx:if="{{!ex.steps.length}}" class="sub">暂无步骤</view>
+  <view class="bar-spacer"></view>
+</view>
+<empty-state wx:if="{{!ex}}" title="未找到该动作"></empty-state>
+<view class="bar" wx:if="{{ex}}">
+  <block wx:if="{{mode==='select'}}">
+    <btn size="bar" style="flex:1" bind:press="select">选择这个动作</btn>
+  </block>
+  <block wx:elif="{{isCustom && !readOnly}}">
+    <btn type="secondary" size="bar" style="width:160rpx" bind:press="editCustom">编辑</btn>
+    <view class="gap"></view>
+    <btn type="secondary" size="bar" style="width:160rpx" bind:press="deleteCustom">删除</btn>
+    <view class="gap"></view>
+    <btn size="bar" style="flex:1" bind:press="addToWorkout">加入训练</btn>
+  </block>
+  <block wx:else>
+    <btn size="bar" style="flex:1" disabled="{{readOnly}}" bind:press="addToWorkout" bind:disabledtap="addToWorkout">加入当前训练</btn>
+  </block>
+</view>

@@ -1,0 +1,12 @@
+{"_placeholder":"PLACEHOLDER 占位数据：data/ 中尚无 exercises.json，待动作库管家替换","exercises":[
+{"id":"ph-squat","name_zh":"杠铃深蹲","name_en":"Barbell Squat","bodyPart":"腿","equipment":"杠铃","target":["股四头肌"],"secondary":["臀大肌","腘绳肌"],"steps":["杠铃置于斜方肌上","屈髋屈膝下蹲至大腿平行地面","蹬地站起"]},
+{"id":"ph-bench","name_zh":"杠铃卧推","name_en":"Barbell Bench Press","bodyPart":"胸","equipment":"杠铃","target":["胸大肌"],"secondary":["三角肌前束","肱三头肌"],"steps":["仰卧握杠略宽于肩","下放至胸部","推起至手臂伸直"]},
+{"id":"ph-deadlift","name_zh":"硬拉","name_en":"Deadlift","bodyPart":"背","equipment":"杠铃","target":["竖脊肌","臀大肌"],"secondary":["腘绳肌","斜方肌"],"steps":["双脚与髋同宽站于杠下","背部挺直握杠","伸髋伸膝拉起"]},
+{"id":"ph-pullup","name_zh":"引体向上","name_en":"Pull-up","bodyPart":"背","equipment":"自重","target":["背阔肌"],"secondary":["肱二头肌"],"steps":["正握单杠悬垂","拉起至下巴过杠","控制下放"]},
+{"id":"ph-ohp","name_zh":"站姿推举","name_en":"Overhead Press","bodyPart":"肩","equipment":"杠铃","target":["三角肌前束"],"secondary":["肱三头肌"],"steps":["杠铃置于锁骨前","向上推至手臂伸直","控制下放"]},
+{"id":"ph-dbcurl","name_zh":"哑铃弯举","name_en":"Dumbbell Curl","bodyPart":"手臂","equipment":"哑铃","target":["肱二头肌"],"secondary":["肱桡肌"],"steps":["双手持哑铃站立","屈肘举起","缓慢放下"]},
+{"id":"ph-pushdown","name_zh":"绳索下压","name_en":"Cable Pushdown","bodyPart":"手臂","equipment":"绳索","target":["肱三头肌"],"secondary":[],"steps":["面对龙门架握把","大臂贴身向下伸肘","控制还原"]},
+{"id":"ph-lunge","name_zh":"哑铃箭步蹲","name_en":"Dumbbell Lunge","bodyPart":"腿","equipment":"哑铃","target":["股四头肌","臀大肌"],"secondary":["腘绳肌"],"steps":["持哑铃站立","向前跨步下蹲","蹬回起始位"]},
+{"id":"ph-plank","name_zh":"平板支撑","name_en":"Plank","bodyPart":"核心","equipment":"自重","target":["腹直肌"],"secondary":["腹横肌"],"steps":["前臂撑地","身体成一直线","保持姿势"]},
+{"id":"ph-row","name_zh":"坐姿划船","name_en":"Seated Cable Row","bodyPart":"背","equipment":"器械","target":["背阔肌","菱形肌"],"secondary":["肱二头肌"],"steps":["坐姿握把","挺胸后拉至腹部","控制还原"]}
+]}

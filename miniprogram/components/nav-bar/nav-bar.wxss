@@ -1,0 +1,10 @@
+.nav { position: fixed; top: 0; left: 0; right: 0; background: var(--c-white); z-index: 40; }
+.bar-in { position: relative; display: flex; align-items: center; padding-left: 32rpx; box-sizing: border-box; }
+.tab-title { font-size: var(--fs-h1); font-weight: 700; }
+.back { width: 88rpx; height: 88rpx; display: flex; align-items: center; margin-left: -16rpx; font-size: 48rpx; flex-shrink: 0; position: relative; z-index: 1; }
+.center { position: absolute; top: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.center-in { display: flex; align-items: center; max-width: 100%; overflow: hidden; white-space: nowrap; pointer-events: auto; }
+.title { font-size: var(--fs-nav); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ro { min-height: 64rpx; line-height: 64rpx; background: var(--c-bg-2); color: var(--c-text-2); font-size: 24rpx; text-align: center; padding: 0 32rpx; }
+.ro.warn { color: var(--c-danger); }
+.ro-sp { height: 64rpx; }

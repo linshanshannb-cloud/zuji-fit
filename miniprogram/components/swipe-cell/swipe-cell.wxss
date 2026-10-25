@@ -1,0 +1,6 @@
+:host { display: block; }
+.sc { position: relative; overflow: hidden; }
+.sc-del { position: absolute; top: 0; right: 0; bottom: 0; width: 150rpx; background: var(--c-danger); color: var(--c-white); display: flex; align-items: center; justify-content: center; font-size: 28rpx; font-weight: 600; }
+.sc-body { position: relative; background: var(--c-white); z-index: 1; }
+.sc-body.anim { transition: transform .2s ease-out; }
+.sc-cover { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 2; }

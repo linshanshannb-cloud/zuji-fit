@@ -1,0 +1,15 @@
+<view class="nav" style="padding-top:{{statusH}}px">
+  <view class="bar-in" style="height:{{navH}}px; padding-right:{{rightGap}}px">
+    <block wx:if="{{mode==='tab'}}"><text class="tab-title">{{title}}</text><slot name="right"></slot></block>
+    <block wx:else>
+      <view class="back" bindtap="onBack">{{mode==='close'?'×':'‹'}}</view>
+      <!-- centered on the screen, symmetric capsule gap on both sides (REVIEW M1) -->
+      <view class="center" style="left:{{rightGap}}px; right:{{rightGap}}px; height:{{navH}}px">
+        <view class="center-in"><slot name="center"></slot><text wx:if="{{title}}" class="title">{{title}}</text></view>
+      </view>
+    </block>
+  </view>
+  <view wx:if="{{banner}}" class="ro {{bannerAct?'warn':''}}" bindtap="onBanner">{{banner}}</view>
+</view>
+<view style="height:{{statusH + navH}}px"></view>
+<view wx:if="{{banner}}" class="ro-sp"></view>

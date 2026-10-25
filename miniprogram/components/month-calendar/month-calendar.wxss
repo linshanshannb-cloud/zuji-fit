@@ -1,0 +1,44 @@
+.head { height: 88rpx; }
+.ym { font-size: 34rpx; font-weight: 700; }
+.today-pill { margin-left: 16rpx; font-size: 22rpx; padding: 4rpx 16rpx; border: 1px solid var(--c-line); border-radius: var(--r-pill); color: var(--c-text-2); }
+.arrow { width: 88rpx; height: 88rpx; display: flex; align-items: center; justify-content: center; font-size: 40rpx; }
+.week, .grid { display: flex; flex-wrap: wrap; }
+.wd { width: 14.2857%; text-align: center; font-size: 24rpx; color: var(--c-text-3); padding: 8rpx 0; }
+.cell { width: 14.2857%; height: 88rpx; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.v-value { height: 100rpx; }
+.n { width: 68rpx; height: 68rpx; line-height: 68rpx; border-radius: 50%; text-align: center; font-size: 30rpx; position: relative; }
+.v-value .n { width: 60rpx; height: 60rpx; line-height: 60rpx; }
+.out .n { color: var(--c-placeholder); }
+.future .n { color: var(--c-placeholder); }
+.dot { position: relative; width: 10rpx; height: 10rpx; border-radius: 50%; margin-top: 2rpx; }
+.dot.on { background: var(--c-accent); }
+.val { font-size: 18rpx; color: var(--c-text-3); height: 24rpx; line-height: 24rpx; }
+.out .dot, .out .val { visibility: hidden; }
+.today-hit { height: 88rpx; display: flex; align-items: center; padding: 0 16rpx; }
+/* v0.5 紧凑格子：行高 100rpx = 6 + 数字 40 + (2 + 标签 24) × 2 */
+.rich { height: 100rpx; justify-content: flex-start; padding-top: 6rpx; box-sizing: border-box; }
+.rich .n { width: 40rpx; height: 40rpx; line-height: 40rpx; font-size: 28rpx; }
+/* 训练日：整格浅橙底 + 日期加粗 */
+.rich.train::before { content: ''; position: absolute; top: 2rpx; bottom: 0; left: 3rpx; right: 3rpx; border-radius: 16rpx; background: #FFE4D6; }
+.train .n { color: var(--c-ink); font-weight: 700; }
+.out.train::before { display: none; }
+.today .n { color: var(--c-accent); font-weight: 700; }
+.sel .n { background: var(--c-ink); color: var(--c-white); font-weight: 700; }
+/* 格子标签：力量在上（黑字）、有氧在下（深橙字），白底，20rpx */
+.ctag { position: relative; max-width: 88rpx; margin-top: 2rpx; padding: 0 6rpx; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center; font-size: 20rpx; line-height: 24rpx; height: 24rpx; border-radius: 6rpx; font-weight: 600; background: var(--c-white); }
+.ctag-part { color: var(--c-ink); }
+.ctag-aero { color: #C94412; }
+.ci { position: relative; max-width: 100%; padding: 0 2rpx; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center; font-size: 19rpx; line-height: 24rpx; height: 24rpx; }
+.ci-r { color: #6B7F99; font-weight: 600; margin-top: 4rpx; width: 32rpx; height: 32rpx; line-height: 32rpx; border-radius: 50%; background: #EEF2F7; font-size: 20rpx; padding: 0; }
+.out .ctag, .out .ci { visibility: hidden; }
+/* 底部一行：图例 + 展开/收起 */
+.foot { min-height: 72rpx; }
+.legend { font-size: 22rpx; color: var(--c-text-3); flex-wrap: wrap; min-width: 0; }
+.legend text { margin: 0 14rpx 0 6rpx; }
+.lg-box { padding: 3rpx 4rpx; border-radius: 8rpx; background: #FFE4D6; display: flex; }
+.lg-box .ctag { margin-top: 0; }
+.lg-sel { width: 20rpx; height: 20rpx; border-radius: 50%; background: var(--c-ink); }
+.lg-rest { width: 28rpx; height: 28rpx; line-height: 28rpx; border-radius: 50%; background: #EEF2F7; color: #6B7F99; font-size: 18rpx; text-align: center; font-weight: 600; }
+.toggle { flex-shrink: 0; padding-left: 16rpx; font-size: 24rpx; color: var(--c-text-2); font-weight: 600; }
+.chev { width: 10rpx; height: 10rpx; margin: -6rpx 0 0 10rpx; border-right: 3rpx solid var(--c-text-2); border-bottom: 3rpx solid var(--c-text-2); transform: rotate(45deg); }
+.chev.up { margin-top: 6rpx; transform: rotate(-135deg); }

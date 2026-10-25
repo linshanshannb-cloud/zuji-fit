@@ -1,0 +1,4 @@
+.part-grid { display: flex; flex-wrap: wrap; margin-top: 16rpx; }
+.part-grid .chip { margin-bottom: 16rpx; }
+.hint { color: var(--c-text-3); font-size: var(--fs-caption); padding: 16rpx 0 0; }
+.del-wrap { padding: 48rpx 0 24rpx; text-align: center; }

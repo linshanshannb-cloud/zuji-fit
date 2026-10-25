@@ -1,0 +1,13 @@
+<view wx:if="{{visible}}" class="rt {{finished?'fin':''}}" style="bottom:{{bottom}}rpx" catchtouchmove="noop">
+  <view class="rt-bar"><view class="rt-fill" style="width:{{pct}}%"></view></view>
+  <view class="rt-row">
+    <view class="rt-info">
+      <text class="rt-title">{{finished ? '休息结束' : title}}</text>
+      <text class="rt-time num">{{label}}</text>
+    </view>
+    <view class="rt-btn" bindtap="minus">−15s</view>
+    <view class="rt-btn" bindtap="plus">+15s</view>
+    <view class="rt-btn rt-skip" bindtap="skip">{{finished ? '关闭' : '跳过'}}</view>
+  </view>
+  <view class="rt-set" bindtap="settings">设置时长</view>
+</view>

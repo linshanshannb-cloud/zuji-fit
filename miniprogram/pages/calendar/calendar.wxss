@@ -1,0 +1,27 @@
+.day-head { margin-top: var(--sp-4); min-height: 48rpx; }
+.tag-rest { background: #EEF2F7; color: #6B7F99; }
+/* QA-01：有氧标签略加深橙字 */
+.tag-aero { background: #FFE4D6; color: #C94412; }
+.ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 16rpx; }
+/* 所选日汇总卡 */
+.sum { margin-top: var(--sp-3); background: var(--c-bg-2); border-radius: var(--r-card); padding: 8rpx var(--sp-4); }
+.sum-total { padding: 20rpx 0; align-items: baseline; }
+.sum-k { font-size: var(--fs-sub); color: var(--c-text-2); font-weight: 600; }
+.sum-big { font-size: 64rpx; font-weight: 700; line-height: 1; color: var(--c-accent); }
+.sum-unit { font-size: var(--fs-sub); color: var(--c-text-2); margin-left: 8rpx; }
+.sum-block { padding: 24rpx 0 4rpx; }
+.sum-total + .sum-block, .sum-block + .sum-block { border-top: 1px solid var(--c-line); }
+.sum-title { font-size: 36rpx; font-weight: 700; color: var(--c-ink); margin-left: 4rpx; }
+.stats { padding: 16rpx 0 20rpx; }
+.stat { flex: 1; }
+.sv { font-size: var(--fs-stat); font-weight: 700; line-height: 1.2; color: var(--c-ink); }
+/* 当日记录：紧凑卡片（大数字只在汇总卡） */
+.rec-title { margin-top: var(--sp-4); }
+.rec { margin-top: var(--sp-2); }
+.rec-name { font-size: var(--fs-body); font-weight: 600; }
+.rec-meta { padding-top: 12rpx; }
+.ex-line { padding-top: 12rpx; font-size: 28rpx; }
+.unrest { text-align: center; padding: 8rpx 0 24rpx; }
+.unrest .sub { text-decoration: underline; padding: 16rpx 24rpx; }
+.aero-link { text-align: center; padding: 32rpx 0 120rpx; }
+.aero-link .sub { padding: 16rpx 24rpx; font-weight: 600; }

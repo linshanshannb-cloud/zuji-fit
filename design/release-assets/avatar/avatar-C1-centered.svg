@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>组迹 头像方案 C1：半边杠铃，杠铃片垂直居中、由小到大</title>
+  <rect width="1024" height="1024" fill="#FF5A1F"/>
+  <g transform="translate(-96.8 -94.4) scale(1.1867)">
+  <rect x="176.0" y="482.0" width="330.0" height="60.0" rx="30.0" fill="#FFFFFF"/>
+  <rect x="222.0" y="414.0" width="46.0" height="196.0" rx="19.0" fill="#FFFFFF"/>
+  <rect x="284.0" y="364.0" width="62.0" height="296.0" rx="22.0" fill="#FFFFFF"/>
+  <rect x="362.0" y="310.0" width="82.0" height="404.0" rx="22.0" fill="#FFFFFF"/>
+  <rect x="460.0" y="450.0" width="40.0" height="124.0" rx="12.0" fill="#FFFFFF"/>
+  <rect x="500.0" y="492.0" width="352.0" height="40.0" rx="20.0" fill="#FFFFFF"/>
+  <rect x="612.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="634.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="656.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="678.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="700.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="722.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="744.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="766.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="788.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  <rect x="810.0" y="499.0" width="7.0" height="26.0" rx="3.5" fill="#FF5A1F"/>
+  </g>
+</svg>

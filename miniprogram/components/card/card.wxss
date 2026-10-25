@@ -1,0 +1,4 @@
+:host { display: block; }
+.card { background: var(--c-white); border: 1px solid var(--c-line); border-radius: var(--r-card); }
+.pad { padding: var(--sp-4); }
+.pressed { opacity: .7; }

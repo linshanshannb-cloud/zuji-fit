@@ -1,0 +1,64 @@
+{
+  "pages": [
+    "pages/calendar/calendar",
+    "pages/library/library",
+    "pages/body/body",
+    "pages/workout-detail/workout-detail",
+    "pages/workout-edit/workout-edit",
+    "pages/aerobic-detail/aerobic-detail",
+    "pages/aerobic-edit/aerobic-edit",
+    "pages/exercise-picker/exercise-picker",
+    "pages/exercise-detail/exercise-detail",
+    "pages/custom-exercise-edit/custom-exercise-edit",
+    "pages/body-edit/body-edit",
+    "pages/settings/settings",
+    "pages/about/about"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#8C8C8C",
+    "selectedColor": "#FF5A1F",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/calendar/calendar",
+        "text": "日历",
+        "iconPath": "images/tabbar/calendar.png",
+        "selectedIconPath": "images/tabbar/calendar-active.png"
+      },
+      {
+        "pagePath": "pages/library/library",
+        "text": "动作库",
+        "iconPath": "images/tabbar/library.png",
+        "selectedIconPath": "images/tabbar/library-active.png"
+      },
+      {
+        "pagePath": "pages/body/body",
+        "text": "身体数据",
+        "iconPath": "images/tabbar/body.png",
+        "selectedIconPath": "images/tabbar/body-active.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "btn": "/components/btn/btn",
+    "card": "/components/card/card",
+    "empty-state": "/components/empty-state/empty-state",
+    "undo-toast": "/components/undo-toast/undo-toast",
+    "month-calendar": "/components/month-calendar/month-calendar",
+    "line-chart": "/components/line-chart/line-chart",
+    "set-row": "/components/set-row/set-row",
+    "swipe-cell": "/components/swipe-cell/swipe-cell",
+    "rest-timer": "/components/rest-timer/rest-timer"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

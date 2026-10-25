@@ -1,0 +1,39 @@
+<nav-bar mode="back" title="{{mode==='replace'?'替换动作':'选择动作'}}"></nav-bar>
+<view class="page page-pk">
+  <view class="pk-top">
+    <view class="search"><view class="mag"></view><input value="{{q}}" placeholder="搜索中文 / 英文名" confirm-type="search" bindinput="onQ"/><view wx:if="{{q}}" class="clear" bindtap="clearQ"><view class="x"></view></view></view>
+    <view class="row chips">
+      <scroll-view scroll-x class="flex1" style="white-space:nowrap"><view class="chip {{equipment===''?'on':''}}" bindtap="setEq" data-v="">不限</view><view wx:for="{{equipments}}" wx:key="value" class="chip {{equipment===item.value?'on':''}}" bindtap="setEq" data-v="{{item.value}}">{{item.zh}}</view></scroll-view>
+      <text wx:if="{{!readOnly}}" class="cap accent hit" style="margin-left:12rpx;flex-shrink:0;font-weight:600" bindtap="goCustom">+ 自定义</text>
+    </view>
+  </view>
+  <view class="pk-wrap" style="height:{{listH}}px">
+    <scroll-view scroll-y class="side" style="height:{{listH}}px" enhanced="{{true}}" show-scrollbar="{{false}}">
+      <view wx:for="{{tabs}}" wx:key="key" class="side-i {{group===item.key?'on':''}}" bindtap="setGroup" data-k="{{item.key}}"><text>{{item.zh}}</text><text class="side-n">{{item.count}}</text></view>
+    </scroll-view>
+    <scroll-view scroll-y class="main" style="height:{{listH}}px" scroll-top="{{mainScrollTop}}" bindscrolltolower="more" lower-threshold="120" enhanced="{{true}}">
+      <empty-state wx:if="{{!total}}" title="没有找到{{q?'“'+q+'”':'动作'}}" sub="试试其他关键词，或清除筛选" action="清除筛选" bind:action="clearAll"></empty-state>
+      <view class="ex-grid">
+        <view wx:for="{{items}}" wx:key="id" class="ex-cell {{selMap[item.id]?'sel':''}}" bindtap="toggle" data-id="{{item.id}}">
+          <view class="ex-img">
+            <image wx:if="{{item.img}}" src="{{item.img}}" mode="aspectFill" lazy-load="{{true}}"/>
+            <view wx:else class="ex-ph"><view class="db"><view class="db-p"></view><view class="db-p s"></view><view class="db-b"></view><view class="db-p s"></view><view class="db-p"></view></view><text class="ex-ini">{{item.initial}}</text></view>
+            <view wx:if="{{item.hasVideo}}" class="ex-play"></view>
+            <text wx:if="{{item.custom}}" class="ex-badge">自定</text>
+            <text wx:if="{{added[item.id]}}" class="tag tag-gray added">已添加</text>
+          </view>
+          <view class="ex-corner pick {{selMap[item.id]?'on':''}}">{{selMap[item.id] && mode==='add' ? selMap[item.id] : (selMap[item.id]?'✓':'')}}</view>
+          <view class="ex-body">
+            <view class="ex-nm">{{item.nameZh}}</view>
+            <view class="row between"><view class="ex-tags flex1"><text class="tag tag-gray">{{item.part}}</text><text class="tag tag-gray">{{item.equip}}</text></view><text class="cap det" catchtap="detail" data-id="{{item.id}}">详情</text></view>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{items.length < total}}" class="more" bindtap="more">加载更多（{{items.length}}/{{total}}）</view>
+    </scroll-view>
+  </view>
+</view>
+<view class="bar">
+  <text class="sub" style="width:200rpx">已选 {{selected.length}} 个</text>
+  <btn type="primary" size="bar" style="flex:1" disabled="{{!selected.length}}" bind:press="confirm">{{mode==='replace'?'替换':'添加到训练 ('+selected.length+')'}}</btn>
+</view>

@@ -1,0 +1,5 @@
+.stats { padding: 32rpx 0 8rpx; } .stat { flex: 1; } .sv { font-size: 44rpx; font-weight: 700; }
+.th { height: 64rpx; margin-top: 16rpx; } .tr { height: 88rpx; }
+.c1 { width: 80rpx; } .c2 { flex: 1; } .c3 { width: 140rpx; text-align: right; }
+.warm { display: inline-block; background: var(--c-bg-2); color: var(--c-text-2); border-radius: 8rpx; padding: 0 10rpx; font-size: 24rpx; width: auto; margin-right: 32rpx; }
+.faded { opacity: .45; }

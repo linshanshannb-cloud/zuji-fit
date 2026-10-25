@@ -1,0 +1,6 @@
+<view class="empty {{compact?'compact':''}}">
+  <view class="icon"></view>
+  <view class="title">{{title}}</view>
+  <view wx:if="{{sub}}" class="esub">{{sub}}</view>
+  <view wx:if="{{action}}" class="act"><btn type="secondary" block="{{false}}" bind:press="onAction">{{action}}</btn></view>
+</view>

@@ -1,0 +1,363 @@
+{
+  "_note": "value 为 exercises.json 中使用的稳定英文枚举值；zh/en 为显示名。",
+  "bodyPart": [
+    {
+      "value": "chest",
+      "en": "chest",
+      "zh": "胸",
+      "count": 35,
+      "details": [
+        "chest"
+      ]
+    },
+    {
+      "value": "back",
+      "en": "back",
+      "zh": "背",
+      "count": 45,
+      "details": [
+        "back"
+      ]
+    },
+    {
+      "value": "shoulders",
+      "en": "shoulders",
+      "zh": "肩",
+      "count": 43,
+      "details": [
+        "shoulders"
+      ]
+    },
+    {
+      "value": "legs",
+      "en": "legs",
+      "zh": "腿",
+      "count": 73,
+      "details": [
+        "lower_legs",
+        "upper_legs"
+      ]
+    },
+    {
+      "value": "arms",
+      "en": "arms",
+      "zh": "手臂",
+      "count": 46,
+      "details": [
+        "lower_arms",
+        "upper_arms"
+      ]
+    },
+    {
+      "value": "core",
+      "en": "core",
+      "zh": "核心",
+      "count": 42,
+      "details": [
+        "waist"
+      ]
+    }
+  ],
+  "bodyPartDetail": [
+    {
+      "value": "back",
+      "en": "back",
+      "zh": "背部",
+      "count": 45
+    },
+    {
+      "value": "chest",
+      "en": "chest",
+      "zh": "胸部",
+      "count": 35
+    },
+    {
+      "value": "lower_arms",
+      "en": "lower arms",
+      "zh": "前臂",
+      "count": 5
+    },
+    {
+      "value": "lower_legs",
+      "en": "lower legs",
+      "zh": "小腿",
+      "count": 8
+    },
+    {
+      "value": "shoulders",
+      "en": "shoulders",
+      "zh": "肩部",
+      "count": 43
+    },
+    {
+      "value": "upper_arms",
+      "en": "upper arms",
+      "zh": "上臂",
+      "count": 41
+    },
+    {
+      "value": "upper_legs",
+      "en": "upper legs",
+      "zh": "大腿",
+      "count": 65
+    },
+    {
+      "value": "waist",
+      "en": "waist",
+      "zh": "腰腹",
+      "count": 42
+    }
+  ],
+  "equipment": [
+    {
+      "value": "band",
+      "en": "band",
+      "zh": "弹力带",
+      "count": 4
+    },
+    {
+      "value": "barbell",
+      "en": "barbell",
+      "zh": "杠铃",
+      "count": 45
+    },
+    {
+      "value": "body_weight",
+      "en": "body weight",
+      "zh": "自重",
+      "count": 52
+    },
+    {
+      "value": "cable",
+      "en": "cable",
+      "zh": "绳索",
+      "count": 53
+    },
+    {
+      "value": "dumbbell",
+      "en": "dumbbell",
+      "zh": "哑铃",
+      "count": 60
+    },
+    {
+      "value": "ez_barbell",
+      "en": "ez barbell",
+      "zh": "曲杆杠铃",
+      "count": 3
+    },
+    {
+      "value": "kettlebell",
+      "en": "kettlebell",
+      "zh": "壶铃",
+      "count": 9
+    },
+    {
+      "value": "leverage_machine",
+      "en": "leverage machine",
+      "zh": "固定器械",
+      "count": 36
+    },
+    {
+      "value": "sled_machine",
+      "en": "sled machine",
+      "zh": "45°腿举机",
+      "count": 1
+    },
+    {
+      "value": "smith_machine",
+      "en": "smith machine",
+      "zh": "史密斯机",
+      "count": 12
+    },
+    {
+      "value": "trap_bar",
+      "en": "trap bar",
+      "zh": "六角杠",
+      "count": 1
+    },
+    {
+      "value": "weighted",
+      "en": "weighted",
+      "zh": "负重",
+      "count": 7
+    },
+    {
+      "value": "wheel_roller",
+      "en": "wheel roller",
+      "zh": "健腹轮",
+      "count": 1
+    }
+  ],
+  "category": [
+    {
+      "value": "calisthenics",
+      "en": "calisthenics",
+      "zh": "自重训练",
+      "count": 45
+    },
+    {
+      "value": "isometric",
+      "en": "isometric",
+      "zh": "等长训练",
+      "count": 6
+    },
+    {
+      "value": "strength",
+      "en": "strength",
+      "zh": "力量",
+      "count": 233
+    }
+  ],
+  "muscles": [
+    {
+      "value": "chest",
+      "en": "chest",
+      "zh": "胸肌",
+      "count": 47
+    },
+    {
+      "value": "delts",
+      "en": "delts",
+      "zh": "三角肌",
+      "count": 111
+    },
+    {
+      "value": "rear_delts",
+      "en": "rear delts",
+      "zh": "三角肌后束",
+      "count": 11
+    },
+    {
+      "value": "rotator_cuff",
+      "en": "rotator cuff",
+      "zh": "肩袖",
+      "count": 4
+    },
+    {
+      "value": "lats",
+      "en": "lats",
+      "zh": "背阔肌",
+      "count": 28
+    },
+    {
+      "value": "traps",
+      "en": "traps",
+      "zh": "斜方肌",
+      "count": 30
+    },
+    {
+      "value": "upper_back",
+      "en": "upper back",
+      "zh": "上背部",
+      "count": 36
+    },
+    {
+      "value": "rhomboids",
+      "en": "rhomboids",
+      "zh": "菱形肌",
+      "count": 20
+    },
+    {
+      "value": "lower_back",
+      "en": "lower back",
+      "zh": "下背部（竖脊肌）",
+      "count": 30
+    },
+    {
+      "value": "biceps",
+      "en": "biceps",
+      "zh": "肱二头肌",
+      "count": 71
+    },
+    {
+      "value": "triceps",
+      "en": "triceps",
+      "zh": "肱三头肌",
+      "count": 69
+    },
+    {
+      "value": "brachialis",
+      "en": "brachialis",
+      "zh": "肱肌",
+      "count": 6
+    },
+    {
+      "value": "forearms",
+      "en": "forearms",
+      "zh": "前臂（含握力）",
+      "count": 64
+    },
+    {
+      "value": "abs",
+      "en": "abs",
+      "zh": "腹肌",
+      "count": 42
+    },
+    {
+      "value": "obliques",
+      "en": "obliques",
+      "zh": "腹斜肌",
+      "count": 18
+    },
+    {
+      "value": "core",
+      "en": "core",
+      "zh": "核心",
+      "count": 31
+    },
+    {
+      "value": "hip_flexors",
+      "en": "hip flexors",
+      "zh": "髋屈肌",
+      "count": 22
+    },
+    {
+      "value": "glutes",
+      "en": "glutes",
+      "zh": "臀肌",
+      "count": 70
+    },
+    {
+      "value": "quads",
+      "en": "quads",
+      "zh": "股四头肌",
+      "count": 43
+    },
+    {
+      "value": "hamstrings",
+      "en": "hamstrings",
+      "zh": "腘绳肌",
+      "count": 69
+    },
+    {
+      "value": "adductors",
+      "en": "adductors",
+      "zh": "髋内收肌",
+      "count": 6
+    },
+    {
+      "value": "abductors",
+      "en": "abductors",
+      "zh": "髋外展肌",
+      "count": 1
+    },
+    {
+      "value": "calves",
+      "en": "calves",
+      "zh": "小腿肌",
+      "count": 37
+    },
+    {
+      "value": "soleus",
+      "en": "soleus",
+      "zh": "比目鱼肌",
+      "count": 2
+    },
+    {
+      "value": "ankles",
+      "en": "ankles",
+      "zh": "脚踝",
+      "count": 3
+    }
+  ]
+}

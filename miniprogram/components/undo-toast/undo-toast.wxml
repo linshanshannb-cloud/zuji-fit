@@ -1,0 +1,3 @@
+<view wx:if="{{visible}}" class="toast" style="bottom: calc({{bottom}}rpx + env(safe-area-inset-bottom))">
+  <text class="t">{{text}}</text><text class="u" bindtap="onUndo">撤销</text>
+</view>
