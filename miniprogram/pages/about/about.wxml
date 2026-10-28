@@ -13,7 +13,10 @@
   <text wx:if="{{full}}" class="lic" user-select>{{license}}</text>
   <view class="h2">修改说明</view>
   <view class="p">本小程序对原始数据做了修改：只选取了部分动作与字段，进行了中文翻译与校对、重命名了少量中文名称，并整理了部位 / 器械 / 肌群的分类。其中 46 个动作的简介与步骤在 openGym 中只有英文，由本小程序自行译为中文。</view>
-  <view class="p">本小程序未使用 openGym 的任何图片、动图或视频素材；动作列表中的方块为占位图。</view>
+  <view class="p">本小程序未使用 openGym 的任何图片、动图或视频素材。</view>
+  <view class="p">部分动作示意图与动画来自 Workout Guide（Bryl Lim，基于 Everkinetic），CC BY-SA 4.0，已修改（白底黑线、缩放、合成循环动画）：</view>
+  <view class="p mono" user-select>github.com/bryllim/workout-guide</view>
+  <view class="p mono" user-select>creativecommons.org/licenses/by-sa/4.0/</view>
   <view class="h2">本地数据</view>
   <view class="p">训练与身体数据只保存在本机微信存储中，不上传任何服务器。</view>
 </view>

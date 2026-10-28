@@ -23,7 +23,6 @@
       "伸展双臂，将杠铃推回到起始位置。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0025.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
@@ -56,7 +55,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0033.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0033.mp4"
   },
   {
     "id": "0047",
@@ -114,7 +115,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0122.mp4",
+    "illustration": "/assets/exercises/0122.png"
   },
   {
     "id": "0151",
@@ -229,7 +232,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0171.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0171.mp4"
   },
   {
     "id": "0179",
@@ -287,7 +292,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0188.mp4",
+    "illustration": "/assets/exercises/0188.png"
   },
   {
     "id": "0227",
@@ -373,7 +380,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0279.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0279.mp4"
   },
   {
     "id": "0289",
@@ -397,7 +406,6 @@
       "暂停片刻，然后将哑铃推回起始位置，完全伸展双臂。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0289.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
@@ -428,7 +436,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0301.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0301.mp4"
   },
   {
     "id": "0302",
@@ -477,7 +487,6 @@
       "暂停片刻，然后反转动作，将哑铃拉回到起始位置。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0308.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
@@ -733,7 +742,8 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0662.mp4"
   },
   {
     "id": "0748",
@@ -959,7 +969,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/1311.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1311.mp4"
   },
   {
     "id": "2144",
@@ -1045,7 +1057,8 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0027.mp4"
   },
   {
     "id": "0095",
@@ -1071,7 +1084,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0095.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0095.mp4"
   },
   {
     "id": "0150",
@@ -1101,7 +1116,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0150.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0150.mp4"
   },
   {
     "id": "0180",
@@ -1441,7 +1458,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0499.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0499.mp4"
   },
   {
     "id": "0541",
@@ -1468,7 +1487,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0541.mp4",
+    "illustration": "/assets/exercises/0541.png"
   },
   {
     "id": "0572",
@@ -1497,7 +1518,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0572.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0572.mp4"
   },
   {
     "id": "0573",
@@ -1526,7 +1549,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0573.mp4",
+    "illustration": "/assets/exercises/0573.png"
   },
   {
     "id": "0579",
@@ -1638,7 +1663,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0627.mp4",
+    "illustration": "/assets/exercises/0627.png"
   },
   {
     "id": "0652",
@@ -1666,7 +1693,8 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0652.mp4"
   },
   {
     "id": "0673",
@@ -1722,7 +1750,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0674.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0674.mp4"
   },
   {
     "id": "0818",
@@ -1783,7 +1813,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0841.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0841.mp4"
   },
   {
     "id": "0861",
@@ -1807,7 +1839,6 @@
       "在动作的最高点暂停片刻，然后慢慢松开手柄回到起始位置。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0861.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
@@ -1840,7 +1871,9 @@
       "全程保持背部平直。完成次数后换另一侧手臂。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/10329.mp4",
+    "illustration": "/assets/exercises/10329.png"
   },
   {
     "id": "1047",
@@ -1867,7 +1900,9 @@
       "让横杆缓慢回升，直到手臂伸直。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/1047.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1047.mp4"
   },
   {
     "id": "1204",
@@ -1975,7 +2010,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1327.mp4",
+    "illustration": "/assets/exercises/1327.png"
   },
   {
     "id": "1350",
@@ -2005,7 +2042,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/1350.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1350.mp4"
   },
   {
     "id": "1351",
@@ -2060,7 +2099,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1429.mp4",
+    "illustration": "/assets/exercises/1429.png"
   },
   {
     "id": "1503",
@@ -2087,7 +2128,9 @@
       "有控制地缓慢还原。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/1503.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1503.mp4"
   },
   {
     "id": "2285",
@@ -2144,7 +2187,8 @@
     ],
     "illustration": "assets/exercises/2291.png",
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/2291.mp4"
   },
   {
     "id": "3017",
@@ -2172,7 +2216,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/3017.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/3017.mp4"
   },
   {
     "id": "3541",
@@ -2227,7 +2273,9 @@
       "肩膀保持远离耳朵。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/3896.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/3896.mp4"
   },
   {
     "id": "6156",
@@ -2254,7 +2302,9 @@
       "完成次数后换另一侧手臂。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/6156.mp4",
+    "illustration": "/assets/exercises/6156.png"
   },
   {
     "id": "0041",
@@ -2280,7 +2330,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0041.mp4",
+    "illustration": "/assets/exercises/0041.png"
   },
   {
     "id": "0076",
@@ -2337,7 +2389,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0091.mp4",
+    "illustration": "/assets/exercises/0091.png"
   },
   {
     "id": "0120",
@@ -2364,7 +2418,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0120.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0120.mp4"
   },
   {
     "id": "0154",
@@ -2392,7 +2448,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0154.mp4",
+    "illustration": "/assets/exercises/0154.png"
   },
   {
     "id": "0162",
@@ -2420,7 +2478,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0162.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0162.mp4"
   },
   {
     "id": "0178",
@@ -2447,7 +2507,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0178.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0178.mp4"
   },
   {
     "id": "0192",
@@ -2474,7 +2536,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0192.mp4",
+    "illustration": "/assets/exercises/0192.png"
   },
   {
     "id": "0215",
@@ -2501,7 +2565,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0215.mp4",
+    "illustration": "/assets/exercises/0215.png"
   },
   {
     "id": "0219",
@@ -2611,7 +2677,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0310.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0310.mp4"
   },
   {
     "id": "0334",
@@ -2634,7 +2702,6 @@
       "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0334.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
@@ -2669,7 +2736,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0377.mp4",
+    "illustration": "/assets/exercises/0377.png"
   },
   {
     "id": "0378",
@@ -2724,7 +2793,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0380.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0380.mp4"
   },
   {
     "id": "0383",
@@ -2752,7 +2823,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0383.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0383.mp4"
   },
   {
     "id": "0392",
@@ -2779,7 +2852,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0392.mp4",
+    "illustration": "/assets/exercises/0392.png"
   },
   {
     "id": "0396",
@@ -2806,7 +2881,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0396.mp4",
+    "illustration": "/assets/exercises/0396.png"
   },
   {
     "id": "0405",
@@ -2830,7 +2907,6 @@
       "在顶部停顿片刻，然后慢慢将哑铃放回肩部高度。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0405.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
@@ -2915,7 +2991,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0523.mp4",
+    "illustration": "/assets/exercises/0523.png"
   },
   {
     "id": "0550",
@@ -2971,7 +3049,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0584.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0584.mp4"
   },
   {
     "id": "0587",
@@ -2998,7 +3078,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0587.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0587.mp4"
   },
   {
     "id": "0602",
@@ -3191,7 +3273,9 @@
       "有控制地把杠铃下放回锁骨位置。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/1162.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1162.mp4"
   },
   {
     "id": "1200",
@@ -3218,7 +3302,9 @@
       "核心收紧，避免身体后仰。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/1200.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1200.mp4"
   },
   {
     "id": "1700",
@@ -3244,7 +3330,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1700.mp4",
+    "illustration": "/assets/exercises/1700.png"
   },
   {
     "id": "2137",
@@ -3297,7 +3385,9 @@
       "全程收紧核心。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/2921.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/2921.mp4"
   },
   {
     "id": "3237",
@@ -3405,7 +3495,9 @@
       "缓慢还原。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/5607.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/5607.mp4"
   },
   {
     "id": "5609",
@@ -3432,7 +3524,8 @@
     ],
     "illustration": "assets/exercises/5609.png",
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/5609.mp4"
   },
   {
     "id": "0032",
@@ -3490,7 +3583,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0042.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0042.mp4"
   },
   {
     "id": "0043",
@@ -3522,7 +3617,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0043.mp4",
+    "illustration": "/assets/exercises/0043.png"
   },
   {
     "id": "0044",
@@ -3548,7 +3645,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0044.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0044.mp4"
   },
   {
     "id": "0046",
@@ -3577,7 +3676,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0046.mp4",
+    "illustration": "/assets/exercises/0046.png"
   },
   {
     "id": "0054",
@@ -3605,7 +3706,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0054.mp4",
+    "illustration": "/assets/exercises/0054.png"
   },
   {
     "id": "0074",
@@ -3633,7 +3736,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0074.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0074.mp4"
   },
   {
     "id": "0078",
@@ -3661,7 +3766,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0078.mp4",
+    "illustration": "/assets/exercises/0078.png"
   },
   {
     "id": "0085",
@@ -3688,7 +3795,6 @@
       "在动作的最高点挤压臀部。",
       "将杠铃放回起始位置，然后重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0085.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
@@ -3722,7 +3828,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0088.mp4",
+    "illustration": "/assets/exercises/0088.png"
   },
   {
     "id": "0114",
@@ -3751,7 +3859,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0114.mp4",
+    "illustration": "/assets/exercises/0114.png"
   },
   {
     "id": "0117",
@@ -3781,7 +3891,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0117.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0117.mp4"
   },
   {
     "id": "0157",
@@ -3838,7 +3950,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0168.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0168.mp4"
   },
   {
     "id": "0228",
@@ -3894,7 +4008,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0284.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0284.mp4"
   },
   {
     "id": "0300",
@@ -3978,7 +4094,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0381.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0381.mp4"
   },
   {
     "id": "0410",
@@ -4006,7 +4124,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0410.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0410.mp4"
   },
   {
     "id": "0413",
@@ -4059,7 +4179,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0417.mp4",
+    "illustration": "/assets/exercises/0417.png"
   },
   {
     "id": "0431",
@@ -4088,7 +4210,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0431.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0431.mp4"
   },
   {
     "id": "0432",
@@ -4114,7 +4238,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0432.mp4",
+    "illustration": "/assets/exercises/0432.png"
   },
   {
     "id": "0459",
@@ -4140,7 +4266,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0459.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0459.mp4"
   },
   {
     "id": "0534",
@@ -4168,7 +4296,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0534.mp4",
+    "illustration": "/assets/exercises/0534.png"
   },
   {
     "id": "0549",
@@ -4196,7 +4326,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0549.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0549.mp4"
   },
   {
     "id": "0582",
@@ -4309,7 +4441,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0593.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0593.mp4"
   },
   {
     "id": "0594",
@@ -4337,7 +4471,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0594.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0594.mp4"
   },
   {
     "id": "0597",
@@ -4394,7 +4530,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0598.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0598.mp4"
   },
   {
     "id": "0599",
@@ -4451,7 +4589,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0605.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0605.mp4"
   },
   {
     "id": "0739",
@@ -4478,7 +4618,6 @@
       "在动作的最高点暂停片刻，然后弯曲膝盖，慢慢地将踏板放回到身体的方向。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0739.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
@@ -4579,7 +4718,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0770.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0770.mp4"
   },
   {
     "id": "0781",
@@ -4605,7 +4746,9 @@
       "完成全部次数后换腿。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0781.mp4",
+    "illustration": "/assets/exercises/0781.png"
   },
   {
     "id": "0811",
@@ -4634,7 +4777,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0811.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0811.mp4"
   },
   {
     "id": "1060",
@@ -4689,7 +4834,9 @@
       "全程保持背部平直。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/1206.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1206.mp4"
   },
   {
     "id": "1372",
@@ -4715,7 +4862,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1372.mp4",
+    "illustration": "/assets/exercises/1372.png"
   },
   {
     "id": "1379",
@@ -4742,7 +4891,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1379.mp4",
+    "illustration": "/assets/exercises/1379.png"
   },
   {
     "id": "1409",
@@ -4798,7 +4949,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1410.mp4",
+    "illustration": "/assets/exercises/1410.png"
   },
   {
     "id": "1459",
@@ -4853,7 +5006,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1460.mp4",
+    "illustration": "/assets/exercises/1460.png"
   },
   {
     "id": "1476",
@@ -4882,7 +5037,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1476.mp4",
+    "illustration": "/assets/exercises/1476.png"
   },
   {
     "id": "1489",
@@ -4910,7 +5067,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/1489.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1489.mp4"
   },
   {
     "id": "1543",
@@ -4936,7 +5095,9 @@
       "髋部向前发力回到站立。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1543.mp4",
+    "illustration": "/assets/exercises/1543.png"
   },
   {
     "id": "1595",
@@ -5042,7 +5203,9 @@
       "缓慢放下并重复。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/2072.mp4",
+    "illustration": "/assets/exercises/2072.png"
   },
   {
     "id": "2133",
@@ -5070,7 +5233,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/2133.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/2133.mp4"
   },
   {
     "id": "2146",
@@ -5123,7 +5288,9 @@
       "按计划次数重复。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/2267.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/2267.mp4"
   },
   {
     "id": "2289",
@@ -5180,7 +5347,8 @@
     ],
     "illustration": "assets/exercises/2290.png",
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/2290.mp4"
   },
   {
     "id": "2471",
@@ -5235,7 +5403,9 @@
       "完成次数后换腿。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/3030.mp4",
+    "illustration": "/assets/exercises/3030.png"
   },
   {
     "id": "3193",
@@ -5349,7 +5519,9 @@
       "缓慢放下髋部并重复。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/3335.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/3335.mp4"
   },
   {
     "id": "3593",
@@ -5376,7 +5548,6 @@
       "膝盖与脚尖方向一致。",
       "双脚发力站直。"
     ],
-    "illustration": "assets/exercises/3593.png",
     "translationPending": false,
     "untranslatedFields": [],
     "video": "packageVideoC/videos/3593.mp4",
@@ -5433,7 +5604,9 @@
       "两腿交替，完成预定步数。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/4295.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/4295.mp4"
   },
   {
     "id": "7589",
@@ -5460,7 +5633,9 @@
       "完成全部次数后换另一侧。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/7589.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/7589.mp4"
   },
   {
     "id": "7746",
@@ -5486,7 +5661,9 @@
       "推回起始位置并重复。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/7746.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/7746.mp4"
   },
   {
     "id": "0030",
@@ -5514,7 +5691,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0030.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0030.mp4"
   },
   {
     "id": "0031",
@@ -5542,7 +5721,8 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0031.mp4"
   },
   {
     "id": "0038",
@@ -5568,7 +5748,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0038.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0038.mp4"
   },
   {
     "id": "0060",
@@ -5594,7 +5776,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0060.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0060.mp4"
   },
   {
     "id": "0061",
@@ -5620,7 +5804,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0061.mp4",
+    "illustration": "/assets/exercises/0061.png"
   },
   {
     "id": "0070",
@@ -5676,7 +5862,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0080.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0080.mp4"
   },
   {
     "id": "0082",
@@ -5703,7 +5891,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0082.mp4",
+    "illustration": "/assets/exercises/0082.png"
   },
   {
     "id": "0092",
@@ -5729,7 +5919,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0092.mp4",
+    "illustration": "/assets/exercises/0092.png"
   },
   {
     "id": "0109",
@@ -5755,7 +5947,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0109.mp4",
+    "illustration": "/assets/exercises/0109.png"
   },
   {
     "id": "0126",
@@ -5782,7 +5976,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0126.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0126.mp4"
   },
   {
     "id": "0166",
@@ -5808,7 +6004,9 @@
       "上臂保持不动，避免身体摆动。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/0166.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0166.mp4"
   },
   {
     "id": "0195",
@@ -5835,7 +6033,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0195.mp4",
+    "illustration": "/assets/exercises/0195.png"
   },
   {
     "id": "0201",
@@ -5864,7 +6064,8 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0201.mp4"
   },
   {
     "id": "0206",
@@ -5893,7 +6094,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0206.mp4",
+    "illustration": "/assets/exercises/0206.png"
   },
   {
     "id": "0207",
@@ -6003,7 +6206,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0283.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0283.mp4"
   },
   {
     "id": "0285",
@@ -6087,7 +6292,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0297.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0297.mp4"
   },
   {
     "id": "0313",
@@ -6146,7 +6353,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0318.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0318.mp4"
   },
   {
     "id": "0333",
@@ -6173,7 +6382,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0333.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0333.mp4"
   },
   {
     "id": "0351",
@@ -6199,7 +6410,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0351.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0351.mp4"
   },
   {
     "id": "0364",
@@ -6226,7 +6439,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0364.mp4",
+    "illustration": "/assets/exercises/0364.png"
   },
   {
     "id": "0372",
@@ -6254,7 +6469,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0372.mp4",
+    "illustration": "/assets/exercises/0372.png"
   },
   {
     "id": "0385",
@@ -6282,7 +6499,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0385.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0385.mp4"
   },
   {
     "id": "0391",
@@ -6308,7 +6527,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0391.mp4",
+    "illustration": "/assets/exercises/0391.png"
   },
   {
     "id": "0420",
@@ -6334,7 +6555,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0420.mp4",
+    "illustration": "/assets/exercises/0420.png"
   },
   {
     "id": "0430",
@@ -6413,7 +6636,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0446.mp4",
+    "illustration": "/assets/exercises/0446.png"
   },
   {
     "id": "0447",
@@ -6467,7 +6692,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0451.mp4",
+    "illustration": "/assets/exercises/0451.png"
   },
   {
     "id": "0575",
@@ -6522,7 +6749,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0592.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0592.mp4"
   },
   {
     "id": "0607",
@@ -6631,7 +6860,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0868.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0868.mp4"
   },
   {
     "id": "1399",
@@ -6658,7 +6889,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/1399.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1399.mp4"
   },
   {
     "id": "1636",
@@ -6716,7 +6949,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/1755.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1755.mp4"
   },
   {
     "id": "2188",
@@ -6770,7 +7005,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0084.mp4",
+    "illustration": "/assets/exercises/0084.png"
   },
   {
     "id": "0175",
@@ -6796,7 +7033,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0175.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0175.mp4"
   },
   {
     "id": "0212",
@@ -6822,7 +7061,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0212.mp4",
+    "illustration": "/assets/exercises/0212.png"
   },
   {
     "id": "0222",
@@ -6876,7 +7117,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0226.mp4",
+    "illustration": "/assets/exercises/0226.png"
   },
   {
     "id": "0243",
@@ -6931,7 +7174,8 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0274.mp4"
   },
   {
     "id": "0276",
@@ -7013,7 +7257,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0282.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0282.mp4"
   },
   {
     "id": "0407",
@@ -7038,7 +7284,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0407.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0407.mp4"
   },
   {
     "id": "0463",
@@ -7066,7 +7314,8 @@
     ],
     "illustration": "assets/exercises/0463.png",
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0463.mp4"
   },
   {
     "id": "0472",
@@ -7092,7 +7341,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0472.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0472.mp4"
   },
   {
     "id": "0475",
@@ -7118,7 +7369,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0475.mp4",
+    "illustration": "/assets/exercises/0475.png"
   },
   {
     "id": "0554",
@@ -7280,7 +7533,8 @@
     ],
     "illustration": "assets/exercises/0715.png",
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0715.mp4"
   },
   {
     "id": "0832",
@@ -7306,7 +7560,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0832.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0832.mp4"
   },
   {
     "id": "0846",
@@ -7334,7 +7590,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0846.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0846.mp4"
   },
   {
     "id": "0871",
@@ -7386,7 +7644,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0872.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0872.mp4"
   },
   {
     "id": "0873",
@@ -7463,7 +7723,9 @@
       "收回胸前，完成一组后换另一侧。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/1202.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1202.mp4"
   },
   {
     "id": "1241",
@@ -7490,7 +7752,9 @@
       "换另一侧，交替进行。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/1241.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1241.mp4"
   },
   {
     "id": "1246",
@@ -7515,7 +7779,9 @@
       "保持 20–30 秒后休息。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/1246.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/1246.mp4"
   },
   {
     "id": "1452",
@@ -7572,7 +7838,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/2135.mp4",
+    "illustration": "/assets/exercises/2135.png"
   },
   {
     "id": "2963",
@@ -7599,7 +7867,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/2963.mp4",
+    "illustration": "/assets/exercises/2963.png"
   },
   {
     "id": "3419",
@@ -7627,7 +7897,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/3419.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/3419.mp4"
   },
   {
     "id": "3670",
@@ -7654,7 +7926,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/3670.mp4",
+    "illustration": "/assets/exercises/3670.png"
   },
   {
     "id": "3679",
@@ -7708,7 +7982,9 @@
       "重复至目标次数。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/3890.mp4",
+    "illustration": "/assets/exercises/3890.png"
   },
   {
     "id": "4093",
@@ -7734,7 +8010,9 @@
       "背部保持平直，避免髋部下塌。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/4093.mp4",
+    "illustration": "/assets/exercises/4093.png"
   },
   {
     "id": "5107",
@@ -7759,7 +8037,9 @@
       "缓慢放下双腿，不要摆动。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/5107.mp4",
+    "illustration": "/assets/exercises/5107.png"
   },
   {
     "id": "6211",
@@ -7813,7 +8093,9 @@
       "有控制地还原，然后换另一侧。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/8025.mp4",
+    "illustration": "/assets/exercises/8025.png"
   },
   {
     "id": "8193",
@@ -7840,7 +8122,9 @@
       "缓慢还原。完成一组后换另一侧。"
     ],
     "translationPending": false,
-    "untranslatedFields": []
+    "untranslatedFields": [],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/8193.mp4",
+    "illustration": "/assets/exercises/8193.png"
   },
   {
     "id": "9819",

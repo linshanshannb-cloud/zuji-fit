@@ -1,15 +1,4 @@
-# zuji-fit
-
-组迹（RepNote）微信原生健身小程序，以 AGPL-3.0 开源。
-
-```bash
-git clone https://github.com/linshanshannb-cloud/zuji-fit.git
-```
-
-小程序「关于 / 数据来源」页的源码地址指向本仓库：https://github.com/linshanshannb-cloud/zuji-fit
-
-## 健身小程序 v1（微信原生，本地存储）
-
+# 健身小程序 v1（微信原生，本地存储）
 负责人：Jarvis（总管 + 开发）
 - data/   动作库管家：动作库数据
 - design/ 极简设计师：设计规范与线框
