@@ -9,6 +9,7 @@
     <text class="h2">{{sel.label}}</text>
     <text wx:if="{{sel.isTraining}}" class="tag tag-gray" style="margin-left:16rpx">已完成</text>
     <text wx:elif="{{sel.isRest}}" class="tag tag-rest" style="margin-left:16rpx">休息日</text>
+    <text class="tpl-entry accent" bindtap="openTemplates">模板 ›</text>
   </view>
 
   <!-- 所选日汇总卡：大号关键数 -->

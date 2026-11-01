@@ -1,0 +1,40 @@
+<nav-bar mode="back" title="训练模板"></nav-bar>
+<view class="page">
+  <view class="seg">
+    <view class="seg-item {{tab==='preset'?'on':''}}" bindtap="setTab" data-t="preset">精选</view>
+    <view class="seg-item {{tab==='mine'?'on':''}}" bindtap="setTab" data-t="mine">我的</view>
+  </view>
+  <view class="cap hint" wx:if="{{wid}}">套用会追加到正在编辑的训练，不会另开一条。</view>
+  <view class="cap hint" wx:elif="{{future}}">{{dateLabel}}还没到，可以先看看。套用得到了这一天才行。</view>
+  <view class="cap hint" wx:else>套用会写到 {{dateLabel}} 的力量训练。复制只留在本机「我的」。</view>
+
+  <block wx:if="{{tab==='preset'}}">
+    <view wx:for="{{presets}}" wx:key="id" class="tpl hairline-b" bindtap="open" data-id="{{item.id}}">
+      <view class="row between">
+        <text class="h2 ell">{{item.title}}</text>
+        <text class="chev">›</text>
+      </view>
+      <view class="row tags">
+        <text class="tag tag-accent">{{item.scene}}</text>
+        <text class="tag tag-gray">{{item.focus}}</text>
+        <text class="cap">{{item.count}} 个动作</text>
+      </view>
+      <view class="sub line">{{item.line}}</view>
+    </view>
+  </block>
+  <block wx:else>
+    <empty-state wx:if="{{!mine.length}}" compact title="还没有自己的模板" sub="在精选里点「复制」，就会出现在这里" action="去看精选" bind:action="showPreset"></empty-state>
+    <view wx:for="{{mine}}" wx:key="id" class="tpl hairline-b" bindtap="open" data-id="{{item.id}}">
+      <view class="row between">
+        <text class="h2 ell">{{item.title}}</text>
+        <text class="chev">›</text>
+      </view>
+      <view class="row tags">
+        <text class="tag tag-gray">我的</text>
+        <text wx:if="{{item.focus}}" class="tag tag-gray">{{item.focus}}</text>
+        <text class="cap">{{item.count}} 个动作</text>
+      </view>
+      <view class="sub line">{{item.line}}</view>
+    </view>
+  </block>
+</view>

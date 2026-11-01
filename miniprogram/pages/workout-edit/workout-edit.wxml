@@ -9,6 +9,10 @@
     <text class="cap">{{w.name || w.placeholder}} · {{w.summary}}</text>
     <text class="cap save-st {{saveState==='failed'?'danger':''}}" bindtap="retry">{{narrow?(w.status==='draft'?'草稿 · ':'已完成 · '):''}}{{saveState==='failed'?(canRetry?'保存失败 · 重试':'保存失败'):(w.persisted?'已自动保存':'加入动作后自动保存')}}</text>
   </view>
+  <view wx:if="{{!sorting}}" class="tpl-row hit" bindtap="openTemplates">
+    <text class="sub accent">训练模板 ›</text>
+    <text class="cap">套用精选或我的模板</text>
+  </view>
 
   <empty-state wx:if="{{!cards.length}}" title="从动作库添加第一个动作" action="+ 添加动作" bind:action="addTap"></empty-state>
 

@@ -3,18 +3,22 @@
     "pages/calendar/calendar",
     "pages/library/library",
     "pages/body/body",
-    "pages/diet/diet",
-    "pages/diet-formula/diet-formula",
-    "pages/workout-detail/workout-detail",
-    "pages/workout-edit/workout-edit",
-    "pages/aerobic-detail/aerobic-detail",
-    "pages/aerobic-edit/aerobic-edit",
-    "pages/exercise-picker/exercise-picker",
-    "pages/exercise-detail/exercise-detail",
-    "pages/custom-exercise-edit/custom-exercise-edit",
-    "pages/body-edit/body-edit",
-    "pages/settings/settings",
-    "pages/about/about"
+    "pages/diet/diet"
+  ],
+  "subpackages": [
+    { "root": "pages/diet-formula", "pages": ["diet-formula"] },
+    { "root": "pages/workout-detail", "pages": ["workout-detail"] },
+    { "root": "pages/workout-edit", "pages": ["workout-edit"] },
+    { "root": "pages/templates", "pages": ["templates"] },
+    { "root": "pages/template-detail", "pages": ["template-detail"] },
+    { "root": "pages/aerobic-detail", "pages": ["aerobic-detail"] },
+    { "root": "pages/aerobic-edit", "pages": ["aerobic-edit"] },
+    { "root": "pages/exercise-picker", "pages": ["exercise-picker"] },
+    { "root": "pages/exercise-detail", "pages": ["exercise-detail"] },
+    { "root": "pages/custom-exercise-edit", "pages": ["custom-exercise-edit"] },
+    { "root": "pages/body-edit", "pages": ["body-edit"] },
+    { "root": "pages/settings", "pages": ["settings"] },
+    { "root": "pages/about", "pages": ["about"] }
   ],
   "window": {
     "navigationStyle": "custom",
@@ -41,16 +45,16 @@
         "selectedIconPath": "images/tabbar/library-active.png"
       },
       {
-        "pagePath": "pages/body/body",
-        "text": "身体数据",
-        "iconPath": "images/tabbar/body.png",
-        "selectedIconPath": "images/tabbar/body-active.png"
-      },
-      {
         "pagePath": "pages/diet/diet",
         "text": "饮食",
         "iconPath": "images/tabbar/diet.png",
         "selectedIconPath": "images/tabbar/diet-active.png"
+      },
+      {
+        "pagePath": "pages/body/body",
+        "text": "身体数据",
+        "iconPath": "images/tabbar/body.png",
+        "selectedIconPath": "images/tabbar/body-active.png"
       }
     ]
   },

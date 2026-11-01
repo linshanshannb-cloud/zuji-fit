@@ -12,7 +12,7 @@ test('T1 app.json：pages 每页四件套齐全；tabBar 2–5 项且都在 page
   assert.ok(tabs.length >= 2 && tabs.length <= 5);
   tabs.forEach(t => assert.ok(app.pages.includes(t), t));
   assert.strictEqual(app.pages[0], tabs[0]);
-  assert.deepStrictEqual(app.tabBar.list.map(t => t.text), ['日历', '动作库', '身体数据', '饮食']);
+  assert.deepStrictEqual(app.tabBar.list.map(t => t.text), ['日历', '动作库', '饮食', '身体数据']);
   assert.ok(fs.existsSync(path.join(MP, app.sitemapLocation)));
   assert.ok(fs.existsSync(path.join(MP, 'app.js')) && fs.existsSync(path.join(MP, 'app.wxss')));
 });
@@ -22,17 +22,41 @@ test('T2 组件：usingComponents 路径都存在，组件 json 声明 component
     assert.strictEqual(JSON.parse(fs.readFileSync(path.join(MP, p + '.json'), 'utf8')).component, true, tag);
   }
 });
+function packIgnored(rel, rules) {
+  const norm = rel.replace(/\\/g, '/');
+  return rules.some(rule => {
+    const v = String(rule.value || '').replace(/\\/g, '/');
+    if (rule.type === 'folder') return norm === v || norm.startsWith(v + '/');
+    if (rule.type === 'file') return norm === v;
+    if (rule.type === 'suffix') return norm.endsWith(v);
+    if (rule.type === 'prefix') return norm.startsWith(v) || norm.split('/').some(seg => seg.startsWith(v));
+    if (rule.type === 'regexp') return new RegExp(v).test(norm);
+    return false;
+  });
+}
 test('T3 project.config.json：compileType=miniprogram，打包忽略 tests/scripts；主包体积 < 2MB（不含 subpackages）', () => {
   const pc = JSON.parse(fs.readFileSync(path.join(MP, 'project.config.json'), 'utf8'));
   assert.strictEqual(pc.compileType, 'miniprogram');
-  const ign = pc.packOptions.ignore.map(i => i.value); assert.ok(ign.includes('tests') && ign.includes('scripts'));
-  const subRoots = (app.subpackages || []).map(s => s.root.replace(/\\/g, '/'));
-  const inSub = f => subRoots.some(r => f.replace(/\\/g, '/').includes('/' + r + '/') || f.replace(/\\/g, '/').endsWith('/' + r));
-  const size = walk(MP, '').filter(f => !/\/(tests|scripts)\//.test(f) && !inSub(f)).reduce((t, f) => t + fs.statSync(f).size, 0);
+  const rules = pc.packOptions.ignore;
+  const ign = rules.map(i => i.value); assert.ok(ign.includes('tests') && ign.includes('scripts'));
+  const subRoots = (app.subpackages || []).map(s => s.root.replace(/\\/g, '/').replace(/\/$/, ''));
+  const inSub = rel => subRoots.some(r => rel === r || rel.startsWith(r + '/'));
+  let size = 0;
+  for (const abs of walk(MP, '')) {
+    const rel = path.relative(MP, abs).replace(/\\/g, '/');
+    if (packIgnored(rel, rules) || inSub(rel)) continue;
+    size += fs.statSync(abs).size;
+  }
   assert.ok(size < 2 * 1024 * 1024, 'main size ' + size);
-  for (const r of subRoots) {
-    const subSize = walk(path.join(MP, r), '').reduce((t, f) => t + fs.statSync(f).size, 0);
-    assert.ok(subSize <= 2 * 1024 * 1024, r + ' size ' + subSize);
+  assert.ok(size <= 1900 * 1024, 'main size above 1900KB target ' + size);
+  for (const s of app.subpackages || []) {
+    const root = s.root.replace(/\\/g, '/').replace(/\/$/, '');
+    for (const page of s.pages) {
+      const full = root + '/' + page;
+      for (const e of ['js', 'json', 'wxml', 'wxss']) assert.ok(fs.existsSync(path.join(MP, full + '.' + e)), full + '.' + e);
+    }
+    const subSize = walk(path.join(MP, root), '').reduce((t, f) => t + fs.statSync(f).size, 0);
+    assert.ok(subSize <= 2 * 1024 * 1024, root + ' size ' + subSize);
   }
 });
 test('T4 wx.showModal 的 confirmText / cancelText 最多 4 个字符（微信文档），否则调用失败、弹窗不出现', () => {
