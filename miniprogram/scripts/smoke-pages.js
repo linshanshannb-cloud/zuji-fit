@@ -346,6 +346,50 @@ flow('body metric empty states: range-empty -> 切换到全部; 1 point hint', (
   assert.strictEqual(body.data.rows.length, 1);
 });
 
+flow('diet: taper target, unlogged is not zero, basis required, suggestion waits for confirm', () => {
+  reset();
+  const page = open('pages/diet/diet');
+  assert.strictEqual(page.data.tab, 'plan');
+  assert.strictEqual(page.data.hasPlan, false);
+  assert.ok(fs.readFileSync(path.join(ROOT, 'pages/diet/diet.wxml'), 'utf8').includes('未记录'));
+  page.setData({ form: Object.assign({}, page.data.form, { mode: 'taper', refWeightKg: '80', energyMode: 'absolute_target', absoluteTarget: '2400', macroMode: 's4b' }) });
+  page.commitPlan();
+  assert.strictEqual(page.data.hasPlan, true);
+  assert.strictEqual(page.data.tab, 'today');
+  assert.strictEqual(page.data.today.recorded, false);
+  assert.strictEqual(page.data.today.c, '345');
+  assert.strictEqual(page.data.today.k, '2400');
+  page.onQuick(ev({ k: 'carbsG' }, { value: '10' }));
+  page.onQuick(ev({ k: 'proteinG' }, { value: '20' }));
+  page.onQuick(ev({ k: 'fatG' }, { value: '5' }));
+  page.saveQuick();
+  assert.strictEqual(page.data.today.recorded, true);
+  assert.strictEqual(page.data.today.ik, '165');
+  page.clearLog();
+  assert.strictEqual(page.data.today.recorded, false);
+  assert.strictEqual(repo().diet.getLog(page.data.date), null);
+  page.setData({ foodForm: { foodId: 'ex-rice', basis: '', qty: '100', lockedBasis: false } });
+  page.addFoodToDay();
+  assert.strictEqual(page.data.today.recorded, false);
+  page.setData({ 'foodForm.basis': 'raw' });
+  page.addFoodToDay();
+  assert.strictEqual(page.data.today.recorded, true);
+  assert.strictEqual(page.data.today.entries[0].basis, '生重');
+  assert.strictEqual(page.data.today.entries[0].example, true);
+  repo().body.saveBody({ weightKg: 70 });
+  page.refresh();
+  assert.strictEqual(page.data.today.c, '345', 'new body weight must not change the locked target');
+  page.openAdjust(ev({ kind: 'stuck' }));
+  assert.strictEqual(page.data.adjust.carbsG, '330');
+  page.refresh();
+  assert.strictEqual(page.data.today.c, '345');
+  page.confirmAdjust();
+  assert.strictEqual(page.data.today.c, '330');
+  const formulaPage = open('pages/diet-formula/diet-formula');
+  assert.deepStrictEqual(formulaPage.data.oral.map(d => d.kcal), ['1960.2', '1477.2', '1872.0']);
+  assert.ok(formulaPage.data.exclusions.some(s => s.includes('0 碳日')));
+});
+
 // ---------- report
 results.forEach(r => console.log(r[0].padEnd(4), r[1], r[2] ? '\n     ' + r[2] : ''));
 const failed = results.filter(r => r[0] !== 'ok').length;

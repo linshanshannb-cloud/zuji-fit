@@ -18,5 +18,5 @@
   <view class="p mono" user-select>github.com/bryllim/workout-guide</view>
   <view class="p mono" user-select>creativecommons.org/licenses/by-sa/4.0/</view>
   <view class="h2">本地数据</view>
-  <view class="p">训练与身体数据只保存在本机微信存储中，不上传任何服务器。</view>
+  <view class="p">训练、身体数据和饮食（计划、阶段快照、摄入、自定义食物）只保存在本机微信存储中，不上传任何服务器，也不需要登录。</view>
 </view>

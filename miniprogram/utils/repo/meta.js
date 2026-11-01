@@ -8,7 +8,8 @@ let state = { mode: 'uninitialized', schemaVersion: null, migrated: false, error
 function getMeta() { return S.get(K.META, undefined); }
 const FRIENDLY = { QUOTA_EXCEEDED: '存储空间不足', WRITE_FAILED: '写入失败', DATA_CORRUPT: '数据读取异常' };
 function withHealth(st) {
-  [K.WORKOUTS, K.BODY, K.CUSTOM].forEach(k => S.getTyped(k, 'array', null)); // probe main keys so damage is reported at launch
+  [K.WORKOUTS, K.BODY, K.CUSTOM, K.DIET_LOGS, K.DIET_FOODS].forEach(k => S.getTyped(k, 'array', null)); // probe main keys so damage is reported at launch
+  S.getTyped(K.DIET_PLAN, 'object', null);
   const h = S.getHealth();
   if (st.mode === 'normal' && !h.ok) return Object.assign({}, st, { mode: 'corrupt', health: h, message: '部分数据读取异常，已暂停对这部分数据的保存（原数据已保留）' });
   return Object.assign({}, st, { health: h });

@@ -3,6 +3,8 @@
     "pages/calendar/calendar",
     "pages/library/library",
     "pages/body/body",
+    "pages/diet/diet",
+    "pages/diet-formula/diet-formula",
     "pages/workout-detail/workout-detail",
     "pages/workout-edit/workout-edit",
     "pages/aerobic-detail/aerobic-detail",
@@ -43,6 +45,12 @@
         "text": "身体数据",
         "iconPath": "images/tabbar/body.png",
         "selectedIconPath": "images/tabbar/body-active.png"
+      },
+      {
+        "pagePath": "pages/diet/diet",
+        "text": "饮食",
+        "iconPath": "images/tabbar/diet.png",
+        "selectedIconPath": "images/tabbar/diet-active.png"
       }
     ]
   },
