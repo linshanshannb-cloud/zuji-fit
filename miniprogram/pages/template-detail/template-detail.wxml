@@ -1,0 +1,28 @@
+<nav-bar mode="back" title="{{t.title}}"></nav-bar>
+<view class="page page-pad-bar" wx:if="{{t}}">
+  <view class="row tags">
+    <text class="tag tag-accent">{{t.scene}}</text>
+    <text class="tag tag-gray">{{t.kind==='mine'?'我的模板':'精选'}}</text>
+    <text wx:if="{{t.focus}}" class="tag tag-gray">{{t.focus}}</text>
+  </view>
+  <view class="sub blurb">{{t.blurb}}</view>
+  <view class="cap sec">动作 · {{t.count}}</view>
+  <view wx:for="{{t.exercises}}" wx:key="id" class="ex hairline-b" bindtap="openEx" data-id="{{item.id}}" data-unknown="{{item.unknown}}">
+    <text class="idx num">{{index + 1}}</text>
+    <view class="flex1">
+      <view class="nm">{{item.name}}</view>
+      <view class="cap" wx:if="{{item.part}}">{{item.part}}<text wx:if="{{item.equipment}}"> · {{item.equipment}}</text></view>
+    </view>
+    <text class="chev">›</text>
+  </view>
+  <view wx:if="{{t.kind==='preset'}}" class="cap note">复制只保存到本机「我的」，不会改动今天的训练。套用才会把这 4 个动作写进去。</view>
+  <view wx:if="{{t.kind==='mine'}}" class="row links">
+    <text class="sub accent hit" bindtap="rename">改名称</text>
+    <text class="sub danger hit" bindtap="remove">删除模板</text>
+  </view>
+</view>
+<view class="bar" wx:if="{{t}}">
+  <btn wx:if="{{t.kind==='preset'}}" type="secondary" size="bar" style="width:200rpx" disabled="{{readOnly}}" bind:press="copy">复制</btn>
+  <view wx:if="{{t.kind==='preset'}}" class="gap"></view>
+  <btn type="primary" size="bar" style="flex:1" disabled="{{readOnly || future}}" bind:press="apply">{{applyLabel}}</btn>
+</view>

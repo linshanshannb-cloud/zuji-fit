@@ -1,0 +1,7 @@
+.seg { margin-top: var(--sp-3); }
+.hint { display: block; padding: 20rpx 0 8rpx; line-height: 1.5; }
+.tpl { padding: 28rpx 0; }
+.tags { margin-top: 12rpx; }
+.tags .cap { margin-left: 8rpx; }
+.line { margin-top: 12rpx; }
+.ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

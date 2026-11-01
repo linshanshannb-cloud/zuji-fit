@@ -7,6 +7,8 @@
     "pages/diet-formula/diet-formula",
     "pages/workout-detail/workout-detail",
     "pages/workout-edit/workout-edit",
+    "pages/templates/templates",
+    "pages/template-detail/template-detail",
     "pages/aerobic-detail/aerobic-detail",
     "pages/aerobic-edit/aerobic-edit",
     "pages/exercise-picker/exercise-picker",

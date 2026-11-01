@@ -21,7 +21,7 @@ global.wx = {
   showModal: o => { ['confirmText', 'cancelText'].forEach(k => { if (o[k] && [...o[k]].length > 4) throw new Error(`showModal ${k} > 4 chars: ${o[k]}`); }); modals.push(o.title + (o.content ? '|' + o.content : '')); const a = modalAnswers.length ? modalAnswers.shift() : { confirm: true }; o.success && o.success(Object.assign({ confirm: false, cancel: false }, a)); },
   showActionSheet: o => { if (o.itemList.length > 6) throw new Error('showActionSheet > 6 items'); const i = sheetAnswers.shift(); if (i === undefined) throw new Error('unexpected action sheet: ' + o.itemList); o.success && o.success({ tapIndex: o.itemList.indexOf(i) >= 0 ? o.itemList.indexOf(i) : i }); },
   navigateTo: o => open(o.url, o.events), redirectTo: o => { close(); open(o.url); }, switchTab: o => { while (stack.length > 1) close(); open(o.url); },
-  navigateBack: () => { close(); const top = cur(); if (top && top.onShow) top.onShow(); },
+  navigateBack: (o = {}) => { const n = Math.max(1, (o && o.delta) || 1); for (let i = 0; i < n && stack.length; i++) close(); const top = cur(); if (top && top.onShow) top.onShow(); },
   createSelectorQuery: () => ({ in() { return this; }, select() { return this; }, fields() { return this; }, exec(cb) { cb([null]); } }),
   getWindowInfo: () => ({ statusBarHeight: 20, windowWidth: 375, pixelRatio: 2 }), getSystemInfoSync: () => ({ statusBarHeight: 20, windowWidth: 375, pixelRatio: 2 }),
   getMenuButtonBoundingClientRect: () => ({ top: 24, height: 32, left: 280 }),
@@ -388,6 +388,48 @@ flow('diet: taper target, unlogged is not zero, basis required, suggestion waits
   const formulaPage = open('pages/diet-formula/diet-formula');
   assert.deepStrictEqual(formulaPage.data.oral.map(d => d.kcal), ['1960.2', '1477.2', '1872.0']);
   assert.ok(formulaPage.data.exclusions.some(s => s.includes('0 碳日')));
+});
+
+flow('templates: 首页套用精选，饮食页仍可进', () => {
+  reset();
+  const cal = open('pages/calendar/calendar');
+  assert.ok(fs.readFileSync(path.join(ROOT, 'pages/calendar/calendar.wxml'), 'utf8').includes('模板 ›'));
+  cal.openTemplates();
+  const list = cur();
+  assert.strictEqual(list.route, 'pages/templates/templates');
+  assert.strictEqual(list.data.presets.length, 6);
+  assert.ok(list.data.presets.every(p => p.count === 4));
+  list.open(ev({ id: 'preset_home_full' }));
+  const detail = cur();
+  assert.strictEqual(detail.route, 'pages/template-detail/template-detail');
+  assert.strictEqual(detail.data.t.exercises.length, 4);
+  detail.copy();
+  assert.strictEqual((store('fit_templates') || []).length, 1);
+  detail.apply();
+  const ed = cur();
+  assert.strictEqual(ed.route, 'pages/workout-edit/workout-edit');
+  assert.strictEqual(ed.data.cards.length, 4);
+  assert.strictEqual(ed.data.w.name, '居家全身自重');
+  const diet = open('pages/diet/diet');
+  assert.strictEqual(diet.route, 'pages/diet/diet');
+  assert.strictEqual(diet.data.tab, 'plan');
+  assert.strictEqual(diet.data.hasPlan, false);
+  assert.strictEqual((store('fit_templates') || []).length, 1, '进饮食页不应清掉模板');
+  assert.ok(draftHeader(), '进饮食页不应清掉刚套用的训练');
+});
+
+flow('templates: 训练编辑套用精选是追加并回到编辑页', () => {
+  reset();
+  open('pages/calendar/calendar').newWorkout();
+  const ed = cur();
+  assert.strictEqual(ed.route, 'pages/workout-edit/workout-edit');
+  ed.openTemplates();
+  cur().open(ev({ id: 'preset_gym_chest' }));
+  assert.strictEqual(cur().data.applyLabel, '追加到当前训练');
+  cur().apply();
+  assert.strictEqual(cur().route, 'pages/workout-edit/workout-edit');
+  assert.strictEqual(cur().data.cards.length, 4);
+  assert.deepStrictEqual(cur().data.cards.map(c => c.name), ['杠铃卧推', '哑铃上斜卧推', '哑铃飞鸟', '绳索上胸夹胸']);
 });
 
 // ---------- report

@@ -72,6 +72,11 @@ Page({
     });
   },
   addTap() { this.openPicker('add'); },
+  openTemplates() {
+    const w = this.data.w;
+    if (!w) return;
+    wx.navigateTo({ url: '/pages/templates/templates?date=' + w.date + '&wid=' + encodeURIComponent(this.data.id) });
+  },
   onPicked(ids, mode, weId) {
     if (!ids || !ids.length) return;
     if (mode === 'replace') return this.run(repo.workouts.replaceExercise(this.data.id, weId, ids[0]));

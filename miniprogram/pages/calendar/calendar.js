@@ -81,14 +81,19 @@ Page({
     if (kind === 'aerobic') wx.navigateTo({ url: '/pages/aerobic-detail/aerobic-detail?id=' + id });
     else wx.navigateTo({ url: '/pages/workout-detail/workout-detail?id=' + id });
   },
+  openTemplates() { wx.navigateTo({ url: '/pages/templates/templates?date=' + this.data.selected }); },
   continueDraft() { wx.navigateTo({ url: '/pages/workout-edit/workout-edit?id=' + this.data.draft.id }); },
   // FAB / 空态：力量或有氧
   pickNew() {
     if (!ui.canWrite()) return;
     if (this.data.selected > D.today()) return wx.showToast({ title: '不能为未来日期新建训练', icon: 'none' });
     wx.showActionSheet({
-      itemList: ['力量训练', '有氧训练'],
-      success: r => { if (r.tapIndex === 0) this.newWorkout(); else if (r.tapIndex === 1) this.newAerobic(); },
+      itemList: ['力量训练', '有氧训练', '训练模板'],
+      success: r => {
+        if (r.tapIndex === 0) this.newWorkout();
+        else if (r.tapIndex === 1) this.newAerobic();
+        else if (r.tapIndex === 2) this.openTemplates();
+      },
     });
   },
   newAerobic() {
@@ -100,11 +105,12 @@ Page({
   pickPast() {
     if (!ui.canWrite()) return;
     wx.showActionSheet({
-      itemList: ['补录力量训练', '补录有氧训练', '标记为休息日'],
+      itemList: ['补录力量训练', '补录有氧训练', '从模板补录', '标记为休息日'],
       success: r => {
         if (r.tapIndex === 0) this.newWorkout();
         else if (r.tapIndex === 1) this.newAerobic();
-        else if (r.tapIndex === 2) this.markRest();
+        else if (r.tapIndex === 2) this.openTemplates();
+        else if (r.tapIndex === 3) this.markRest();
       },
     });
   },

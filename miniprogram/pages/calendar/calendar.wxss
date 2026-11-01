@@ -1,4 +1,5 @@
 .day-head { margin-top: var(--sp-4); min-height: 48rpx; }
+.tpl-entry { margin-left: auto; font-size: var(--fs-sub); font-weight: 600; padding: 12rpx 0 12rpx 24rpx; }
 .tag-rest { background: #EEF2F7; color: #6B7F99; }
 /* QA-01：有氧标签略加深橙字 */
 .tag-aero { background: #FFE4D6; color: #C94412; }

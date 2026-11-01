@@ -1,0 +1,9 @@
+.tags { margin-top: var(--sp-3); flex-wrap: wrap; }
+.blurb { margin-top: 16rpx; }
+.sec { margin-top: var(--sp-4); }
+.ex { min-height: 112rpx; display: flex; align-items: center; padding: 16rpx 0; box-sizing: border-box; }
+.idx { width: 48rpx; font-weight: 700; color: var(--c-text-3); flex-shrink: 0; }
+.nm { font-size: 32rpx; font-weight: 600; }
+.note { display: block; margin-top: var(--sp-4); line-height: 1.6; }
+.links { margin-top: var(--sp-3); }
+.links .hit { margin-right: 40rpx; }
