@@ -23,7 +23,7 @@
 </view>
 <empty-state wx:if="{{missing}}" title="训练不存在或已删除"></empty-state>
 <view class="bar repeat-bar" wx:if="{{w}}">
-  <btn type="primary" size="bar" disabled="{{detailMissing || detailCorrupt}}" bind:press="repeat" bind:disabledtap="onRepeatBlocked">再练一次</btn>
+  <btn type="primary" size="bar" disabled="{{detailMissing || detailCorrupt}}" bind:press="repeat" bind:disabledtap="onRepeatBlocked">复制到今天</btn>
   <view class="repeat-row">
     <btn type="danger" size="bar" style="flex:1" bind:press="remove">删除</btn>
     <view class="gap"></view>

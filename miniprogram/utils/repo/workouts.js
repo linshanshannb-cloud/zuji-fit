@@ -475,13 +475,13 @@ function duplicateSet(workoutId, setId) {
 // 完成勾选和计时一律清空。训练备注、动作备注不带。组间歇存在动作偏好里，不挂在单次训练上；组上若已有 restSec 则原样带上。
 function repeatName(header) {
   const base = (header.name && String(header.name).trim()) || M.defaultWorkoutName(header.date);
-  return C.check(V.validateText(('再练：' + base).slice(0, V.LIMITS.workoutName), V.LIMITS.workoutName));
+  return C.check(V.validateText(('复制：' + base).slice(0, V.LIMITS.workoutName), V.LIMITS.workoutName));
 }
 function planFrom(detail) {
   const exercises = (detail.exercises || []).filter(M.isObj).slice().sort(M.byOrder);
-  if (!exercises.length) C.raise('EMPTY_WORKOUT', '这次训练没有动作，不能再练');
+  if (!exercises.length) C.raise('EMPTY_WORKOUT', '这次训练没有动作，不能复制');
   exercises.forEach(e => {
-    if (typeof e.exerciseId !== 'string' || !e.exerciseId) C.raise('UNKNOWN_EXERCISE', '动作不存在，不能再练');
+    if (typeof e.exerciseId !== 'string' || !e.exerciseId) C.raise('UNKNOWN_EXERCISE', '动作不存在，不能复制');
     resolveAddable(e.exerciseId);
   });
   return exercises.map(e => ({
@@ -541,8 +541,8 @@ function repeatFrom(sourceId, opts = {}) {
     const day = C.check(V.validateDate(opts.date || C.today(), { today: C.today() }));
     const header = findHeader(sourceId);
     const st = loadDetail(sourceId);
-    if (st.missing) C.raise('DETAIL_MISSING', '训练详情丢失，不能再练');
-    if (st.blocked) C.raise('DATA_CORRUPT', '记录已损坏，不能再练');
+    if (st.missing) C.raise('DETAIL_MISSING', '训练详情丢失，不能复制');
+    if (st.blocked) C.raise('DATA_CORRUPT', '记录已损坏，不能复制');
     const plan = planFrom(st.detail);
     const draft = getDraft();
     if (draft && draft.date === day) {

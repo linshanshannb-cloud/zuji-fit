@@ -45,14 +45,14 @@ Page({
   repeat() {
     if (this._repeating) return;
     if (!ui.canWrite()) return;
-    if (this.data.detailMissing) { wx.showToast({ title: '训练详情丢失，不能再练', icon: 'none' }); return; }
-    if (this.data.detailCorrupt) { wx.showToast({ title: '记录已损坏，不能再练', icon: 'none' }); return; }
+    if (this.data.detailMissing) { wx.showToast({ title: '训练详情丢失，不能复制', icon: 'none' }); return; }
+    if (this.data.detailCorrupt) { wx.showToast({ title: '记录已损坏，不能复制', icon: 'none' }); return; }
     this._repeating = true;
     const r = repo.workouts.repeatFrom(this.data.id);
     if (r && r.code === 'DRAFT_EXISTS') return this.askDraft(r.data);
     if (r && (r.code === 'DETAIL_MISSING' || r.code === 'DATA_CORRUPT')) {
       this._repeating = false;
-      wx.showToast({ title: r.message || '不能再练这次训练', icon: 'none' });
+      wx.showToast({ title: r.message || '不能复制这次训练', icon: 'none' });
       return;
     }
     if (!ui.handle(r)) { this._repeating = false; return; }
@@ -63,8 +63,8 @@ Page({
     });
   },
   onRepeatBlocked() {
-    if (this.data.detailMissing) wx.showToast({ title: '训练详情丢失，不能再练', icon: 'none' });
-    else wx.showToast({ title: '记录已损坏，不能再练', icon: 'none' });
+    if (this.data.detailMissing) wx.showToast({ title: '训练详情丢失，不能复制', icon: 'none' });
+    else wx.showToast({ title: '记录已损坏，不能复制', icon: 'none' });
   },
   // 另一天还有未完成草稿时不能静默丢掉。继续它，或放弃后再复制到今天。
   askDraft(existing) {
@@ -72,7 +72,7 @@ Page({
     const n = existing && existing.exerciseCount ? existing.exerciseCount : 0;
     wx.showModal({
       title: '有未完成的训练',
-      content: `你有一个未完成的训练（${date} · ${n} 个动作）。继续它，或放弃后再练这次。`,
+      content: `你有一个未完成的训练（${date} · ${n} 个动作）。继续它，或放弃后复制到今天。`,
       confirmText: '继续', cancelText: '放弃',
       fail: () => { this._repeating = false; },
       success: m => {

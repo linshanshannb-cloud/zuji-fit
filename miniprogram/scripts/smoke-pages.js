@@ -462,7 +462,7 @@ flow('repeat: 过去的力量训练可以再练到今天，重量带上且源记
   assert.strictEqual(edit.route, 'pages/workout-edit/workout-edit');
   assert.notStrictEqual(edit.data.id, sourceId);
   assert.strictEqual(edit.data.w.date, today);
-  assert.strictEqual(edit.data.w.name, '再练：背');
+  assert.strictEqual(edit.data.w.name, '复制：背');
   assert.strictEqual(edit.data.w.note, '');
   assert.strictEqual(edit.data.cards.length, 2);
   const copiedBench = edit.data.cards.find(c => c.exerciseId === '0025');

@@ -81,7 +81,7 @@ test('复制字段齐全：顺序、模式、重量、次数或时长、组类�
   const copy = repo.workouts.getWorkout(r.data.workoutId);
   assert.strictEqual(copy.date, localDay, '目标日是本地日历今天，而不是 UTC 日期字符串');
   assert.strictEqual(copy.status, 'draft');
-  assert.strictEqual(copy.name, '再练：背');
+  assert.strictEqual(copy.name, '复制：背');
   assert.strictEqual(copy.note, '');
   assert.strictEqual(copy.completedAt, null);
   assert.strictEqual(typeof copy.startedAt, 'number');
@@ -122,12 +122,12 @@ test('训练名为空时用源日期；超长名称截到 30 字', () => {
   repo.init();
   const blank = doneWorkout(repo, { date: '2026-10-10', name: '' });
   const named = repo.workouts.repeatFrom(blank);
-  assert.strictEqual(repo.workouts.getWorkout(named.data.workoutId).name, '再练：10月10日训练');
+  assert.strictEqual(repo.workouts.getWorkout(named.data.workoutId).name, '复制：10月10日训练');
   repo.workouts.discardDraft();
   const id = doneWorkout(repo, { date: '2026-10-09', name: '甲'.repeat(30) });
   const r = repo.workouts.repeatFrom(id);
   const name = repo.workouts.getWorkout(r.data.workoutId).name;
-  assert.strictEqual(name, ('再练：' + '甲'.repeat(30)).slice(0, 30));
+  assert.strictEqual(name, ('复制：' + '甲'.repeat(30)).slice(0, 30));
   assert.strictEqual(name.length, 30);
 });
 
@@ -151,8 +151,8 @@ test('今天没有力量训练就新建草稿；有氧不算力量训练', () =>
   assert.deepStrictEqual(be.data[K.AEROBICS], aeroBefore);
   const detailWxml = fs.readFileSync(path.join(__dirname, '../pages/workout-detail/workout-detail.wxml'), 'utf8');
   const aeroWxml = fs.readFileSync(path.join(__dirname, '../pages/aerobic-detail/aerobic-detail.wxml'), 'utf8');
-  assert.ok(detailWxml.includes('再练一次'));
-  assert.ok(!aeroWxml.includes('再练一次'));
+  assert.ok(detailWxml.includes('复制到今天'));
+  assert.ok(!aeroWxml.includes('复制到今天'));
 });
 
 test('今天已有力量训练则追加：不改名、不覆盖原组、同名动作不合并', () => {
@@ -260,7 +260,7 @@ test('详情丢失或损坏、没有动作、动作不可用时整单失败，�
   delete be.data[missingKey];
   const missing = repo.workouts.repeatFrom(missingId);
   assert.strictEqual(missing.code, 'DETAIL_MISSING');
-  assert.match(missing.message, /不能再练/);
+  assert.match(missing.message, /不能复制/);
   assert.strictEqual(be.data[missingKey], undefined);
   assert.deepStrictEqual(be.data[K.WORKOUTS], headers);
 
@@ -271,7 +271,7 @@ test('详情丢失或损坏、没有动作、动作不可用时整单失败，�
   const corruptHeaders = clone(be.data[K.WORKOUTS]);
   const corrupt = repo.workouts.repeatFrom(corruptId);
   assert.strictEqual(corrupt.code, 'DATA_CORRUPT');
-  assert.match(corrupt.message, /不能再练/);
+  assert.match(corrupt.message, /不能复制/);
   assert.deepStrictEqual(be.data[corruptKey], corruptRaw);
   assert.deepStrictEqual(be.data[K.WORKOUTS], corruptHeaders);
 
