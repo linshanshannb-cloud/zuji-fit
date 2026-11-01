@@ -6,7 +6,7 @@ const P = require('../../utils/custom-part');
 Page({
   data: {
     id: '', parts: P.PARTS, partKey: 'chest', equipments: [],
-    form: { nameZh: '', equipment: 'body_weight' },
+    form: { nameZh: '', equipment: 'body_weight', trackMode: 'reps' },
     errors: {}, dirty: false, saving: false, focus: true,
   },
   onLoad(o) {
@@ -19,12 +19,13 @@ Page({
     }
     this.setData({
       id: ex.id, partKey: P.partKeyOf(ex), focus: false, dirty: false, errors: {},
-      form: { nameZh: ex.nameZh || '', equipment: ex.equipment || 'body_weight' },
+      form: { nameZh: ex.nameZh || '', equipment: ex.equipment || 'body_weight', trackMode: ex.trackMode === 'time' ? 'time' : 'reps' },
     });
   },
   onName(e) { this.setData({ 'form.nameZh': e.detail.value, dirty: true, 'errors.nameZh': '' }); },
   onPart(e) { this.setData({ partKey: e.currentTarget.dataset.k, dirty: true, 'errors.bodyPart': '' }); },
   onEquip(e) { this.setData({ 'form.equipment': e.currentTarget.dataset.v, dirty: true }); },
+  onTrack(e) { const mode = e.currentTarget.dataset.mode; if (mode !== 'reps' && mode !== 'time') return; this.setData({ 'form.trackMode': mode, dirty: true }); },
   onBack() {
     if (!this.data.dirty) return wx.navigateBack();
     wx.showModal({
@@ -47,6 +48,7 @@ Page({
       target: part.target || '',
       equipment: this.data.form.equipment || 'body_weight',
       category: 'strength',
+      trackMode: this.data.form.trackMode === 'time' ? 'time' : 'reps',
     };
     this.setData({ saving: true });
     const r = this.data.id

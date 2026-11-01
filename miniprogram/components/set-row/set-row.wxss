@@ -13,5 +13,13 @@
 .circle { width: 56rpx; height: 56rpx; border-radius: 50%; border: 3rpx solid var(--c-check); box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: var(--c-white); font-size: 30rpx; transition: transform .2s ease-out; }
 .circle.on { background: var(--c-accent); border-color: var(--c-accent); animation: pop .2s ease-out; }
 @keyframes pop { from { transform: scale(.8); } to { transform: scale(1); } }
+/* time mode: 64 + 8 + 128 + 8 + 216 + 8 + 88 + 8 + 80 = 608rpx. Reps row above is unchanged. */
+.sr.time .no { width: 64rpx; }
+.sr.time .stp.w { width: 128rpx; }
+.sr.time .stp.d { width: 216rpx; }
+.sr.time .stp.d .pm { width: 52rpx; }
+.sr.time .chk { width: 80rpx; }
+.tm { width: 88rpx; height: 88rpx; margin-left: 8rpx; flex-shrink: 0; box-sizing: border-box; border: 1px solid var(--c-line); border-radius: var(--r-control); display: flex; align-items: center; justify-content: center; font-size: 26rpx; font-weight: 600; }
+.ro .tm { opacity: .35; }
 .shake { animation: shake .3s; border-color: var(--c-danger); }
 @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8rpx); } 75% { transform: translateX(8rpx); } }

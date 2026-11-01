@@ -1,6 +1,6 @@
 // Validation & normalization per DATA_MODEL.md. Pure.
 const D = require('../date');
-const LIMITS = { setWeightMax: 999.9, repsMax: 999, bodyWeightMax: 700, bodyFatMax: 100, waistMax: 300,
+const LIMITS = { setWeightMax: 999.9, repsMax: 999, durationMax: 3600, bodyWeightMax: 700, bodyFatMax: 100, waistMax: 300,
   workoutName: 30, workoutNote: 500, weNote: 200, bodyNote: 200, customName: 30, customDesc: 500 };
 const round1 = x => Math.round(x * 10) / 10;
 const isBlank = v => v === null || v === undefined || (typeof v === 'string' && v.trim() === '');
@@ -31,6 +31,14 @@ function validateReps(v) {
   if (n < 0 || n > LIMITS.repsMax) return bad('INVALID_REPS', '次数需在 0–999');
   return ok(n);
 }
+// Hold duration: null or integer seconds 1..3600. Blank clears. Decimals are rejected (not truncated).
+function validateDuration(v) {
+  if (isBlank(v)) return ok(null);
+  const n = num(v);
+  if (!isFinite(n) || Math.floor(n) !== n) return bad('INVALID_DURATION', '时长必须是整数');
+  if (n < 1 || n > LIMITS.durationMax) return bad('INVALID_DURATION', '时长需在 1–3600 秒');
+  return ok(n);
+}
 // Body metrics: invalid/blank/<=0/out of range -> null (doc §7 rule 2: never error, store null).
 const bodyMetric = max => v => { const n = num(v); return isFinite(n) && n > 0 && n <= max ? round1(n) : null; };
 const normalizeBodyWeight = bodyMetric(LIMITS.bodyWeightMax);
@@ -55,5 +63,5 @@ function validateText(v, max, code = 'TEXT_TOO_LONG') {
   const s = isBlank(v) ? '' : String(v).trim();
   return s.length > max ? bad(code, `不能超过 ${max} 字`) : ok(s);
 }
-module.exports = { LIMITS, round1, isBlank, validateSetWeight, validateReps, normalizeBodyWeight, normalizeBodyFat, normalizeWaist,
+module.exports = { LIMITS, round1, isBlank, validateSetWeight, validateReps, validateDuration, normalizeBodyWeight, normalizeBodyFat, normalizeWaist,
   validateBodyWeight, validateBodyWeightOptional, validateBodyFat, validateWaist, validateDate, validateText };

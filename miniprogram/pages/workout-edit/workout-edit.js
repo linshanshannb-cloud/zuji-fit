@@ -37,6 +37,7 @@ Page({
       id: e.id, name: e.displayName, exerciseId: e.exerciseId, note: e.note, unknown: !!(e.exercise && e.exercise.unknown),
       part: e.exercise && !e.exercise.unknown ? repo.exercises.zhOf('bodyPart', e.exercise.bodyPart) : '',
       bodyweight: !!(e.exercise && e.exercise.equipment === 'body_weight'),
+      mode: e.mode === 'time' ? 'time' : 'reps',
       restLabel: repo.rest.getFor(e.exerciseId) + 's' + (repo.rest.getOverride(e.exerciseId) ? '' : '（默认）'),
       sets: e.sets.map(s => Object.assign({}, s)),
     }));
@@ -48,7 +49,7 @@ Page({
     this.setData({ cards, expanded, detailMissing, detailCorrupt, readOnly: repo.isReadOnly() || detailMissing || detailCorrupt,
       saveState: pending ? 'failed' : 'saved', canRetry: pending,
       w: { id: w.id, status: w.status, persisted: w.persisted !== false, dateLabel: F.dateLabel(w.date), dateShort: F.md(w.date), date: w.date,
-        name: w.name, note: w.note, placeholder: F.md(w.date) + '训练', summary: `${w.exerciseCount} 个动作 · ${w.setCount} 组 · ${F.thousands(w.volumeKg)} kg` } });
+        name: w.name, note: w.note, placeholder: F.md(w.date) + '训练', summary: F.strengthSummary(w.exerciseCount, w.setCount, w.volumeKg, w.timeSec) } });
   },
   // Run a repo mutation. Success reloads from storage, then replays any still-pending edits on top.
   // Storage failure keeps every failed edit (not just the last) and never flips the status line back to 已自动保存.
@@ -132,7 +133,7 @@ Page({
     if (!this.pageWritable()) return;
     const card = this.data.cards.find(c => c.id === weId);
     const same = card && card.exerciseId === exerciseId;
-    const scored = card && card.sets.some(s => s.done || s.weightKg != null || s.reps != null);
+    const scored = card && card.sets.some(s => s.done || s.weightKg != null || s.reps != null || s.durationSec != null);
     const id = this.data.id;
     const go = () => {
       const op = { key: 'replace:' + weId, exec: () => repo.workouts.replaceExercise(id, weId, exerciseId), apply() {} };
@@ -141,7 +142,7 @@ Page({
     if (same || !scored) return go();
     wx.showModal({
       title: '替换这个动作？',
-      content: '已录入的重量、次数和完成状态不会带到新动作。',
+      content: '已录入的重量、次数、时长和完成状态不会带到新动作。',
       cancelText: '取消', confirmText: '替换',
       success: m => { if (m.confirm) go(); },
     });
@@ -198,7 +199,7 @@ Page({
         const c = cards.find(x => x.id === we);
         if (!c || c.sets.some(s => s.id === tempId)) return;
         const last = c.sets[c.sets.length - 1];
-        c.sets.push({ id: tempId, type: 'normal', done: false, weightKg: last ? last.weightKg : null, reps: last ? last.reps : null });
+        c.sets.push({ id: tempId, type: 'normal', done: false, weightKg: last ? last.weightKg : null, reps: last ? last.reps : null, durationSec: last && last.durationSec != null ? last.durationSec : null });
       },
     };
     this.run(op.exec(), { op });
@@ -232,7 +233,10 @@ Page({
       apply(cards) { cards.forEach(c => { const set = c.sets.find(x => x.id === s); if (set) set.done = next; }); },
     };
     const r = op.exec();
-    if (r.code === 'REPS_REQUIRED') { wx.showToast({ title: '先填写次数', icon: 'none' }); this.setData({ shakeSet: s }); setTimeout(() => this.setData({ shakeSet: '' }), 400); return; }
+    if (r.code === 'REPS_REQUIRED' || r.code === 'DURATION_REQUIRED') {
+      wx.showToast({ title: r.code === 'DURATION_REQUIRED' ? '请输入时长' : '先填写次数', icon: 'none' });
+      this.setData({ shakeSet: s }); setTimeout(() => this.setData({ shakeSet: '' }), 400); return;
+    }
     if (r.ok && !d) { try { wx.vibrateShort({ type: 'light' }); } catch (err) { /* noop */ } }
     if (this.run(r, { op }) && !d) this.startRest(e.currentTarget.dataset.we);
   },
@@ -266,8 +270,68 @@ Page({
   // ---------- swipe delete
   swipeDelEx(e) { if (this.pageWritable()) this.removeExercise(e.currentTarget.dataset.id); },
   swipeDelSet(e) { if (this.pageWritable()) this.deleteSet(e.currentTarget.dataset.s, e.currentTarget.dataset.label); },
-  // ---------- rest timer
+  onMode(e) {
+    if (!this.pageWritable()) return;
+    const weId = e.currentTarget.dataset.id, mode = e.currentTarget.dataset.mode;
+    const card = this.data.cards.find(c => c.id === weId);
+    if (!card || card.mode === mode || (mode !== 'reps' && mode !== 'time')) return;
+    const id = this.data.id;
+    const op = {
+      key: 'mode:' + weId,
+      exec: () => repo.workouts.setExerciseMode(id, weId, mode),
+      apply(cards) {
+        const c = cards.find(x => x.id === weId);
+        if (!c) return;
+        c.mode = mode;
+        c.sets.forEach(s => {
+          if (!s.done) return;
+          const ok = mode === 'time' ? s.durationSec >= 1 : s.reps >= 1;
+          if (!ok) s.done = false;
+        });
+      },
+    };
+    const r = op.exec();
+    if (r.ok && r.data && r.data.reset > 0) wx.showToast({ title: mode === 'time' ? '已取消缺少时长的完成勾选' : '已取消缺少次数的完成勾选', icon: 'none' });
+    this.run(r, { op });
+  },
+  // ---------- rest / hold timer
+  onSetTimer(e) {
+    if (!this.pageWritable()) return;
+    const { s, we } = e.currentTarget.dataset;
+    const card = this.data.cards.find(c => c.id === we);
+    const set = card && card.sets.find(x => x.id === s);
+    if (!set || !(set.durationSec >= 1)) {
+      wx.showToast({ title: '请输入时长', icon: 'none' });
+      this.setData({ shakeSet: s }); setTimeout(() => this.setData({ shakeSet: '' }), 400);
+      return;
+    }
+    this._hold = { setId: s, weId: we };
+    const t = this.selectComponent('#rest');
+    if (t) t.start(set.durationSec, card.name, { kind: 'hold' });
+  },
+  onTimerDone(e) {
+    const detail = (e && e.detail) || {};
+    if (detail.kind !== 'hold' || !this._hold) return;
+    const { setId, weId } = this._hold;
+    this._hold = null;
+    if (!this.pageWritable()) return;
+    const id = this.data.id;
+    const op = {
+      key: 'done:' + setId,
+      exec: () => repo.workouts.setSetDone(id, setId, true),
+      apply(cards) { cards.forEach(c => { const set = c.sets.find(x => x.id === setId); if (set) set.done = true; }); },
+    };
+    const r = op.exec();
+    if (r.code === 'DURATION_REQUIRED' || r.code === 'REPS_REQUIRED') {
+      wx.showToast({ title: r.code === 'DURATION_REQUIRED' ? '请输入时长' : '先填写次数', icon: 'none' });
+      return;
+    }
+    const saved = this.run(r, { op });
+    if (saved || SAVE_FAIL.includes(r && r.code)) this.startRest(weId);
+  },
+  onTimerSkip() { this._hold = null; },
   startRest(weId) {
+    this._hold = null;
     const card = this.data.cards.find(c => c.id === weId);
     if (!card) return;
     this._restEx = { exerciseId: card.exerciseId, name: card.name };

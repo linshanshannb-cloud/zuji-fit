@@ -26,6 +26,15 @@ function filter(list, { q = '', bodyPart = '', equipment = '', target = '', incl
     (!target || e.target === target || (includeSecondary && (e.secondary || []).includes(target))));
 }
 const unknownExercise = id => ({ id, unknown: true, nameZh: '未知动作', nameEn: '', bodyPart: '', equipment: '', target: '', secondary: [], steps: [], description: '' });
+// Static holds that default to timing a set. Everything else, including other isometrics, stays reps.
+// Custom exercises opt in with trackMode. Missing exercise / missing field = reps (no migration).
+const TIME_DEFAULT_IDS = { '0463': true, '0715': true, '1246': true, '2135': true, '3419': true };
+function defaultMode(ex) {
+  if (!ex || typeof ex !== 'object') return 'reps';
+  if (ex.trackMode === 'time') return 'time';
+  if (ex.trackMode === 'reps') return 'reps';
+  return TIME_DEFAULT_IDS[ex.id] ? 'time' : 'reps';
+}
 // Display-ready copy (Chinese labels), used by pages.
 function display(e) {
   return Object.assign({}, e, { bodyPartZh: zhOf('bodyPart', e.bodyPart), equipmentZh: zhOf('equipment', e.equipment),
@@ -36,4 +45,4 @@ module.exports = { builtin, byId, filters, source: data.source, placeholder: dat
   muscles: opts('muscles').length ? opts('muscles') : opts('target').concat(opts('secondary')),
   // target-muscle filter options: muscles that actually occur as a primary target
   targets: (opts('muscles').length ? opts('muscles') : opts('target')).filter(o => builtin.some(e => e.target === o.value)),
-  zhOf, muscleZh, search, filter, unknownExercise, display };
+  zhOf, muscleZh, search, filter, unknownExercise, display, defaultMode, TIME_DEFAULT_IDS };

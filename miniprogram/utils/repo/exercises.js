@@ -40,11 +40,14 @@ function buildCustom(input, base) {
   if (input.bodyPartDetail && !details.includes(input.bodyPartDetail)) C.raise('INVALID_BODY_PART_DETAIL', '细分部位无效');
   if (input.target && !muscles.includes(input.target)) C.raise('INVALID_MUSCLE', '目标肌群无效');
   if (arr(input.secondary).some(m => !muscles.includes(m))) C.raise('INVALID_MUSCLE', '次要肌群无效');
+  let trackMode = 'reps';
+  if (input.trackMode === 'time' || input.trackMode === 'reps') trackMode = input.trackMode;
+  else if (input.trackMode != null && input.trackMode !== '') C.raise('INVALID_MODE', '计组方式无效');
   return Object.assign({}, base, {
     nameZh, nameEn: String(input.nameEn || '').trim(), bodyPart: input.bodyPart, bodyPartDetail: String(input.bodyPartDetail || ''),
     target: String(input.target || ''), secondary: arr(input.secondary), equipment, category, categoryZh: CATEGORY_ZH[category],
     description: C.check(V.validateText(input.description, V.LIMITS.customDesc)), steps: arr(input.steps),
-    translationPending: !!input.translationPending, untranslatedFields: arr(input.untranslatedFields) });
+    translationPending: !!input.translationPending, untranslatedFields: arr(input.untranslatedFields), trackMode });
 }
 function addCustom(input = {}) {
   return C.guard(() => {

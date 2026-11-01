@@ -22,6 +22,15 @@
     <view class="hint">选填，默认自重；保存后可在动作库 / 力量训练里选用</view>
   </view>
 
+  <view class="section">
+    <view class="field-label">计组方式</view>
+    <view class="seg" style="margin-top:16rpx">
+      <view class="seg-item {{form.trackMode!=='time'?'on':''}}" data-mode="reps" bindtap="onTrack">按次数</view>
+      <view class="seg-item {{form.trackMode==='time'?'on':''}}" data-mode="time" bindtap="onTrack">按时长</view>
+    </view>
+    <view class="hint">加入训练时的默认方式，训练中仍可随时切换</view>
+  </view>
+
   <view wx:if="{{id}}" class="del-wrap">
     <text class="danger hit" bindtap="onDelete">删除此动作</text>
   </view>

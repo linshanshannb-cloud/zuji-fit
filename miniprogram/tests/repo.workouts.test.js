@@ -204,7 +204,7 @@ test('day summaries, personal best, duration', () => {
   repo.workouts.finalizeWorkout(w.id);
   const [sum] = repo.workouts.daySummaries('2026-10-17');
   assert.ok(sum.durationMin >= 1); assert.strictEqual(sum.top.length, 1); assert.strictEqual(sum.more, 0);
-  assert.deepStrictEqual(sum.top[0], { name: '杠铃卧推', sets: 2, best: { weightKg: 60, reps: 10 } });
+  assert.deepStrictEqual(sum.top[0], { name: '杠铃卧推', sets: 2, mode: 'reps', best: { weightKg: 60, reps: 10 } });
   assert.deepStrictEqual(repo.workouts.personalBest(BENCH), { date: '2026-10-17', workoutId: w.id, weightKg: 60, reps: 10 }, 'warmup ignored, tie -> more reps');
   assert.strictEqual(repo.workouts.personalBest(OTHER()), null);
 });
