@@ -1,5 +1,5 @@
 <nav-bar mode="back"></nav-bar>
-<view class="page page-pad-bar" wx:if="{{w}}">
+<view class="page page-pad-bar repeat-pad" wx:if="{{w}}">
   <view wx:if="{{w.name}}" class="sub">{{w.name}}</view>
   <view class="row"><text class="h1">{{w.date}}</text><text class="tag tag-gray" style="margin-left:16rpx">已完成</text></view>
   <view class="sub" style="margin-top:8rpx">{{w.time}}</view>
@@ -22,8 +22,12 @@
   <view wx:if="{{w.note}}" class="section"><view class="cap">备注</view><view style="margin-top:8rpx">{{w.note}}</view></view>
 </view>
 <empty-state wx:if="{{missing}}" title="训练不存在或已删除"></empty-state>
-<view class="bar" wx:if="{{w}}">
-  <btn type="danger" size="bar" style="width:200rpx" bind:press="remove">删除</btn><view class="gap"></view>
-  <btn type="primary" size="bar" style="flex:1" disabled="{{detailMissing || detailCorrupt}}" bind:press="edit">编辑训练</btn>
+<view class="bar repeat-bar" wx:if="{{w}}">
+  <btn type="primary" size="bar" disabled="{{detailMissing || detailCorrupt}}" bind:press="repeat" bind:disabledtap="onRepeatBlocked">再练一次</btn>
+  <view class="repeat-row">
+    <btn type="danger" size="bar" style="flex:1" bind:press="remove">删除</btn>
+    <view class="gap"></view>
+    <btn type="secondary" size="bar" style="flex:1" disabled="{{detailMissing || detailCorrupt}}" bind:press="edit">编辑训练</btn>
+  </view>
 </view>
 <view class="bar" wx:if="{{missing}}"><btn type="danger" size="bar" style="flex:1" bind:press="remove">删除这条训练</btn></view>
