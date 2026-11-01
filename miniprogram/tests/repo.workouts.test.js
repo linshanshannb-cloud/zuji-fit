@@ -74,11 +74,23 @@ test('exercises: order, reorder/move, note, replace keeps sets, remove + undo re
   assert.deepStrictEqual(repo.workouts.getWorkout(w.id).exercises.map(e => e.id), [b.id, c.id, a.id]);
   assert.strictEqual(repo.workouts.updateExerciseNote(w.id, a.id, '  握距窄 ').data.note, '握距窄');
   assert.strictEqual(repo.workouts.updateExerciseNote(w.id, a.id, 'x'.repeat(201)).code, 'TEXT_TOO_LONG');
-  // replace keeps sets
-  repo.workouts.addSet(w.id, c.id, { reps: 5 });
+  // replace keeps set rows; cross-exercise replace clears weight/reps/done. Same exercise keeps scores.
+  const c0 = repo.workouts.getWorkout(w.id).exercises.find(e => e.id === c.id).sets[0];
+  repo.workouts.updateSet(w.id, c0.id, { reps: 5, weightKg: 40 });
+  repo.workouts.setSetDone(w.id, c0.id, true);
+  repo.workouts.updateSet(w.id, c0.id, { type: 'warmup' });
+  repo.workouts.addSet(w.id, c.id, { reps: 5, weightKg: 30 });
   const rep = repo.workouts.replaceExercise(w.id, c.id, BENCH).data;
   assert.deepStrictEqual([rep.exerciseId, rep.nameSnapshot], [BENCH, '杠铃卧推']);
-  assert.strictEqual(repo.workouts.getWorkout(w.id).exercises[1].sets.length, 2);
+  let replaced = repo.workouts.getWorkout(w.id).exercises.find(e => e.id === c.id);
+  assert.strictEqual(replaced.sets.length, 2);
+  assert.ok(replaced.sets.every(s => s.weightKg == null && s.reps == null && s.done === false && s.doneAt == null));
+  assert.strictEqual(replaced.sets[0].type, 'warmup', 'set type is structure, not a score');
+  repo.workouts.updateSet(w.id, replaced.sets[0].id, { reps: 3, weightKg: 20, type: 'normal' });
+  repo.workouts.setSetDone(w.id, replaced.sets[0].id, true);
+  assert.ok(repo.workouts.replaceExercise(w.id, c.id, BENCH).ok);
+  replaced = repo.workouts.getWorkout(w.id).exercises.find(e => e.id === c.id);
+  assert.deepStrictEqual([replaced.sets[0].weightKg, replaced.sets[0].reps, replaced.sets[0].done], [20, 3, true]);
   // remove + undo
   const rm = repo.workouts.removeExercise(w.id, c.id);
   assert.strictEqual(rm.data.sets.length, 2); assert.strictEqual(rm.data.exercise.order, 1);

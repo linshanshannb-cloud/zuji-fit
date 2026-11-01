@@ -16,7 +16,7 @@ const wxBackend = () => ({
 });
 let backend = typeof wx !== 'undefined' ? wxBackend() : null;
 let readOnly = false;
-let health = { corrupt: {}, unreadable: {} };
+let health = { corrupt: {}, unreadable: {}, issues: {} };
 
 function setBackend(b) { backend = b; resetHealth(); }
 function setReadOnly(v) { readOnly = !!v; }
@@ -35,12 +35,14 @@ function getTyped(key, shape, fallback) {
   if (v === undefined) return fallback;
   const okShape = shape === 'array' ? Array.isArray(v) : v !== null && typeof v === 'object' && !Array.isArray(v);
   if (okShape) return v;
-  markCorrupt(key, v);
+  markCorrupt(key, v, [{ kind: 'shape', path: key }]);
   return fallback;
 }
-function markCorrupt(key, raw) {
+// issues: [{ kind, path, raw? }] identifying damaged records. The original key is never rewritten here.
+function markCorrupt(key, raw, issues) {
   if (health.corrupt[key]) return;
   health.corrupt[key] = Array.isArray(raw) ? 'array' : typeof raw;
+  health.issues[key] = Array.isArray(issues) && issues.length ? issues : [{ kind: 'shape', path: key }];
   if (readOnly || !backend) return;
   try { need().set('fit_corrupt_' + key + '_' + Date.now(), raw); } catch (e) { /* backup is best effort; original stays untouched anyway */ }
 }
@@ -62,9 +64,11 @@ function remove(key) {
 function keys() { try { return need().keys(); } catch (e) { return null; } } // null = unknown (do not clean up)
 function getHealth() {
   const corruptKeys = Object.keys(health.corrupt), unreadableKeys = Object.keys(health.unreadable);
-  return { ok: !corruptKeys.length && !unreadableKeys.length, corruptKeys, unreadableKeys };
+  const issues = {};
+  Object.keys(health.issues).forEach(k => { issues[k] = health.issues[k].slice(); });
+  return { ok: !corruptKeys.length && !unreadableKeys.length, corruptKeys, unreadableKeys, issues };
 }
-function resetHealth() { health = { corrupt: {}, unreadable: {} }; }
+function resetHealth() { health = { corrupt: {}, unreadable: {}, issues: {} }; }
 
 // In-memory backend for tests / previews. opts.failOn(key, value) -> truthy to throw on set.
 function memoryBackend(initial = {}, opts = {}) {

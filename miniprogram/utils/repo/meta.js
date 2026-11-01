@@ -77,8 +77,12 @@ function cleanOrphans(workouts) {
   const list = workouts || S.getTyped(K.WORKOUTS, 'array', null);
   const h = S.getHealth();
   if (!list || h.corruptKeys.includes(K.WORKOUTS) || h.unreadableKeys.includes(K.WORKOUTS)) return;
+  // A null / typeless header is not a trustworthy index: deleting "unreferenced" details could drop real history.
+  const M = require('./model');
+  const split = M.splitRecords(list, M.inspectHeader, 'workouts');
+  if (split.issues.length) { S.markCorrupt(K.WORKOUTS, list, split.issues); return; }
   const all = S.keys(); if (!all) return;
-  const ids = {}; list.forEach(w => { if (w && w.id) ids[w.id] = true; });
+  const ids = {}; split.list.forEach(w => { if (w && w.id) ids[w.id] = true; });
   all.forEach(k => {
     if (k.indexOf(K.DETAIL_PREFIX) === 0 && !ids[k.slice(K.DETAIL_PREFIX.length)]) { try { S.remove(k); } catch (e) { /* ignore */ } }
   });

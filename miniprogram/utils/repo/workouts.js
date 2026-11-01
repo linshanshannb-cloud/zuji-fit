@@ -12,11 +12,41 @@ const isPending = id => !!pending && pending.id === id;
 function getPending() { return pending ? Object.assign({}, pending) : null; }
 function discardPending() { pending = null; }
 // ---------- raw IO
-function headers() { return S.getTyped(K.WORKOUTS, 'array', []); } // corrupt -> [] for display, writes refused
+// Outer shape is checked by storage. Records inside a well-typed array can still be null, id-less, or the wrong type.
+// Those are marked corrupt (writes refused, raw kept) and omitted from the clean view so queries don't throw.
+function headerView() {
+  const raw = S.getTyped(K.WORKOUTS, 'array', null);
+  if (raw == null) return { list: [], issues: [] };
+  const split = M.splitRecords(raw, M.inspectHeader, 'workouts');
+  if (split.issues.length) S.markCorrupt(K.WORKOUTS, raw, split.issues);
+  return split;
+}
+function headers() { return headerView().list; }
+function loadDetail(id) {
+  const key = K.workoutDetail(id);
+  const raw = S.get(key, undefined);
+  if (S.getHealth().unreadableKeys.includes(key)) {
+    return { key, missing: false, blocked: true, detail: { workoutId: id, exercises: [], sets: [] },
+      integrity: { ok: false, issues: [{ kind: 'unreadable', path: key }] } };
+  }
+  if (raw === undefined) {
+    return { key, missing: true, blocked: true, detail: null, integrity: { ok: false, issues: [{ kind: 'missing', path: key }] } };
+  }
+  if (typeof raw !== 'object' || Array.isArray(raw) || !Array.isArray(raw.exercises) || !Array.isArray(raw.sets)) {
+    const issues = [{ kind: 'shape', path: key }];
+    S.markCorrupt(key, raw, issues);
+    return { key, missing: false, blocked: true, detail: { workoutId: id, exercises: [], sets: [] }, integrity: { ok: false, issues } };
+  }
+  const integrity = M.inspectDetail(raw);
+  if (!integrity.ok) {
+    S.markCorrupt(key, raw, integrity.issues);
+    return { key, missing: false, blocked: true, detail: { workoutId: id, exercises: integrity.exercises, sets: integrity.sets }, integrity };
+  }
+  return { key, missing: false, blocked: false, detail: raw, integrity };
+}
 function detailOf(id) {
-  const key = K.workoutDetail(id), d = S.getTyped(key, 'object', null);
-  if (d && !(Array.isArray(d.exercises) && Array.isArray(d.sets))) S.markCorrupt(key, d); // malformed: keep raw, block writes
-  return d && Array.isArray(d.exercises) && Array.isArray(d.sets) ? d : { workoutId: id, exercises: [], sets: [] };
+  const st = loadDetail(id);
+  return st.detail || { workoutId: id, exercises: [], sets: [] };
 }
 function findHeader(id) { const h = headers().find(w => w.id === id); if (!h) C.raise('NOT_FOUND', '训练不存在'); return h; }
 // Write order (§8): detail first, then headers.
@@ -38,25 +68,44 @@ function mutate(workoutId, fn) {
   return C.guard(() => {
     C.writable();
     const header = findHeader(workoutId);
+    const st = loadDetail(workoutId);
+    // Missing detail is not an empty workout: writing one would invent history and hide the loss.
+    if (st.missing) C.raise('DETAIL_MISSING', '训练详情丢失，已暂停编辑');
+    if (st.blocked) C.raise('DATA_CORRUPT', '数据读取异常，已暂停保存以保护原数据');
     const prev = S.get(K.workoutDetail(workoutId), undefined);
-    const detail = detailOf(workoutId);
+    const detail = st.detail;
     const res = fn(detail, header) || {};
     const h = commit(header, res.detail || detail, res.patch, prev);
     return C.ok(res.data !== undefined ? res.data : h);
   });
 }
-function findWE(detail, weId) { const we = detail.exercises.find(e => e.id === weId); if (!we) C.raise('NOT_FOUND', '动作不存在'); return we; }
-function findSet(detail, setId) { const s = detail.sets.find(x => x.id === setId); if (!s) C.raise('NOT_FOUND', '组不存在'); return s; }
+function findWE(detail, weId) { const we = (detail.exercises || []).find(e => e && e.id === weId); if (!we) C.raise('NOT_FOUND', '动作不存在'); return we; }
+function findSet(detail, setId) { const s = (detail.sets || []).find(x => x && x.id === setId); if (!s) C.raise('NOT_FOUND', '组不存在'); return s; }
 const replaceIn = (arr, item) => arr.map(x => (x.id === item.id ? item : x));
 
 // ---------- queries
 function getDraft() { return headers().find(w => w.status === 'draft') || null; }
 function getHeader(id) { if (isPending(id)) return Object.assign({ persisted: false }, pending); return headers().find(w => w.id === id) || null; }
 // Full view with nested exercises/sets; summaries recomputed (authoritative per §4.4).
+function stamp(view, st) {
+  view.detailMissing = !!(st && st.missing);
+  view.detailCorrupt = !!(st && st.blocked && !st.missing);
+  view.integrity = st && st.integrity ? st.integrity : { ok: true, issues: [] };
+  return view;
+}
 function getWorkout(id) {
   const h = getHeader(id); if (!h) return null;
-  const d = isPending(id) ? { workoutId: id, exercises: [], sets: [] } : detailOf(id);
-  return M.assemble(Object.assign({}, h, M.computeSummary(d), { displayName: h.name || M.defaultWorkoutName(h.date) }), d, exRepo.get);
+  if (isPending(id)) {
+    const d = { workoutId: id, exercises: [], sets: [] };
+    return stamp(M.assemble(Object.assign({}, h, M.computeSummary(d), { displayName: h.name || M.defaultWorkoutName(h.date) }), d, exRepo.get), null);
+  }
+  const st = loadDetail(id);
+  const d = st.detail || { workoutId: id, exercises: [], sets: [] };
+  // Keep the index summary when the detail key is absent so the header is not presented as a real empty workout.
+  const summary = st.missing
+    ? { exerciseCount: h.exerciseCount || 0, setCount: h.setCount || 0, volumeKg: h.volumeKg || 0 }
+    : M.computeSummary(d);
+  return stamp(M.assemble(Object.assign({}, h, summary, { displayName: h.name || M.defaultWorkoutName(h.date) }), d, exRepo.get), st);
 }
 function listWorkouts({ status = 'completed', from = '', to = '' } = {}) {
   return headers().filter(w => (!status || w.status === status) && (!from || w.date >= from) && (!to || w.date <= to))
@@ -68,19 +117,24 @@ function completedDates(from, to) { const m = {}; listWorkouts({ from, to }).for
 // Best done normal set of one WorkoutExercise: max weight, tie -> more reps.
 function bestSet(sets) {
   let b = null;
-  sets.forEach(s => { if (!M.isCountable(s)) return; const w = s.weightKg == null ? 0 : s.weightKg;
-    if (!b || w > b.weightKg || (w === b.weightKg && s.reps > b.reps)) b = { weightKg: w, reps: s.reps }; });
+  (sets || []).forEach(s => {
+    if (!M.isCountable(s)) return;
+    const w = typeof s.weightKg === 'number' ? s.weightKg : 0;
+    const reps = typeof s.reps === 'number' ? s.reps : 0;
+    if (!b || w > b.weightKg || (w === b.weightKg && reps > b.reps)) b = { weightKg: w, reps };
+  });
   return b;
 }
 // Calendar summary cards for a day (completed only, by createdAt): header + duration + first 3 exercises with best set.
 function daySummaries(date) {
   return workoutsOn(date).map(w => {
-    const v = getWorkout(w.id), detailMissing = S.get(K.workoutDetail(w.id), undefined) === undefined;
+    const v = getWorkout(w.id) || { exercises: [], detailMissing: true, detailCorrupt: false };
     return Object.assign({}, w, {
       durationMin: w.startedAt && w.completedAt ? Math.max(1, Math.round((w.completedAt - w.startedAt) / 60000)) : null,
-      detailMissing,
-      top: v.exercises.slice(0, 3).map(e => ({ name: e.displayName, sets: e.sets.filter(M.isCountable).length, best: bestSet(e.sets) })),
-      more: Math.max(0, v.exercises.length - 3) });
+      detailMissing: !!v.detailMissing,
+      detailCorrupt: !!v.detailCorrupt,
+      top: (v.exercises || []).slice(0, 3).map(e => ({ name: e.displayName, sets: e.sets.filter(M.isCountable).length, best: bestSet(e.sets) })),
+      more: Math.max(0, (v.exercises || []).length - 3) });
   });
 }
 // 我的最佳 (§P6): heaviest done normal set across completed workouts (tie -> more reps).
@@ -89,14 +143,20 @@ function personalBest(exerciseId) {
   headers().filter(w => w.status === 'completed').forEach(w => {
     const d = detailOf(w.id);
     d.exercises.filter(e => e.exerciseId === exerciseId).forEach(e => {
-      const b = bestSet(d.sets.filter(s => s.workoutExerciseId === e.id));
+      const b = bestSet(d.sets.filter(s => s && s.workoutExerciseId === e.id));
       if (b && (!best || b.weightKg > best.weightKg || (b.weightKg === best.weightKg && b.reps > best.reps))) best = Object.assign({ date: w.date, workoutId: w.id }, b);
     });
   });
   return best;
 }
 function referencedExerciseIds() {
-  const s = {}; headers().forEach(w => detailOf(w.id).exercises.forEach(e => { s[e.exerciseId] = true; })); return s;
+  const s = {};
+  headers().forEach(w => {
+    const raw = S.get(K.workoutDetail(w.id), undefined);
+    const exercises = raw && Array.isArray(raw.exercises) ? raw.exercises : [];
+    exercises.forEach(e => { if (e && typeof e.exerciseId === 'string' && e.exerciseId) s[e.exerciseId] = true; });
+  });
+  return s;
 }
 
 // ---------- workout lifecycle
@@ -152,14 +212,17 @@ function completeWorkout(id) {
 // R-C pre-check for the confirm dialog. Pure read.
 function completionCheck(id) {
   const h = getHeader(id); if (!h) return null;
-  const d = detailOf(id);
-  const doneSets = d.sets.filter(s => s.done === true).length;
-  const empty = d.exercises.slice().sort(M.byOrder).filter(we => !d.sets.some(s => s.workoutExerciseId === we.id && s.done === true));
+  if (isPending(id)) return { status: h.status, doneSets: 0, canFinish: false, willRemove: [], exercisesWithoutDone: [], undoneSets: 0, detailMissing: false, detailCorrupt: false };
+  const st = loadDetail(id);
+  if (st.missing) return { status: h.status, detailMissing: true, detailCorrupt: false, doneSets: 0, canFinish: false, willRemove: [], exercisesWithoutDone: [], undoneSets: 0 };
+  const d = st.detail;
+  const doneSets = d.sets.filter(s => s && s.done === true).length;
+  const empty = d.exercises.slice().sort(M.byOrder).filter(we => !d.sets.some(s => s && s.workoutExerciseId === we.id && s.done === true));
   const emptyIds = {}; empty.forEach(e => { emptyIds[e.id] = true; });
-  return { status: h.status, doneSets, canFinish: doneSets > 0,
+  return { status: h.status, doneSets, canFinish: doneSets > 0, detailMissing: false, detailCorrupt: !!st.blocked,
     willRemove: h.status === 'draft' ? empty.map(e => e.nameSnapshot) : [], // drafts only (lead decision §9#9)
     exercisesWithoutDone: empty.map(e => e.nameSnapshot),
-    undoneSets: d.sets.filter(s => !s.done && (h.status !== 'draft' || !emptyIds[s.workoutExerciseId])).length };
+    undoneSets: d.sets.filter(s => s && !s.done && (h.status !== 'draft' || !emptyIds[s.workoutExerciseId])).length };
 }
 // 完成训练 / 完成编辑. draft -> completeWorkout (prune). completed -> require ≥1 done set, no pruning, completedAt unchanged.
 function finalizeWorkout(id) {
@@ -237,8 +300,16 @@ function addToCurrentDraft(exerciseId) {
 function replaceExercise(workoutId, weId, exerciseId) {
   return mutate(workoutId, detail => {
     const ex = resolveAddable(exerciseId);
-    const we = Object.assign({}, findWE(detail, weId), { exerciseId: ex.id, nameSnapshot: ex.nameZh });
-    return { detail: Object.assign({}, detail, { exercises: replaceIn(detail.exercises, we) }), data: we };
+    const prev = findWE(detail, weId);
+    const we = Object.assign({}, prev, { exerciseId: ex.id, nameSnapshot: ex.nameZh });
+    let sets = detail.sets;
+    // Cross-exercise replace keeps the set rows (and warm-up/normal type) but does not carry weight, reps, or done.
+    // Replacing a workout exercise with itself only refreshes nameSnapshot.
+    if (prev.exerciseId !== ex.id) {
+      sets = detail.sets.map(s => (s.workoutExerciseId === weId
+        ? Object.assign({}, s, { weightKg: null, reps: null, done: false, doneAt: null }) : s));
+    }
+    return { detail: Object.assign({}, detail, { exercises: replaceIn(detail.exercises, we), sets }), data: we };
   });
 }
 // Returns { exercise, sets } snapshot for undo (restoreExercise).
@@ -348,13 +419,13 @@ function duplicateSet(workoutId, setId) {
 }
 // Launch self-heal: recompute derived header fields from details (detail is authoritative, DATA_MODEL §4.4).
 function healHeaders() {
-  const list = headers(); let changed = false;
+  const list = headers();
   if (S.getHealth().corruptKeys.includes(K.WORKOUTS) || S.getHealth().unreadableKeys.includes(K.WORKOUTS)) return false;
+  let changed = false;
   const next = list.map(h => {
-    const raw = S.get(K.workoutDetail(h.id), undefined);
-    if (raw === undefined) return h; // detail missing: keep header as is (UI shows 训练详情丢失)
-    const d = detailOf(h.id); if (S.getHealth().corruptKeys.includes(K.workoutDetail(h.id))) return h;
-    const sum = M.computeSummary(d);
+    const st = loadDetail(h.id);
+    if (st.missing || st.blocked) return h; // missing or damaged detail: do not invent or rewrite it
+    const sum = M.computeSummary(st.detail);
     if (sum.exerciseCount !== h.exerciseCount || sum.setCount !== h.setCount || sum.volumeKg !== h.volumeKg) { changed = true; return Object.assign({}, h, sum); }
     return h;
   });
