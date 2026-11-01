@@ -110,8 +110,9 @@ test('只读不能复制或套用；饮食 Tab 与模板页同时留在 app.json
   assert.strictEqual(repo.templates.apply({ id: 'preset_home_full', date: '2026-10-17' }).code, 'READ_ONLY');
   S.setReadOnly(false);
   const app = JSON.parse(fs.readFileSync(path.join(__dirname, '../app.json'), 'utf8'));
-  assert.ok(app.pages.includes('pages/templates/templates'));
-  assert.ok(app.pages.includes('pages/template-detail/template-detail'));
+  const registered = app.pages.concat((app.subpackages || []).flatMap(s => s.pages.map(p => (s.root.replace(/\/$/, '') + '/' + p))));
+  assert.ok(registered.includes('pages/templates/templates'));
+  assert.ok(registered.includes('pages/template-detail/template-detail'));
   assert.ok(app.pages.includes('pages/diet/diet'));
   assert.deepStrictEqual(app.tabBar.list.map(t => t.text), ['日历', '动作库', '饮食', '身体数据']);
 });

@@ -1,4 +1,18 @@
-{ "appid": "wxd000e3fb6e804ce0", "projectname": "fitness-miniapp", "compileType": "miniprogram", "libVersion": "3.0.0",
-  "packOptions": { "ignore": [{ "type": "folder", "value": "tests" }, { "type": "folder", "value": "scripts" }, { "type": "file", "value": "DEV_NOTES.md" }] },
+{
+  "appid": "wxd000e3fb6e804ce0",
+  "projectname": "fitness-miniapp",
+  "compileType": "miniprogram",
+  "libVersion": "3.0.0",
+  "packOptions": {
+    "ignore": [
+      { "type": "folder", "value": "tests" },
+      { "type": "folder", "value": "scripts" },
+      { "type": "folder", "value": "docs" },
+      { "type": "suffix", "value": ".md" },
+      { "type": "file", "value": "data/exercises.json" },
+      { "type": "file", "value": "LICENSE-openGym.txt" }
+    ]
+  },
   "setting": { "es6": true, "enhance": true, "postcss": true, "minified": true, "urlCheck": false },
-  "condition": {} }
+  "condition": {}
+}

@@ -126,12 +126,31 @@ for (const root of ['packageVideoA', 'packageVideoB', 'packageVideoC']) {
   check(`V3 subpack ${root} ≤2MB`, sz <= 2 * 1024 * 1024, sz + 'B');
 }
 function mainSize(dir) {
+  // 与上传一致：跳过分包根目录，以及 project.config.json 里 packOptions.ignore。
+  const pcPath = path.join(dir, 'project.config.json');
+  const rules = fs.existsSync(pcPath) ? (JSON.parse(fs.readFileSync(pcPath, 'utf8')).packOptions || {}).ignore || [] : [];
+  const roots = (app.subpackages || []).map(s => s.root.replace(/\\/g, '/').replace(/\/$/, ''));
+  const ignored = rel => {
+    const norm = rel.replace(/\\/g, '/');
+    if (roots.some(r => norm === r || norm.startsWith(r + '/'))) return true;
+    return rules.some(rule => {
+      const v = String(rule.value || '').replace(/\\/g, '/');
+      if (rule.type === 'folder') return norm === v || norm.startsWith(v + '/');
+      if (rule.type === 'file') return norm === v;
+      if (rule.type === 'suffix') return norm.endsWith(v);
+      return false;
+    });
+  };
   let n = 0;
-  for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (['packageVideoA', 'packageVideoB', 'packageVideoC', 'node_modules', 'tests', 'scripts'].includes(ent.name)) continue;
-    const p = path.join(dir, ent.name);
-    n += ent.isDirectory() ? dirSize(p) : fs.statSync(p).size;
-  }
+  (function walk(d) {
+    for (const ent of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, ent.name);
+      const rel = path.relative(dir, p);
+      if (ignored(rel)) continue;
+      if (ent.isDirectory()) walk(p);
+      else n += fs.statSync(p).size;
+    }
+  })(dir);
   return n;
 }
 const mainSz = mainSize(MP);
