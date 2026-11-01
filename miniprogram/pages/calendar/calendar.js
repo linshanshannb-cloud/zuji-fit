@@ -20,9 +20,9 @@ Page({
     const ws = repo.workouts.daySummaries(selected), as = repo.aerobic.daySummaries(selected);
     const strength = ws.map(w => ({
       id: w.id, kind: 'strength', title: w.displayName, duration: w.durationMin, detailMissing: w.detailMissing, createdAt: w.createdAt || 0,
-      stats: [{ v: w.exerciseCount, k: '动作' }, { v: w.setCount, k: '组' }, { v: F.thousands(w.volumeKg), k: '容量 kg' }],
-      meta: `${w.exerciseCount} 动作 · ${w.setCount} 组 · ${F.thousands(w.volumeKg)} kg`,
-      top: w.top.map(t => ({ name: t.name, text: t.sets + '组' + (t.best ? ' · 最佳 ' + F.kg(t.best.weightKg) + 'kg×' + t.best.reps : '') })), more: w.more }));
+      stats: F.strengthStats(w.exerciseCount, w.setCount, w.volumeKg, w.timeSec),
+      meta: F.strengthMeta(w.exerciseCount, w.setCount, w.volumeKg, w.timeSec),
+      top: w.top.map(t => ({ name: t.name, text: t.sets + '组' + (t.best ? ' · 最佳 ' + F.bestLabel(t.best) : '') })), more: w.more }));
     const aerobic = as.map(a => ({
       id: a.id, kind: 'aerobic', title: a.title, duration: a.durationMin, createdAt: a.createdAt || 0,
       kcalHint: a.kcalSource === 'user_override' ? '已手动调整' : '估算',
@@ -52,8 +52,7 @@ Page({
     const manual = as.some(a => a.kcalSource === 'user_override');
     return {
       totalMin, totalNote: totalMin && partial ? '部分记录无时长' : '',
-      strength: ws.length ? { parts: dp.parts.join(' · ') || '—', stats: [
-        { v: sum(ws, 'exerciseCount'), k: '动作' }, { v: sum(ws, 'setCount'), k: '组' }, { v: F.thousands(sum(ws, 'volumeKg')), k: '容量 kg' }] } : null,
+      strength: ws.length ? { parts: dp.parts.join(' · ') || '—', stats: F.strengthStats(sum(ws, 'exerciseCount'), sum(ws, 'setCount'), sum(ws, 'volumeKg'), sum(ws, 'timeSec')) } : null,
       aerobic: as.length ? { names: dp.aeros.join(' · ') || '有氧', stats: [
         { v: sum(as, 'durationMin'), k: '分钟' }, { v: sum(as, 'estimatedKcal'), k: manual ? 'kcal（含手改）' : 'kcal（估算）' }] } : null,
     };

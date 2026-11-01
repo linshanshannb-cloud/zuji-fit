@@ -43,11 +43,18 @@
       </swipe-cell>
       <block wx:if="{{expanded===ex.id}}">
         <view wx:if="{{ex.note}}" class="sub ex-note">{{ex.note}}</view>
-        <view class="row th cap"><text class="c-no">组</text><text class="c-w">重量 kg</text><text class="c-r">次数</text><text class="c-chk">完成</text></view>
+        <view class="mode-row">
+          <view class="seg">
+            <view class="seg-item {{ex.mode!=='time'?'on':''}}" data-id="{{ex.id}}" data-mode="reps" bindtap="onMode">次数</view>
+            <view class="seg-item {{ex.mode==='time'?'on':''}}" data-id="{{ex.id}}" data-mode="time" bindtap="onMode">时长</view>
+          </view>
+        </view>
+        <view wx:if="{{ex.mode==='time'}}" class="row th cap time-th"><text class="t-no">组</text><text class="t-w">重量</text><text class="t-d">秒</text><text class="t-tm"></text><text class="t-chk">完成</text></view>
+        <view wx:else class="row th cap"><text class="c-no">组</text><text class="c-w">重量 kg</text><text class="c-r">次数</text><text class="c-chk">完成</text></view>
         <swipe-cell wx:for="{{ex.sets}}" wx:for-item="s" wx:key="id" disabled="{{readOnly}}" data-s="{{s.id}}" data-label="{{s.label}}" bind:delete="swipeDelSet">
-        <set-row set="{{s}}" label="{{s.label}}" bodyweight="{{ex.bodyweight}}" shake="{{shakeSet===s.id}}" readonly="{{readOnly}}"
+        <set-row set="{{s}}" label="{{s.label}}" mode="{{ex.mode}}" bodyweight="{{ex.bodyweight}}" shake="{{shakeSet===s.id}}" readonly="{{readOnly}}"
           data-s="{{s.id}}" data-we="{{ex.id}}" data-t="{{s.type}}" data-d="{{s.done}}"
-          bind:change="onSetChange" bind:toggletype="onToggleType" bind:toggledone="onToggleDone" bind:more="onSetMore"></set-row>
+          bind:change="onSetChange" bind:toggletype="onToggleType" bind:toggledone="onToggleDone" bind:timer="onSetTimer" bind:more="onSetMore"></set-row>
         </swipe-cell>
         <view class="row between">
           <view class="add-set" bindtap="addSet" data-we="{{ex.id}}">+ 加一组</view>
@@ -69,7 +76,7 @@
   <btn wx:else type="primary" size="bar" style="flex:1" disabled="{{readOnly}}" bind:press="finishEditTap">完成编辑</btn>
 </view>
 <undo-toast id="undo" bottom="{{200}}" bind:undo="onUndo"></undo-toast>
-<rest-timer id="rest" bottom="{{180}}" bind:settings="onRestSettings"></rest-timer>
+<rest-timer id="rest" bottom="{{180}}" bind:settings="onRestSettings" bind:done="onTimerDone" bind:skip="onTimerSkip"></rest-timer>
 
 <block wx:if="{{info}}">
   <view class="mask" bindtap="closeInfo"></view>

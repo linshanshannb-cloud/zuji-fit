@@ -18,6 +18,12 @@
 .c-w { width: 240rpx; margin-left: 8rpx; text-align: center; flex-shrink: 0; }
 .c-r { width: 200rpx; margin-left: 8rpx; text-align: center; flex-shrink: 0; }
 .c-chk { width: 88rpx; margin-left: 8rpx; text-align: center; flex-shrink: 0; }
+.mode-row { padding-bottom: 8rpx; }
+.time-th .t-no { width: 64rpx; text-align: center; flex-shrink: 0; }
+.time-th .t-w { width: 128rpx; margin-left: 8rpx; text-align: center; flex-shrink: 0; }
+.time-th .t-d { width: 216rpx; margin-left: 8rpx; text-align: center; flex-shrink: 0; }
+.time-th .t-tm { width: 88rpx; margin-left: 8rpx; flex-shrink: 0; }
+.time-th .t-chk { width: 80rpx; margin-left: 8rpx; text-align: center; flex-shrink: 0; }
 .ell1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .save-st { flex-shrink: 0; padding: 16rpx 0 16rpx 16rpx; }
 .nav-date { white-space: nowrap; }

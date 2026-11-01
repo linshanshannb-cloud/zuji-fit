@@ -51,12 +51,21 @@ function checkWorkout(id) {
     const idx = d.sets.filter(s => s.workoutExerciseId === e.id).map(s => s.index).sort((a, b) => a - b);
     idx.forEach((v, i) => { if (v !== i + 1) errs.push('index not contiguous for ' + e.id + ': ' + idx); });
   });
+  const modeBy = {};
+  d.exercises.forEach(e => { if (e && e.id) modeBy[e.id] = e.mode === 'time' ? 'time' : 'reps'; });
   const cnt = d.sets.filter(s => s.done === true && s.type === 'normal');
-  const vol = Math.round(cnt.reduce((a, s) => a + (s.weightKg || 0) * s.reps, 0) * 10) / 10;
+  const vol = Math.round(cnt.reduce((a, s) => (modeBy[s.workoutExerciseId] === 'time' ? a : a + (s.weightKg || 0) * (s.reps || 0)), 0) * 10) / 10;
+  const timeSec = cnt.reduce((a, s) => a + (modeBy[s.workoutExerciseId] === 'time' ? (s.durationSec || 0) : 0), 0);
   if (h.exerciseCount !== d.exercises.length) errs.push(`exerciseCount ${h.exerciseCount} != ${d.exercises.length}`);
   if (h.setCount !== cnt.length) errs.push(`setCount ${h.setCount} != ${cnt.length}`);
   if (h.volumeKg !== vol) errs.push(`volumeKg ${h.volumeKg} != ${vol}`);
-  d.sets.forEach(s => { if (s.done && !(s.reps >= 1)) errs.push('done set with reps<1'); if (!s.done && s.doneAt !== null) errs.push('undone set has doneAt'); });
+  if ((typeof h.timeSec === 'number' ? h.timeSec : 0) !== timeSec) errs.push(`timeSec ${h.timeSec} != ${timeSec}`);
+  d.sets.forEach(s => {
+    const time = modeBy[s.workoutExerciseId] === 'time';
+    if (s.done && time && !(s.durationSec >= 1)) errs.push('done time set without duration');
+    else if (s.done && !time && !(s.reps >= 1)) errs.push('done set with reps<1');
+    if (!s.done && s.doneAt !== null) errs.push('undone set has doneAt');
+  });
   if (h.status === 'completed' && !h.completedAt) errs.push('completed without completedAt');
   if (h.status === 'draft' && h.completedAt !== null) errs.push('draft with completedAt');
   return errs;

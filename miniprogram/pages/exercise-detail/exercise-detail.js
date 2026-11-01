@@ -1,6 +1,12 @@
 const F = require('../../utils/format');
+const E = require('../../utils/exercises');
 const repo = require('../../utils/repo/index');
 const ui = require('../../utils/ui');
+function bestText(b) {
+  if (!b) return '—';
+  if (b.mode === 'time' || (b.durationSec != null && b.reps == null)) return F.bestLabel(b);
+  return `${F.kg(b.weightKg)}kg × ${b.reps}`;
+}
 
 function absPath(p) {
   if (!p || typeof p !== 'string') return '';
@@ -183,8 +189,9 @@ Page({
         'ex.info[2].v': ex.categoryZh || '—',
       });
     }
-    const b = repo.workouts.personalBest(this.data.ex.id);
-    this.setData({ 'ex.info[3].v': b ? `${F.kg(b.weightKg)}kg × ${b.reps}` : '—' });
+    const ex = repo.exercises.get(this.data.ex.id);
+    const b = repo.workouts.personalBest(this.data.ex.id, E.defaultMode(ex));
+    this.setData({ 'ex.info[3].v': bestText(b) });
   },
   onHide() { this._pause(); },
   onUnload() { clearTimeout(this._rateT); this._pause(); },

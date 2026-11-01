@@ -13,7 +13,8 @@
       <text wx:elif="{{ex.part}}" class="tag tag-line" style="margin-left:12rpx">{{ex.part}}</text>
     </view>
     <view wx:if="{{ex.note}}" class="sub" style="margin-top:8rpx">{{ex.note}}</view>
-    <view class="row th cap hairline-b"><text class="c1">组</text><text class="c2">重量 kg</text><text class="c2">次数</text><text class="c3">容量</text></view>
+    <view wx:if="{{ex.time}}" class="row th cap hairline-b"><text class="c1">组</text><text class="c2">重量</text><text class="c2">时长</text><text class="c3">状态</text></view>
+    <view wx:else class="row th cap hairline-b"><text class="c1">组</text><text class="c2">重量 kg</text><text class="c2">次数</text><text class="c3">容量</text></view>
     <view wx:for="{{ex.sets}}" wx:for-item="s" wx:key="id" class="row tr hairline-b {{s.done?'':'faded'}}">
       <text class="c1 {{s.warm?'warm':''}}">{{s.no}}</text><text class="c2 num">{{s.w}}</text><text class="c2 num">{{s.r}}</text><text class="c3 num sub">{{s.vol}}</text>
     </view>
