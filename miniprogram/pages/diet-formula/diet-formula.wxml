@@ -1,0 +1,46 @@
+<nav-bar title="公式说明"></nav-bar>
+<view class="page">
+  <view class="cap">数字跟已确认的 §J / D-001 / D-003 一致。这里区分三栏：视频里写得清的规则、产品提案、组迹自己的产品规则。产品提案不是某一条口播的全文。</view>
+
+  <view class="section h2">碳水渐降 · 产品提案</view>
+  <view class="cap">日热量默认是 TDEE 减去约 20%，也可以改成绝对缺口，或直接填热量。</view>
+  <view class="cap">起始宏量默认：蛋白 1.5 g/kg（参考体重），脂肪占目标热量 22.5%，剩下的给碳水。可以改成 532（碳 50% / 蛋白 30% / 脂 20%）。</view>
+  <view class="cap">观察窗 7 天，对比窗首和窗末的体重；有腰围就一起看。卡住时只建议碳水 −15 g，也可以选 −20、−30，或按米饭份量。不会自动改。</view>
+  <view class="cap">碳水底线默认是这次渐降起始碳水的 40%，也可以自己填一个克数。碰到了只提示停一停，不自动改。连续下降周数没有硬顶，满 8 周会在复盘里提一句。</view>
+
+  <view class="section h2">TDEE · 已确认</view>
+  <view class="cap">BMR 用 Mifflin-St Jeor。男：10×体重 + 6.25×身高 − 5×年龄 + 5。女：同样的式子再 −161。TDEE = BMR × 活动系数。默认走活动系数，不用「BMR + 训练估算」。</view>
+  <view wx:for="{{activities}}" wx:key="id" class="li hairline-b">
+    <text class="flex1">{{item.label}} · {{item.hint}}</text>
+    <text class="num">{{item.factor}}</text>
+  </view>
+  <view class="cap" style="margin-top:12rpx">碳循环的每日克数不靠 TDEE。设置里如果填了性别、年龄、身高和活动，只作对照。</view>
+
+  <view class="section h2">碳循环 · 凯圣王上集骨架</view>
+  <view class="cap">视频明确规则：内胚碳水 2 g/kg、脂肪 0.8 g/kg；外胚碳水 3 g/kg、脂肪 1–1.2 g/kg。蛋白每天一样，不按高中低拆。高 2 天、中 3 天、低 2 天。碳水占周碳 50% / 35% / 15%。脂肪占周脂 15% / 35% / 50%（中脂 35% 是和碳对称后确认进默认的）。</view>
+  <view class="cap">产品提案：体型自己选。蛋白默认 1.2 g/kg。外胚脂肪默认 1.1。日历自己排，并提示低碳优先放休息日。</view>
+  <view class="cap">组迹产品规则：参考体重锁定；每一天单独展示碳、蛋白、脂肪和热量（4C+4P+9F）；不把三天热量改成一样。</view>
+  <view class="note">{{kcalNote}}</view>
+
+  <view class="section h2">验算锚点 · W=90 内胚 P=1.0</view>
+  <view class="cap">这是口播体重配上示例蛋白 1.0，不是默认体重，也不是默认蛋白。约 1960 / 1477 / 1872 kcal。</view>
+  <view wx:for="{{oral}}" wx:key="type" class="li hairline-b">
+    <view class="flex1"><view>{{item.label}} · {{item.days}} 天 · 碳 {{item.shareC}}% · 脂 {{item.shareF}}%</view><view class="cap">碳 {{item.c}} · 蛋白 {{item.p}} · 脂 {{item.f}} g</view></view>
+    <text class="num">{{item.kcal}}</text>
+  </view>
+
+  <view class="section h2">同一体重，蛋白改用提案默认 1.2</view>
+  <view class="cap">只把蛋白从 1.0 换成 1.2，周占比不动。中碳日仍然更低。</view>
+  <view wx:for="{{proposal}}" wx:key="type" class="li hairline-b">
+    <view class="flex1"><view>{{item.label}}</view><view class="cap">碳 {{item.c}} · 蛋白 {{item.p}} · 脂 {{item.f}} g</view></view>
+    <text class="num">{{item.kcal}}</text>
+  </view>
+
+  <view class="section h2">食物</view>
+  <view class="cap">上集口播例：100 g 米饭约 25 g 碳，100 g 馒头约 50 g 碳，100 g 南瓜约 4.4 g 碳。生熟没说。完整食物表在下集，还没有。所以先手填克数，并且必须选生重、熟重、每百克或每份。</view>
+
+  <view class="section h2">不进默认</view>
+  <view wx:for="{{exclusions}}" wx:for-index="idx" wx:key="idx" class="cap" style="margin-top:12rpx">{{item}}</view>
+
+  <view class="section cap">能量换算：碳水 4 kcal/g，蛋白 4 kcal/g，脂肪 9 kcal/g。饮食数据只在本机，不上传。</view>
+</view>
