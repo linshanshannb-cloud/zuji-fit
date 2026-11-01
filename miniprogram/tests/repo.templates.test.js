@@ -113,5 +113,5 @@ test('只读不能复制或套用；饮食 Tab 与模板页同时留在 app.json
   assert.ok(app.pages.includes('pages/templates/templates'));
   assert.ok(app.pages.includes('pages/template-detail/template-detail'));
   assert.ok(app.pages.includes('pages/diet/diet'));
-  assert.deepStrictEqual(app.tabBar.list.map(t => t.text), ['日历', '动作库', '身体数据', '饮食']);
+  assert.deepStrictEqual(app.tabBar.list.map(t => t.text), ['日历', '动作库', '饮食', '身体数据']);
 });

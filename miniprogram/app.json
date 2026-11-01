@@ -43,16 +43,16 @@
         "selectedIconPath": "images/tabbar/library-active.png"
       },
       {
-        "pagePath": "pages/body/body",
-        "text": "身体数据",
-        "iconPath": "images/tabbar/body.png",
-        "selectedIconPath": "images/tabbar/body-active.png"
-      },
-      {
         "pagePath": "pages/diet/diet",
         "text": "饮食",
         "iconPath": "images/tabbar/diet.png",
         "selectedIconPath": "images/tabbar/diet-active.png"
+      },
+      {
+        "pagePath": "pages/body/body",
+        "text": "身体数据",
+        "iconPath": "images/tabbar/body.png",
+        "selectedIconPath": "images/tabbar/body-active.png"
       }
     ]
   },

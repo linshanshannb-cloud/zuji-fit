@@ -12,7 +12,7 @@ test('T1 app.json：pages 每页四件套齐全；tabBar 2–5 项且都在 page
   assert.ok(tabs.length >= 2 && tabs.length <= 5);
   tabs.forEach(t => assert.ok(app.pages.includes(t), t));
   assert.strictEqual(app.pages[0], tabs[0]);
-  assert.deepStrictEqual(app.tabBar.list.map(t => t.text), ['日历', '动作库', '身体数据', '饮食']);
+  assert.deepStrictEqual(app.tabBar.list.map(t => t.text), ['日历', '动作库', '饮食', '身体数据']);
   assert.ok(fs.existsSync(path.join(MP, app.sitemapLocation)));
   assert.ok(fs.existsSync(path.join(MP, 'app.js')) && fs.existsSync(path.join(MP, 'app.wxss')));
 });
