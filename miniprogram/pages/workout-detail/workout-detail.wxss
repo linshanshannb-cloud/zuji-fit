@@ -1,3 +1,6 @@
+.page.repeat-pad { padding-bottom: calc(300rpx + env(safe-area-inset-bottom) + 32rpx); }
+.repeat-bar { flex-direction: column; align-items: stretch; }
+.repeat-row { display: flex; align-items: center; margin-top: 16rpx; }
 .stats { padding: 32rpx 0 8rpx; } .stat { flex: 1; } .sv { font-size: 44rpx; font-weight: 700; }
 .th { height: 64rpx; margin-top: 16rpx; } .tr { height: 88rpx; }
 .c1 { width: 80rpx; } .c2 { flex: 1; } .c3 { width: 140rpx; text-align: right; }
