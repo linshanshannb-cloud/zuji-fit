@@ -1,0 +1,58 @@
+<nav-bar title="记录饮食"></nav-bar>
+<view class="page">
+  <view class="cap">记到 {{dateTitle}}。餐次默认按现在的时间，可以改。</view>
+  <scroll-view scroll-x class="chips">
+    <view wx:for="{{meals}}" wx:key="id" class="chip {{meal===item.id?'on':''}}" bindtap="setMeal" data-m="{{item.id}}">{{item.label}}</view>
+  </scroll-view>
+  <view class="seg">
+    <view class="seg-item {{mode==='food'?'on':''}}" bindtap="setMode" data-m="food">按食物记录</view>
+    <view class="seg-item {{mode==='nutrient'?'on':''}}" bindtap="setMode" data-m="nutrient">按营养素记录</view>
+  </view>
+
+  <block wx:if="{{mode==='food'}}">
+    <view class="search" style="margin-top:24rpx">
+      <view class="mag"></view>
+      <input value="{{q}}" placeholder="搜索食物" bindinput="onSearch"/>
+    </view>
+    <view class="cap" style="margin-top:12rpx">生重和熟重分开记，不会混进同一个数。数字按每 100g（或每份）× 数量。</view>
+    <scroll-view scroll-x class="chips">
+      <view wx:for="{{examples}}" wx:key="id" class="chip {{foodId===item.id?'on':''}}" bindtap="pickFood" data-id="{{item.id}}">{{item.name}}</view>
+      <view wx:for="{{custom}}" wx:key="id" class="chip {{foodId===item.id?'on':''}}" bindtap="pickFood" data-id="{{item.id}}">{{item.name}}</view>
+    </scroll-view>
+    <view wx:if="{{chosen}}" class="phrase">{{chosen}}</view>
+    <view wx:elif="{{foodId && !basis}}" class="cap">先选口径。生重、熟重、每百克和每份不能混用。</view>
+    <view class="row choice">
+      <view wx:for="{{basisList}}" wx:key="id" class="chip {{basis===item.id?'on':''}}" bindtap="setBasis" data-m="{{item.id}}">{{item.label}}</view>
+    </view>
+    <view class="field hairline-b"><text class="field-label lab">{{basis==='perServing'?'份数':'重量'}}</text><input class="field-input num" type="digit" value="{{qty}}" bindinput="onQty"/><text class="field-unit">{{basis==='perServing'?'份':'g'}}</text></view>
+    <view wx:if="{{preview}}" class="sub">{{preview}}</view>
+    <view class="stack"><btn type="secondary" disabled="{{readOnly}}" bind:press="openCustom">自定义食物</btn></view>
+  </block>
+  <block wx:else>
+    <view class="cap" style="margin-top:16rpx">直接填克数。名称可以空着，不会被当成某种食物。</view>
+    <view class="field hairline-b"><text class="field-label lab">名称</text><input class="field-input" data-k="name" value="{{nutrient.name}}" placeholder="可选" bindinput="onNutrient"/></view>
+    <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{nutrient.carbsG}}" bindinput="onNutrient"/><text class="field-unit">g</text></view>
+    <view class="field hairline-b"><text class="field-label lab">蛋白质</text><input class="field-input num" type="digit" data-k="proteinG" value="{{nutrient.proteinG}}" bindinput="onNutrient"/><text class="field-unit">g</text></view>
+    <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{nutrient.fatG}}" bindinput="onNutrient"/><text class="field-unit">g</text></view>
+    <view wx:if="{{nutrientPreview}}" class="sub">{{nutrientPreview}}</view>
+  </block>
+  <view class="stack"><btn disabled="{{readOnly || saving}}" loading="{{saving}}" bind:press="save">保存记录</btn></view>
+</view>
+
+<view wx:if="{{sheet}}" class="mask" bindtap="closeSheet"></view>
+<view wx:if="{{sheet==='custom'}}" class="sheet" catchtap="noop">
+  <view class="h2">自定义食物</view>
+  <view class="cap">数字是这一口径下每 100 g（或每 1 份）的碳、蛋白、脂肪。以后改这里，不会改已经记下的那一餐。</view>
+  <view class="field hairline-b"><text class="field-label lab">名称</text><input class="field-input" data-k="name" value="{{customForm.name}}" bindinput="onCustom"/></view>
+  <view class="row choice">
+    <view wx:for="{{basisList}}" wx:key="id" class="chip {{customForm.basis===item.id?'on':''}}" bindtap="setCustomBasis" data-m="{{item.id}}">{{item.label}}</view>
+  </view>
+  <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{customForm.carbsG}}" bindinput="onCustom"/><text class="field-unit">g</text></view>
+  <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="proteinG" value="{{customForm.proteinG}}" bindinput="onCustom"/><text class="field-unit">g</text></view>
+  <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{customForm.fatG}}" bindinput="onCustom"/><text class="field-unit">g</text></view>
+  <view class="stack"><btn disabled="{{readOnly}}" bind:press="saveCustom">保存到食物</btn></view>
+  <view wx:for="{{custom}}" wx:key="id" class="row between entry-line hairline-b">
+    <text class="flex1">{{item.name}} · {{item.basisLabel}}</text>
+    <text class="sub hit" data-id="{{item.id}}" bindtap="deleteCustom">删除</text>
+  </view>
+</view>

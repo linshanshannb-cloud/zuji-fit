@@ -1,0 +1,118 @@
+<nav-bar title="饮食目标"></nav-bar>
+<view class="page">
+  <view class="h2">{{hasPlan?'饮食目标':'新建饮食目标'}}</view>
+  <view class="seg" style="margin-top:16rpx">
+    <view class="seg-item {{form.mode==='taper'?'on':''}}" bindtap="setMode" data-m="taper">碳水渐降</view>
+    <view class="seg-item {{form.mode==='cycle'?'on':''}}" bindtap="setMode" data-m="cycle">碳循环</view>
+  </view>
+  <view class="field hairline-b"><text class="field-label lab">参考体重<text class="req">*</text></text><input class="field-input num" type="digit" data-k="refWeightKg" value="{{form.refWeightKg}}" placeholder="kg" bindinput="onForm"/><text class="field-unit">kg</text></view>
+  <view class="cap">{{hasPlan?'改它会从今天起进入新阶段，过去的日期仍用旧体重。':'会带出身体数据里最近一次体重，点创建才锁定。'}}</view>
+
+  <block wx:if="{{form.mode==='taper'}}">
+    <view class="seg" style="margin-top:24rpx">
+      <view class="seg-item {{form.energyMode==='tdee_pct'?'on':''}}" bindtap="setEnergy" data-m="tdee_pct">TDEE 减%</view>
+      <view class="seg-item {{form.energyMode==='absolute_deficit'?'on':''}}" bindtap="setEnergy" data-m="absolute_deficit">绝对缺口</view>
+      <view class="seg-item {{form.energyMode==='absolute_target'?'on':''}}" bindtap="setEnergy" data-m="absolute_target">直接填热量</view>
+    </view>
+    <block wx:if="{{form.energyMode!=='absolute_target'}}">
+      <view class="cap" style="margin-top:16rpx">BMR 用 Mifflin-St Jeor，TDEE = BMR × 活动系数。不选活动水平就不会偷偷套一个系数。</view>
+      <view class="row choice">
+        <view class="chip {{form.sex==='male'?'on':''}}" bindtap="setSex" data-m="male">男</view>
+        <view class="chip {{form.sex==='female'?'on':''}}" bindtap="setSex" data-m="female">女</view>
+      </view>
+      <view class="field hairline-b"><text class="field-label lab">年龄</text><input class="field-input num" type="number" data-k="age" value="{{form.age}}" placeholder="岁" bindinput="onForm"/></view>
+      <view class="field hairline-b"><text class="field-label lab">身高</text><input class="field-input num" type="digit" data-k="heightCm" value="{{form.heightCm}}" placeholder="cm" bindinput="onForm"/><text class="field-unit">cm</text></view>
+      <scroll-view scroll-x class="chips">
+        <view wx:for="{{activities}}" wx:key="id" class="chip {{form.activity===item.id?'on':''}}" bindtap="setActivity" data-m="{{item.id}}">{{item.label}} {{item.factor}}</view>
+      </scroll-view>
+      <view wx:if="{{form.energyMode==='tdee_pct'}}" class="field hairline-b"><text class="field-label lab">缺口</text><input class="field-input num" type="digit" data-k="deficitPct" value="{{form.deficitPct}}" bindinput="onForm"/><text class="field-unit">%</text></view>
+      <view wx:else class="field hairline-b"><text class="field-label lab">缺口</text><input class="field-input num" type="digit" data-k="deficitKcal" value="{{form.deficitKcal}}" placeholder="kcal" bindinput="onForm"/><text class="field-unit">kcal</text></view>
+    </block>
+    <view wx:else class="field hairline-b"><text class="field-label lab">目标热量</text><input class="field-input num" type="digit" data-k="absoluteTarget" value="{{form.absoluteTarget}}" placeholder="kcal" bindinput="onForm"/><text class="field-unit">kcal</text></view>
+    <view class="seg" style="margin-top:16rpx">
+      <view class="seg-item {{form.macroMode==='s4b'?'on':''}}" bindtap="setMacro" data-m="s4b">蛋白按体重</view>
+      <view class="seg-item {{form.macroMode==='532'?'on':''}}" bindtap="setMacro" data-m="532">532</view>
+    </view>
+    <block wx:if="{{form.macroMode==='s4b'}}">
+      <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="proteinPerKg" value="{{form.proteinPerKg}}" bindinput="onForm"/><text class="field-unit">g/kg</text></view>
+      <view class="field hairline-b"><text class="field-label lab">脂肪热量</text><input class="field-input num" type="digit" data-k="fatPct" value="{{form.fatPct}}" bindinput="onForm"/><text class="field-unit">%</text></view>
+      <view class="cap">默认蛋白 1.5 g/kg，脂肪占目标热量 22.5%，剩下的给碳水。观察窗 7 天。</view>
+    </block>
+    <view wx:else class="cap">532 是热量比：碳 50% / 蛋白 30% / 脂 20%，再换成克。</view>
+    <view class="stack sub hit" bindtap="toggleOverride">{{form.overrideOn?'收起克数微调':'按这个结果微调克数'}}</view>
+    <block wx:if="{{form.overrideOn}}">
+      <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{form.carbsG}}" bindinput="onForm"/><text class="field-unit">g</text></view>
+      <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="proteinG" value="{{form.proteinG}}" bindinput="onForm"/><text class="field-unit">g</text></view>
+      <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{form.fatG}}" bindinput="onForm"/><text class="field-unit">g</text></view>
+    </block>
+  </block>
+
+  <block wx:else>
+    <view class="cap" style="margin-top:16rpx">体型自己选。蛋白默认 1.2 g/kg（有训练基础）。外胚脂肪默认 1.1。</view>
+    <view class="row choice">
+      <view class="chip {{form.bodyType==='endo'?'on':''}}" bindtap="setBody" data-m="endo">内胚</view>
+      <view class="chip {{form.bodyType==='ecto'?'on':''}}" bindtap="setBody" data-m="ecto">外胚</view>
+    </view>
+    <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="cycleProtein" value="{{form.cycleProtein}}" bindinput="onForm"/><text class="field-unit">g/kg</text></view>
+    <view class="cap">初期大约 0.8–1，有训练基础 1.2–1.5。</view>
+    <view wx:if="{{form.bodyType==='ecto'}}" class="row choice">
+      <view class="chip {{form.fatPerKg=='1'||form.fatPerKg=='1.0'?'on':''}}" bindtap="setFatKg" data-m="1">脂 1.0</view>
+      <view class="chip {{form.fatPerKg=='1.1'?'on':''}}" bindtap="setFatKg" data-m="1.1">脂 1.1</view>
+      <view class="chip {{form.fatPerKg=='1.2'?'on':''}}" bindtap="setFatKg" data-m="1.2">脂 1.2</view>
+    </view>
+    <view wx:elif="{{form.bodyType==='endo'}}" class="cap">内胚脂肪固定 0.8 g/kg，碳水 2 g/kg。</view>
+    <view class="stack h2">一周怎么排</view>
+    <view class="cap">{{restHint}} 点某一天可在高 / 中 / 低之间换。要正好 2 高、3 中、2 低才能保存。</view>
+    <view class="week">
+      <view wx:for="{{weekCells}}" wx:key="date" class="week-cell" bindtap="cyclePattern" data-i="{{index}}">
+        <view class="tiny">{{item.label}}<text wx:if="{{item.rest}}"> 休息</text></view>
+        <view style="font-weight:700">{{item.typeLabel}}</view>
+        <view class="tiny">{{item.kcal}}</view>
+      </view>
+    </view>
+    <view class="cap">{{patternText}}</view>
+    <view class="stack"><btn type="secondary" bind:press="applyRest">把本周休息日标成低碳</btn></view>
+    <view wx:if="{{compare}}" class="cap" style="margin-top:12rpx">{{compare}}</view>
+    <view class="row between stack">
+      <text class="sub">博客园部位对照</text>
+      <text class="sub hit" bindtap="toggleBlog">{{form.showBlogMap?'已打开':'关闭'}}</text>
+    </view>
+    <view class="cap">默认关闭。打开后每条都标「{{blogDisclaimer}}」，不会自动改日历。</view>
+    <view wx:if="{{form.showBlogMap}}" class="block">
+      <view wx:for="{{blogMap}}" wx:key="type" class="cap">{{item.label}}：{{item.text}}（{{blogDisclaimer}}）</view>
+    </view>
+  </block>
+
+  <view wx:if="{{preview&&preview.mode==='taper'}}" class="block"><card>
+    <view class="h2">将要锁定的一天</view>
+    <view class="macro-row">
+      <view class="macro"><view class="cap">碳水</view><view class="num macro-n">{{preview.c}}<text class="unit">g</text></view></view>
+      <view class="macro"><view class="cap">蛋白</view><view class="num macro-n">{{preview.p}}<text class="unit">g</text></view></view>
+      <view class="macro"><view class="cap">脂肪</view><view class="num macro-n">{{preview.f}}<text class="unit">g</text></view></view>
+    </view>
+    <view class="sub" style="margin-top:12rpx">{{preview.k}} kcal<text wx:if="{{preview.tdee}}"> · TDEE {{preview.tdee}} · 目标 {{preview.target}}</text></view>
+  </card></view>
+  <view wx:if="{{preview&&preview.mode==='cycle'}}" class="block"><card>
+    <view class="h2">高 / 中 / 低每天的热量</view>
+    <view wx:for="{{preview.days}}" wx:key="type" class="li hairline-b">
+      <text class="tag tag-accent">{{item.label}}</text>
+      <text class="flex1 cap">碳 {{item.c}} · 蛋白 {{item.p}} · 脂 {{item.f}} g</text>
+      <text class="num">{{item.k}}</text>
+    </view>
+  </card></view>
+  <view wx:if="{{previewError}}" class="err-text">{{previewError}}</view>
+  <view class="stack"><btn disabled="{{readOnly}}" bind:press="commitPlan">{{hasPlan?'确认新阶段':'创建计划'}}</btn></view>
+
+  <block wx:if="{{hasPlan}}">
+    <view class="stack h2">只改提示，不改目标</view>
+    <view class="cap">底线默认是这次渐降开始时碳水的 40%。留空就回到这个比例。碰到底线只提示，不会自己降碳。</view>
+    <view class="field hairline-b"><text class="field-label lab">碳水底线</text><input class="field-input num" type="digit" data-k="floor" value="{{hint.floor}}" placeholder="用 40%" bindinput="onHint"/><text class="field-unit">g</text></view>
+    <view class="field hairline-b"><text class="field-label lab">未记录提示</text><input class="field-input num" type="number" data-k="noLog" value="{{hint.noLog}}" bindinput="onHint"/><text class="field-unit">天</text></view>
+    <view class="stack"><btn type="secondary" disabled="{{readOnly}}" bind:press="saveHints">保存提示</btn></view>
+  </block>
+
+  <view class="stack h2">计算规则说明</view>
+  <view class="note">{{kcalNote}}</view>
+  <view class="cap" style="margin-top:12rpx">高、中、低碳的热量按 4 / 4 / 9 从克数算出。中碳日常常更低，是周占比算出来的，不会为了凑平去改克数。切换高 / 中 / 低后，上面的预览会马上重算；已经保存的日期仍用那天的阶段快照。</view>
+  <view class="stack sub hit" bindtap="openFormula">查看完整公式</view>
+</view>

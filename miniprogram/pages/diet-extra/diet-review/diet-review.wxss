@@ -1,0 +1,8 @@
+.block { margin-top: 24rpx; }
+.macro-n { font-size: 40rpx; font-weight: 700; line-height: 1.2; }
+.unit { font-size: 22rpx; color: var(--c-text-3); font-weight: 400; margin-left: 4rpx; }
+.note { background: var(--c-accent-weak); border-radius: var(--r-card); padding: 20rpx 24rpx; margin-top: 24rpx; color: var(--c-text-2); font-size: 26rpx; }
+.stack { margin-top: 28rpx; }
+.lab { width: 220rpx; }
+.choice { margin-top: 8rpx; }
+.page { padding-bottom: 48rpx; }

@@ -8,6 +8,7 @@ const V = require('./validate');
 const D = require('../date');
 const { newId } = require('./ids');
 const Fml = require('../diet-formula');
+const P = require('../diet-present');
 
 const num = v => {
   if (typeof v === 'number') return isFinite(v) ? v : NaN;
@@ -348,7 +349,7 @@ function saveQuick(date, input) {
     const proteinG = Fml.round1(needNum(input.proteinG, '蛋白', 0, 2000));
     const fatG = Fml.round1(needNum(input.fatG, '脂肪', 0, 1000));
     const t = C.now();
-    const entry = { id: newId('de_', t), kind: 'quick', name: '快速记录', basis: null, qty: null, carbsG, proteinG, fatG, example: false, foodId: null };
+    const entry = { id: newId('de_', t), kind: 'quick', meal: 'other', name: '快速记录', basis: null, qty: null, carbsG, proteinG, fatG, example: false, foodId: null };
     const prev = readLogs().find(l => l.date === d);
     const log = { id: prev ? prev.id : newId('dl_', t), date: d, entries: [entry], createdAt: prev ? prev.createdAt : t, updatedAt: t };
     writeLogs(sortLogs(readLogs().filter(l => l.date !== d).concat([log])));
@@ -386,11 +387,19 @@ function addFood(date, input) {
     }
     const scaled = Fml.scaleFood(spec, input.basis, qty);
     ['carbsG', 'proteinG', 'fatG'].forEach(k => { if (!isFinite(scaled[k]) || scaled[k] < 0) C.raise('VALIDATION', '换算结果无效'); });
+    const per = input.basis === 'perServing'
+      ? { carbsG: Number(spec.carbsG), proteinG: Number(spec.proteinG), fatG: Number(spec.fatG) }
+      : {
+        carbsG: Number(spec.carbsPer100g != null ? spec.carbsPer100g : spec.carbsG),
+        proteinG: Number(spec.proteinPer100g != null ? spec.proteinPer100g : spec.proteinG),
+        fatG: Number(spec.fatPer100g != null ? spec.fatPer100g : spec.fatG),
+      };
     const t = C.now();
     const entry = {
-      id: newId('de_', t), kind: 'food', name: spec.name, basis: input.basis, qty: Fml.round1(qty),
+      id: newId('de_', t), kind: 'food', meal: P.normalizeMeal(input.meal || 'other'), name: spec.name, basis: input.basis, qty: Fml.round1(qty),
+      snap: { carbsG: Fml.round1(per.carbsG), proteinG: Fml.round1(per.proteinG), fatG: Fml.round1(per.fatG) },
       carbsG: Fml.round1(scaled.carbsG), proteinG: Fml.round1(scaled.proteinG), fatG: Fml.round1(scaled.fatG),
-      example: !!spec.example, foodId: spec.id || null,
+      example: !!spec.example, foodId: spec.id || null, v: 2,
     };
     const logs = readLogs();
     const prev = logs.find(l => l.date === d);
@@ -412,6 +421,143 @@ function removeEntry(date, entryId) {
     const log = Object.assign({}, prev, { entries, updatedAt: C.now() });
     writeLogs(sortLogs(logs.filter(l => l.date !== date).concat([log])));
     return C.ok(log);
+  });
+}
+function applyPatch(entry, patch) {
+  const next = JSON.parse(JSON.stringify(entry));
+  if ('meal' in patch && patch.meal != null && patch.meal !== '') next.meal = P.normalizeMeal(patch.meal);
+  else if (!next.meal) next.meal = 'other';
+  const nutrient = !P.isFoodEntry(next);
+  if (nutrient) {
+    next.kind = 'nutrient';
+    if ('name' in patch) {
+      if (blankish(patch.name) || patch.name === '快速记录') next.name = '';
+      else next.name = C.check(V.validateText(patch.name, 30));
+    } else if (next.name === '快速记录') next.name = '';
+    const touch = ['carbsG', 'proteinG', 'fatG'].some(k => k in patch && !blankish(patch[k]));
+    if (touch) {
+      next.carbsG = Fml.round1(needNum('carbsG' in patch ? patch.carbsG : next.carbsG, '碳水', 0, 2000));
+      next.proteinG = Fml.round1(needNum('proteinG' in patch ? patch.proteinG : next.proteinG, '蛋白', 0, 2000));
+      next.fatG = Fml.round1(needNum('fatG' in patch ? patch.fatG : next.fatG, '脂肪', 0, 1000));
+    }
+    next.snap = { carbsG: next.carbsG, proteinG: next.proteinG, fatG: next.fatG };
+    next.basis = null;
+    next.qty = null;
+    next.v = 2;
+    return next;
+  }
+  next.kind = 'food';
+  if ('qty' in patch && !blankish(patch.qty)) {
+    const qty = needNum(patch.qty, next.basis === 'perServing' ? '份数' : '重量', 0.1, next.basis === 'perServing' ? 50 : 5000);
+    const snap = P.deriveSnap(next);
+    if (!snap) C.raise('VALIDATION', '这条食物缺少营养快照，不能改重量');
+    const scaled = P.scaleSnap(snap, next.basis, qty);
+    if (!scaled || ['carbsG', 'proteinG', 'fatG'].some(k => !isFinite(scaled[k]) || scaled[k] < 0)) C.raise('VALIDATION', '换算结果无效');
+    next.qty = Fml.round1(qty);
+    next.carbsG = scaled.carbsG;
+    next.proteinG = scaled.proteinG;
+    next.fatG = scaled.fatG;
+    next.snap = { carbsG: Fml.round1(snap.carbsG), proteinG: Fml.round1(snap.proteinG), fatG: Fml.round1(snap.fatG) };
+  }
+  next.v = 2;
+  return next;
+}
+function addNutrient(date, input) {
+  return C.guard(() => {
+    C.writable();
+    const d = C.check(V.validateDate(date, { today: C.today() }));
+    input = input || {};
+    const carbsG = Fml.round1(needNum(input.carbsG, '碳水', 0, 2000));
+    const proteinG = Fml.round1(needNum(input.proteinG, '蛋白', 0, 2000));
+    const fatG = Fml.round1(needNum(input.fatG, '脂肪', 0, 1000));
+    let name = '';
+    if (!blankish(input.name)) name = C.check(V.validateText(input.name, 30));
+    const t = C.now();
+    const entry = {
+      id: newId('de_', t), kind: 'nutrient', meal: P.normalizeMeal(input.meal || 'other'), name,
+      basis: null, qty: null, snap: { carbsG, proteinG, fatG }, carbsG, proteinG, fatG,
+      example: false, foodId: null, v: 2,
+    };
+    const logs = readLogs();
+    const prev = logs.find(l => l.date === d);
+    const log = prev ? JSON.parse(JSON.stringify(prev)) : { id: newId('dl_', t), date: d, entries: [], createdAt: t };
+    log.entries = (log.entries || []).concat([entry]);
+    log.updatedAt = t;
+    writeLogs(sortLogs(logs.filter(l => l.date !== d).concat([log])));
+    return C.ok(log);
+  });
+}
+function updateEntry(date, entryId, patch) {
+  return C.guard(() => {
+    C.writable();
+    const d = C.check(V.validateDate(date, { today: C.today() }));
+    patch = patch || {};
+    const logs = JSON.parse(JSON.stringify(readLogs()));
+    const src = logs.find(l => l.date === d);
+    if (!src) C.raise('NOT_FOUND', '这天没有记录');
+    const idx = (src.entries || []).findIndex(e => e.id === entryId);
+    if (idx < 0) C.raise('NOT_FOUND', '找不到这条记录');
+    const next = applyPatch(src.entries[idx], patch);
+    let targetDate = d;
+    if (!blankish(patch.date) && patch.date !== d) targetDate = C.check(V.validateDate(patch.date, { today: C.today() }));
+    src.entries.splice(idx, 1);
+    src.updatedAt = C.now();
+    let target = src;
+    if (targetDate !== d) {
+      target = logs.find(l => l.date === targetDate);
+      if (!target) {
+        const t = C.now();
+        target = { id: newId('dl_', t), date: targetDate, entries: [], createdAt: t, updatedAt: t };
+        logs.push(target);
+      }
+    }
+    target.entries = (target.entries || []).concat([next]);
+    target.updatedAt = C.now();
+    writeLogs(sortLogs(logs.filter(l => l.entries && l.entries.length)));
+    return C.ok({ date: targetDate, entry: next });
+  });
+}
+function dayBoard(date) {
+  const target = dayTarget(date);
+  const log = getLog(date);
+  const raw = log ? log.entries : [];
+  const meals = P.groupMeals(raw);
+  const sum = raw.length ? totals(log) : { carbsG: 0, proteinG: 0, fatG: 0, kcal: 0 };
+  return {
+    recorded: raw.length > 0,
+    emptyText: raw.length ? '' : '这一天还没有饮食记录。',
+    entries: raw.map(P.presentEntry),
+    meals,
+    mealCount: meals.length,
+    totals: sum,
+    target,
+    intake: P.intakeView(sum, target),
+  };
+}
+function migrateLogs() {
+  return C.guard(() => {
+    C.writable();
+    if (problem()) C.raise('DATA_CORRUPT', '饮食数据读取异常，已暂停保存以保护原数据');
+    const raw = readLogs();
+    const next = raw.map(log => {
+      if (!log || typeof log !== 'object') return log;
+      const copy = Object.assign({}, log);
+      copy.entries = (log.entries || []).map(P.migrateEntry);
+      return copy;
+    });
+    if (JSON.stringify(raw) === JSON.stringify(next)) return C.ok({ changed: false });
+    const backup = JSON.parse(JSON.stringify(raw));
+    try {
+      writeLogs(next);
+      if (JSON.stringify(readLogs()) !== JSON.stringify(next)) {
+        writeLogs(backup);
+        C.raise('WRITE_FAILED', '饮食记录迁移校验失败，已恢复原数据');
+      }
+    } catch (e) {
+      try { writeLogs(backup); } catch (ignore) { /* 写入没成功时原数据还在 */ }
+      throw e;
+    }
+    return C.ok({ changed: true });
   });
 }
 function clearLog(date) {
@@ -487,6 +633,6 @@ module.exports = {
   observeWindow: today => observeWindow(activeStage(readPlan()), today || C.today()),
   declineTip: today => declineTip(readPlan(), today || C.today()),
   preview, commit, updatePrefs, suggestion,
-  getLog, presentIntake, totals, saveQuick, addFood, removeEntry, clearLog, intakeSummary, noLogStreak,
+  getLog, presentIntake, totals, saveQuick, addFood, addNutrient, updateEntry, dayBoard, migrateLogs, removeEntry, clearLog, intakeSummary, noLogStreak,
   listFoods, saveCustomFood, deleteCustomFood,
 };

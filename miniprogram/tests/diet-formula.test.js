@@ -63,6 +63,26 @@ test('anchor W=90 endo P=1.0 is about 1960/1477/1872 and mid stays lower (DIET-Q
   });
 });
 
+test('W=92 endo P=1.2 rounds to high 2077 / mid 1584 / low 1987; low above mid is the share formula', () => {
+  const raw = F.cyclePlan({ weightKg: 92, bodyType: 'endo', proteinPerKg: 1.2 });
+  const days = {};
+  ['high', 'mid', 'low'].forEach(t => { days[t] = F.roundMacros(raw.days[t]); });
+  assert.deepStrictEqual([days.high.kcal, days.mid.kcal, days.low.kcal], [2077, 1584, 1987]);
+  assert.ok(days.mid.kcal < days.high.kcal && days.mid.kcal < days.low.kcal);
+  ['high', 'mid', 'low'].forEach(t => {
+    assert.strictEqual(days[t].kcal, Math.round(F.kcalOf(days[t].carbsG, days[t].proteinG, days[t].fatG)));
+  });
+  assert.deepStrictEqual(
+    [days.high.carbsG, days.mid.carbsG, days.low.carbsG],
+    [322, 150.3, 96.6],
+  );
+  assert.deepStrictEqual(
+    [days.high.fatG, days.mid.fatG, days.low.fatG],
+    [38.6, 60.1, 128.8],
+  );
+  assert.strictEqual(days.high.proteinG, 110.4);
+});
+
 test('oral food examples and kcal copy stay labeled, with no zero-carb day in the split', () => {
   assert.deepStrictEqual(F.EXAMPLES.map(e => [e.name, e.carbsPer100g, e.example]), [['米饭', 25, true], ['馒头', 50, true], ['南瓜', 4.4, true]]);
   assert.strictEqual(F.riceCarbs(100), 25);
