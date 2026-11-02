@@ -470,6 +470,117 @@ function duplicateSet(workoutId, setId) {
     return { detail: Object.assign({}, detail, { sets: insertSetAt(detail.sets, s, s.index) }), data: s };
   });
 }
+// 再练一次：把一条力量训练的动作顺序和组结构复制到某一天（默认今天，本地日历日）。
+// 与「从模板追加」一样：不覆盖已有训练、不把同名动作并成一组。和模板不同的是重量、次数/时长、组类型会带上。
+// 完成勾选和计时一律清空。训练备注、动作备注不带。组间歇存在动作偏好里，不挂在单次训练上；组上若已有 restSec 则原样带上。
+function repeatName(header) {
+  const base = (header.name && String(header.name).trim()) || M.defaultWorkoutName(header.date);
+  return C.check(V.validateText(('复制：' + base).slice(0, V.LIMITS.workoutName), V.LIMITS.workoutName));
+}
+function planFrom(detail) {
+  const exercises = (detail.exercises || []).filter(M.isObj).slice().sort(M.byOrder);
+  if (!exercises.length) C.raise('EMPTY_WORKOUT', '这次训练没有动作，不能复制');
+  exercises.forEach(e => {
+    if (typeof e.exerciseId !== 'string' || !e.exerciseId) C.raise('UNKNOWN_EXERCISE', '动作不存在，不能复制');
+    resolveAddable(e.exerciseId);
+  });
+  return exercises.map(e => ({
+    exerciseId: e.exerciseId,
+    mode: M.modeOf(e),
+    sets: (detail.sets || []).filter(s => M.isObj(s) && s.workoutExerciseId === e.id).slice().sort(M.byIndex).map(s => {
+      const row = {
+        weightKg: C.check(V.validateSetWeight(s.weightKg)),
+        reps: C.check(V.validateReps(s.reps)),
+        durationSec: C.check(V.validateDuration(s.durationSec)),
+        type: s.type === 'warmup' ? 'warmup' : 'normal',
+      };
+      if (typeof s.restSec === 'number' && isFinite(s.restSec)) row.restSec = s.restSec;
+      return row;
+    }),
+  }));
+}
+function writePlan(detail, header, plan) {
+  const added = [];
+  plan.forEach(item => {
+    const ex = resolveAddable(item.exerciseId);
+    detail.exercises = M.renumberExercises(detail.exercises);
+    const we = {
+      id: newId('we_', C.now()), workoutId: header.id, exerciseId: ex.id, order: detail.exercises.length,
+      note: '', nameSnapshot: ex.nameZh, mode: item.mode === 'time' ? 'time' : 'reps',
+    };
+    detail.exercises.push(we);
+    item.sets.forEach((src, i) => {
+      const s = {
+        id: newId('s_', C.now()), workoutExerciseId: we.id, index: i + 1,
+        weightKg: src.weightKg, reps: src.reps, durationSec: src.durationSec, type: src.type, done: false, doneAt: null,
+      };
+      if ('restSec' in src) s.restSec = src.restSec;
+      detail.sets.push(s);
+    });
+    added.push(we);
+  });
+  return added;
+}
+function appendPlan(workoutId, plan) {
+  const st = loadDetail(workoutId);
+  if (st.missing) C.raise('DETAIL_MISSING', '今天的训练详情丢失，不能追加');
+  if (st.blocked) C.raise('DATA_CORRUPT', '今天的训练记录已损坏，不能追加');
+  return mutate(workoutId, detail => {
+    const d = {
+      workoutId: detail.workoutId,
+      exercises: detail.exercises.map(e => Object.assign({}, e)),
+      sets: detail.sets.map(s => Object.assign({}, s)),
+    };
+    const added = writePlan(d, { id: workoutId }, plan);
+    return { detail: d, data: added.length };
+  });
+}
+function repeatFrom(sourceId, opts = {}) {
+  return C.guard(() => {
+    C.writable();
+    const day = C.check(V.validateDate(opts.date || C.today(), { today: C.today() }));
+    const header = findHeader(sourceId);
+    const st = loadDetail(sourceId);
+    if (st.missing) C.raise('DETAIL_MISSING', '训练详情丢失，不能复制');
+    if (st.blocked) C.raise('DATA_CORRUPT', '记录已损坏，不能复制');
+    const plan = planFrom(st.detail);
+    const draft = getDraft();
+    if (draft && draft.date === day) {
+      const r = appendPlan(draft.id, plan);
+      if (!r.ok) return r;
+      return C.ok({ mode: 'append', workoutId: draft.id, added: plan.length });
+    }
+    if (pending && pending.date === day) {
+      if (draft) return C.fail('DRAFT_EXISTS', '已有未完成的训练，继续还是放弃？', { data: draft });
+      const detail = { workoutId: pending.id, exercises: [], sets: [] };
+      writePlan(detail, pending, plan);
+      const h = commit(pending, detail);
+      pending = null;
+      return C.ok({ mode: 'append', workoutId: h.id, added: plan.length });
+    }
+    const doneToday = workoutsOn(day);
+    if (doneToday.length) {
+      const target = doneToday[doneToday.length - 1];
+      const r = appendPlan(target.id, plan);
+      if (!r.ok) return r;
+      return C.ok({ mode: 'append', workoutId: target.id, added: plan.length });
+    }
+    const blocker = draft || (pending ? Object.assign({ persisted: false }, pending) : null);
+    if (blocker) return C.fail('DRAFT_EXISTS', '已有未完成的训练，继续还是放弃？', { data: blocker });
+    const t = C.now();
+    const h = {
+      id: newId('w_', t), status: 'draft', date: day, name: repeatName(header), note: '',
+      startedAt: day === C.today() ? t : null, completedAt: null, createdAt: t, updatedAt: t,
+      exerciseCount: 0, setCount: 0, volumeKg: 0,
+    };
+    const detail = { workoutId: h.id, exercises: [], sets: [] };
+    writePlan(detail, h, plan);
+    pending = null;
+    commit(h, detail);
+    return C.ok({ mode: 'create', workoutId: h.id, added: plan.length });
+  });
+}
+
 // Launch self-heal: recompute derived header fields from details (detail is authoritative, DATA_MODEL §4.4).
 function healHeaders() {
   const list = headers();
@@ -489,6 +600,6 @@ function healHeaders() {
 }
 module.exports = { healHeaders, getPending, discardPending, daySummaries, personalBest, completionCheck, finalizeWorkout, addExercises, addToCurrentDraft, replaceExercise, restoreExercise, restoreSet, duplicateSet,
   getDraft, getHeader, getWorkout, listWorkouts, workoutsOn, completedDates, referencedExerciseIds,
-  createDraft, updateWorkout, completeWorkout, deleteWorkout, discardDraft,
+  createDraft, updateWorkout, completeWorkout, deleteWorkout, discardDraft, repeatFrom,
   addExercise, removeExercise, reorderExercises, moveExercise, updateExerciseNote, setExerciseMode,
   addSet, updateSet, setSetDone, deleteSet, _headers: headers };

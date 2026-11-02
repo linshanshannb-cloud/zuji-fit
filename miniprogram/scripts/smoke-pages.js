@@ -432,6 +432,111 @@ flow('templates: 训练编辑套用精选是追加并回到编辑页', () => {
   assert.deepStrictEqual(cur().data.cards.map(c => c.name), ['杠铃卧推', '哑铃上斜卧推', '哑铃飞鸟', '绳索上胸夹胸']);
 });
 
+flow('repeat: 过去的力量训练可以再练到今天，重量带上且源记录不变', () => {
+  reset();
+  open('pages/calendar/calendar').newWorkout();
+  const ed = cur();
+  ed.onPicked(['0025', '0463'], 'add');
+  const bench = ed.data.cards.find(c => c.exerciseId === '0025');
+  const plank = ed.data.cards.find(c => c.exerciseId === '0463');
+  ed.onSetChange(Object.assign(ev({ s: bench.sets[0].id }), { detail: { field: 'weightKg', value: 50 } }));
+  ed.onSetChange(Object.assign(ev({ s: bench.sets[0].id }), { detail: { field: 'reps', value: 6 } }));
+  ed.onToggleDone(ev({ s: bench.sets[0].id, d: false }));
+  ed.onSetChange(Object.assign(ev({ s: plank.sets[0].id }), { detail: { field: 'durationSec', value: 40 } }));
+  ed.onToggleDone(ev({ s: plank.sets[0].id, d: false }));
+  ed.openInfo();
+  ed.onInfoInput(ev({ k: 'name' }, { value: '背' }));
+  ed.onInfoInput(ev({ k: 'note' }, { value: '备注不带' }));
+  ed.saveInfo();
+  modalAnswers.push({ confirm: true });
+  ed.complete();
+  const detail = cur();
+  assert.strictEqual(detail.route, 'pages/workout-detail/workout-detail');
+  const sourceId = detail.data.id;
+  assert.ok(repo().workouts.updateWorkout(sourceId, { date: '2026-10-01' }).ok);
+  const before = JSON.parse(JSON.stringify(store('fit_workout_' + sourceId)));
+  const headerBefore = JSON.parse(JSON.stringify(store('fit_workouts').find(w => w.id === sourceId)));
+  detail.repeat();
+  detail.repeat();
+  const edit = cur();
+  assert.strictEqual(edit.route, 'pages/workout-edit/workout-edit');
+  assert.notStrictEqual(edit.data.id, sourceId);
+  assert.strictEqual(edit.data.w.date, today);
+  assert.strictEqual(edit.data.w.name, '复制：背');
+  assert.strictEqual(edit.data.w.note, '');
+  assert.strictEqual(edit.data.cards.length, 2);
+  const copiedBench = edit.data.cards.find(c => c.exerciseId === '0025');
+  const copiedPlank = edit.data.cards.find(c => c.exerciseId === '0463');
+  assert.deepStrictEqual([copiedBench.sets[0].weightKg, copiedBench.sets[0].reps, copiedBench.sets[0].done], [50, 6, false]);
+  assert.deepStrictEqual([copiedPlank.mode, copiedPlank.sets[0].durationSec, copiedPlank.sets[0].done], ['time', 40, false]);
+  assert.ok(toasts.includes('已复制到今天'));
+  assert.strictEqual(store('fit_workouts').filter(w => w.status === 'draft').length, 1, '连点不会再复制一条');
+  assert.deepStrictEqual(store('fit_workout_' + sourceId), before);
+  assert.deepStrictEqual(store('fit_workouts').find(w => w.id === sourceId), headerBefore);
+});
+
+flow('repeat: 今天已有力量训练则追加，不覆盖原组', () => {
+  reset();
+  open('pages/calendar/calendar').newWorkout();
+  const ed = cur();
+  ed.onPicked(['0025'], 'add');
+  const s0 = ed.data.cards[0].sets[0];
+  ed.onSetChange(Object.assign(ev({ s: s0.id }), { detail: { field: 'weightKg', value: 40 } }));
+  ed.onSetChange(Object.assign(ev({ s: s0.id }), { detail: { field: 'reps', value: 5 } }));
+  ed.onToggleDone(ev({ s: s0.id, d: false }));
+  ed.complete();
+  const detail = cur();
+  const sourceId = detail.data.id;
+  detail.repeat();
+  const edit = cur();
+  assert.strictEqual(edit.route, 'pages/workout-edit/workout-edit');
+  assert.strictEqual(edit.data.id, sourceId);
+  assert.strictEqual(store('fit_workouts').length, 1);
+  assert.strictEqual(edit.data.cards.length, 2);
+  assert.deepStrictEqual([edit.data.cards[0].sets[0].weightKg, edit.data.cards[0].sets[0].done], [40, true]);
+  assert.deepStrictEqual([edit.data.cards[1].sets[0].weightKg, edit.data.cards[1].sets[0].reps, edit.data.cards[1].sets[0].done], [40, 5, false]);
+  assert.ok(toasts.includes('已追加到今天'));
+});
+
+flow('repeat: 保存失败会提示，源记录还在', () => {
+  reset();
+  open('pages/calendar/calendar').newWorkout();
+  cur().onPicked(['0025'], 'add');
+  const s0 = cur().data.cards[0].sets[0];
+  cur().onSetChange(Object.assign(ev({ s: s0.id }), { detail: { field: 'reps', value: 5 } }));
+  cur().onToggleDone(ev({ s: s0.id, d: false }));
+  cur().complete();
+  const detail = cur();
+  assert.ok(repo().workouts.updateWorkout(detail.data.id, { date: '2026-10-01' }).ok);
+  const before = JSON.parse(JSON.stringify(store('fit_workouts')));
+  failNth = 1;
+  detail.repeat();
+  assert.strictEqual(cur().route, 'pages/workout-detail/workout-detail');
+  assert.ok(toasts.some(t => String(t).includes('保存失败')));
+  assert.deepStrictEqual(store('fit_workouts'), before);
+});
+
+flow('repeat: 另一天有未完成训练时先问，同意继续就不会复制', () => {
+  reset();
+  open('pages/calendar/calendar').newWorkout();
+  cur().onPicked(['0025'], 'add');
+  const s0 = cur().data.cards[0].sets[0];
+  cur().onSetChange(Object.assign(ev({ s: s0.id }), { detail: { field: 'reps', value: 5 } }));
+  cur().onToggleDone(ev({ s: s0.id, d: false }));
+  cur().complete();
+  const detail = cur();
+  assert.ok(repo().workouts.updateWorkout(detail.data.id, { date: '2026-10-01' }).ok);
+  const draft = repo().workouts.createDraft({ date: '2026-10-02', exerciseIds: ['0294'] });
+  assert.ok(draft.ok, draft.message);
+  const n = store('fit_workouts').length;
+  detail.repeat();
+  assert.ok(modals.some(m => m.startsWith('有未完成的训练')));
+  assert.strictEqual(cur().route, 'pages/workout-edit/workout-edit');
+  assert.strictEqual(cur().data.id, draft.data.id);
+  assert.strictEqual(store('fit_workouts').length, n);
+  assert.deepStrictEqual(cur().data.cards.map(c => c.exerciseId), ['0294']);
+});
+
 // ---------- report
 results.forEach(r => console.log(r[0].padEnd(4), r[1], r[2] ? '\n     ' + r[2] : ''));
 const failed = results.filter(r => r[0] !== 'ok').length;
