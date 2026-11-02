@@ -1,20 +1,28 @@
-.subtabs { margin-top: 8rpx; }
-.date-nav { margin-top: 28rpx; }
+.nav-actions { margin-left: auto; display: flex; align-items: center; }
+.nav-ico { height: 80rpx; padding: 0 8rpx; display: flex; align-items: center; justify-content: center; }
+.nav-lab { margin-left: 6rpx; font-size: 22rpx; color: var(--c-text-2); }
+.ico-goal { width: 28rpx; height: 28rpx; border: 3rpx solid var(--c-ink); border-radius: 50%; position: relative; box-sizing: border-box; }
+.ico-goal::before, .ico-goal::after { content: ''; position: absolute; background: var(--c-ink); }
+.ico-goal::before { left: 11rpx; top: 4rpx; width: 3rpx; height: 16rpx; }
+.ico-goal::after { left: 4rpx; top: 11rpx; width: 16rpx; height: 3rpx; }
+.ico-review { width: 28rpx; height: 22rpx; display: flex; align-items: flex-end; justify-content: space-between; }
+.ico-review::before, .ico-review::after { content: ''; width: 6rpx; background: var(--c-ink); border-radius: 2rpx; }
+.ico-review::before { height: 12rpx; box-shadow: 10rpx -8rpx 0 var(--c-ink); }
+.ico-review::after { height: 20rpx; }
+.date-nav { margin-top: 8rpx; }
 .date-btn { width: 88rpx; height: 88rpx; display: flex; align-items: center; justify-content: center; font-size: 44rpx; }
 .date-btn.off { color: var(--c-disabled); }
-.block { margin-top: 24rpx; }
-.macro-row { display: flex; margin-top: 12rpx; }
-.macro { flex: 1; min-width: 0; }
-.macro-n { font-size: 40rpx; font-weight: 700; line-height: 1.2; }
-.unit { font-size: 22rpx; color: var(--c-text-3); font-weight: 400; margin-left: 4rpx; }
-.note { background: var(--c-accent-weak); border-radius: var(--r-card); padding: 20rpx 24rpx; margin-top: 24rpx; color: var(--c-text-2); font-size: 26rpx; }
-.unlogged { font-size: 48rpx; font-weight: 700; padding: 12rpx 0 4rpx; }
-.week { display: flex; margin-top: 12rpx; }
-.week-cell { flex: 1; text-align: center; padding: 12rpx 0; border-radius: 12rpx; }
-.week-cell.on { background: var(--c-ink); color: var(--c-white); }
-.week-cell.on .cap { color: var(--c-white); }
-.tiny { font-size: 20rpx; line-height: 1.3; }
+.intake { margin-top: 8rpx; background: var(--c-bg-2); border-radius: var(--r-card); padding: 32rpx; }
+.kcal-row { margin-top: 20rpx; align-items: flex-end; }
+.kcal-main { font-size: 48rpx; font-weight: 700; line-height: 1.15; }
+.remain { margin-left: 16rpx; font-size: 26rpx; color: var(--c-text-2); white-space: nowrap; }
+.macro-line { margin-top: 24rpx; }
+.track { margin-top: 8rpx; height: 8rpx; border-radius: 999rpx; background: var(--c-line); overflow: hidden; }
+.fill { height: 100%; background: var(--c-accent); border-radius: 999rpx; }
 .stack { margin-top: 28rpx; }
-.lab { width: 220rpx; }
-.choice { margin-top: 8rpx; }
-.entry-line { min-height: 88rpx; }
+.empty-copy { margin-top: 24rpx; color: var(--c-text-2); font-size: 30rpx; }
+.meal { margin-top: 16rpx; background: var(--c-bg-2); border-radius: var(--r-card); padding: 28rpx 32rpx; display: flex; align-items: center; }
+.meal-name { font-size: 32rpx; font-weight: 600; }
+.meal-kcal { margin-left: 16rpx; font-weight: 600; white-space: nowrap; }
+.more { margin-left: 16rpx; width: 64rpx; text-align: center; font-size: 40rpx; line-height: 1; color: var(--c-text-2); }
+.goal-hint { display: block; margin-top: 28rpx; }

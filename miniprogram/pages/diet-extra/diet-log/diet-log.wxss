@@ -1,0 +1,6 @@
+.phrase { margin-top: 8rpx; font-size: 30rpx; font-weight: 600; }
+.stack { margin-top: 28rpx; }
+.lab { width: 220rpx; }
+.choice { margin-top: 8rpx; }
+.page { padding-bottom: 48rpx; }
+.entry-line { min-height: 88rpx; }

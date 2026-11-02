@@ -1,297 +1,63 @@
-<nav-bar mode="tab" title="饮食"></nav-bar>
-<view class="page page-pad-tab">
-  <view class="seg subtabs">
-    <view class="seg-item {{tab==='today'?'on':''}}" bindtap="setTab" data-t="today">今日</view>
-    <view class="seg-item {{tab==='plan'?'on':''}}" bindtap="setTab" data-t="plan">计划</view>
-    <view class="seg-item {{tab==='review'?'on':''}}" bindtap="setTab" data-t="review">复盘</view>
+<nav-bar mode="tab" title="饮食">
+  <view slot="right" class="nav-actions">
+    <view class="nav-ico" bindtap="openGoal">
+      <view class="ico-goal"></view>
+      <text class="nav-lab">目标</text>
+    </view>
+    <view class="nav-ico" bindtap="openReview">
+      <view class="ico-review"></view>
+      <text class="nav-lab">回顾</text>
+    </view>
   </view>
-
+</nav-bar>
+<view class="page page-pad-tab">
   <empty-state wx:if="{{loadError}}" title="饮食数据读取异常" sub="{{loadError}}"></empty-state>
-
-  <block wx:elif="{{tab==='today'}}">
+  <block wx:else>
     <view class="row between date-nav">
       <view class="date-btn" bindtap="shiftDate" data-d="-1">‹</view>
-      <text class="h2">{{dateLabel}}</text>
+      <picker mode="date" value="{{date}}" end="{{todayStr}}" bindchange="onPickDate">
+        <text class="h2">{{dateTitle}}</text>
+      </picker>
       <view class="date-btn {{canNext?'':'off'}}" bindtap="shiftDate" data-d="1">›</view>
     </view>
-    <empty-state wx:if="{{!hasPlan}}" title="还没有饮食计划" sub="先定一个模式。没有计划时，这里不会显示成吃了 0。" action="去创建计划" bind:action="goCreate"></empty-state>
-    <block wx:elif="{{today}}">
-      <view wx:if="{{today.noLog}}" class="note">{{today.noLogText}}</view>
-      <view class="block"><card>
+
+    <view class="intake">
+      <view class="row between">
+        <text class="h2">今日摄入</text>
+        <text wx:if="{{board.badge}}" class="tag tag-accent">{{board.badge}}</text>
+      </view>
+      <view class="row between kcal-row">
+        <text class="kcal-main num">{{board.kcalLine}}</text>
+        <text class="remain">{{board.remain}}</text>
+      </view>
+      <view wx:for="{{board.rows}}" wx:key="key" class="macro-line">
         <view class="row between">
-          <text class="h2">今日目标</text>
-          <text wx:if="{{today.dayLabel}}" class="tag tag-accent">{{today.dayLabel}}</text>
-          <text wx:elif="{{today.mode==='taper'}}" class="tag tag-gray">碳水渐降</text>
+          <text>{{item.name}}</text>
+          <text class="sub num">{{item.right}}</text>
         </view>
-        <view wx:if="{{today.missing}}" class="sub" style="margin-top:12rpx">这一天早于计划开始，没有目标。</view>
-        <block wx:else>
-          <view class="macro-row">
-            <view class="macro"><view class="cap">碳水</view><view class="num macro-n">{{today.c}}<text class="unit">g</text></view></view>
-            <view class="macro"><view class="cap">蛋白</view><view class="num macro-n">{{today.p}}<text class="unit">g</text></view></view>
-            <view class="macro"><view class="cap">脂肪</view><view class="num macro-n">{{today.f}}<text class="unit">g</text></view></view>
-          </view>
-          <view class="sub" style="margin-top:12rpx">{{today.k}} kcal · 参考体重 {{today.ref}} kg</view>
-        </block>
-        <view wx:if="{{today.windowLine}}" class="cap" style="margin-top:12rpx">{{today.windowLine}}</view>
-        <view wx:if="{{today.drift}}" class="cap" style="margin-top:8rpx">身体数据 {{today.drift.date}} 是 {{today.drift.latest}} kg。参考体重仍锁定 {{today.drift.locked}} kg，每日目标没变。</view>
-      </card></view>
-      <view wx:if="{{today.mode==='cycle'}}" class="note">{{kcalNote}}</view>
-      <view class="block"><card>
-        <view class="h2">实际摄入</view>
-        <view wx:if="{{!today.recorded}}" class="unlogged">未记录</view>
-        <block wx:else>
-          <view class="macro-row">
-            <view class="macro"><view class="cap">碳水</view><view class="num macro-n">{{today.ic}}<text class="unit">g</text></view></view>
-            <view class="macro"><view class="cap">蛋白</view><view class="num macro-n">{{today.ip}}<text class="unit">g</text></view></view>
-            <view class="macro"><view class="cap">脂肪</view><view class="num macro-n">{{today.iff}}<text class="unit">g</text></view></view>
-          </view>
-          <view class="sub" style="margin-top:12rpx">{{today.ik}} kcal</view>
-          <view wx:if="{{today.delta}}" class="cap" style="margin-top:8rpx">相对目标 碳 {{today.delta.c}} · 蛋白 {{today.delta.p}} · 脂 {{today.delta.f}} · {{today.delta.k}} kcal</view>
-          <view wx:for="{{today.entries}}" wx:key="id" class="row between entry-line hairline-b">
-            <view class="flex1">
-              <view>{{item.name}}<text wx:if="{{item.example}}" class="tag tag-accent">口播例</text></view>
-              <view class="cap">{{item.basis}} {{item.qty}} · {{item.line}}</view>
-            </view>
-            <text class="sub hit" data-id="{{item.id}}" bindtap="removeEntry">移除</text>
-          </view>
-        </block>
-      </card></view>
-      <view class="stack h2">快速记录</view>
-      <view class="cap">填的是克数，不是食物重量。保存后按 4 / 4 / 9 算出热量。</view>
-      <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{quick.carbsG}}" placeholder="—" bindinput="onQuick"/><text class="field-unit">g</text></view>
-      <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="proteinG" value="{{quick.proteinG}}" placeholder="—" bindinput="onQuick"/><text class="field-unit">g</text></view>
-      <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{quick.fatG}}" placeholder="—" bindinput="onQuick"/><text class="field-unit">g</text></view>
-      <view class="stack"><btn type="secondary" disabled="{{readOnly}}" bind:press="saveQuick">保存为这天的摄入</btn></view>
-      <view wx:if="{{today.recorded}}" class="stack"><btn type="ghost" disabled="{{readOnly}}" bind:press="clearLog">清空，恢复未记录</btn></view>
-      <view class="stack"><btn disabled="{{readOnly}}" bind:press="openFood">食物换算</btn></view>
-      <view class="cap" style="margin-top:12rpx">米饭、馒头、南瓜是上集口播例，生熟没说清。加入前必须选口径。蛋白和脂肪口播没给，按 0 计。</view>
-    </block>
-  </block>
-
-  <block wx:elif="{{tab==='plan'}}">
-    <view class="stack row between"><text class="h2">{{hasPlan?'调整计划':'新建计划'}}</text><text class="sub hit" bindtap="openFormula">公式说明</text></view>
-    <view class="seg" style="margin-top:16rpx">
-      <view class="seg-item {{form.mode==='taper'?'on':''}}" bindtap="setMode" data-m="taper">碳水渐降</view>
-      <view class="seg-item {{form.mode==='cycle'?'on':''}}" bindtap="setMode" data-m="cycle">碳循环</view>
+        <view class="track"><view class="fill" style="width: {{item.bar}}%;"></view></view>
+        <view wx:if="{{item.gap}}" class="cap">{{item.gap}}</view>
+      </view>
     </view>
-    <view class="field hairline-b"><text class="field-label lab">参考体重<text class="req">*</text></text><input class="field-input num" type="digit" data-k="refWeightKg" value="{{form.refWeightKg}}" placeholder="kg" bindinput="onForm"/><text class="field-unit">kg</text></view>
-    <view class="cap">{{hasPlan?'改它会从今天起进入新阶段，过去的日期仍用旧体重。':'会带出身体数据里最近一次体重，点创建才锁定。'}}</view>
 
-    <block wx:if="{{form.mode==='taper'}}">
-      <view class="seg" style="margin-top:24rpx">
-        <view class="seg-item {{form.energyMode==='tdee_pct'?'on':''}}" bindtap="setEnergy" data-m="tdee_pct">TDEE 减%</view>
-        <view class="seg-item {{form.energyMode==='absolute_deficit'?'on':''}}" bindtap="setEnergy" data-m="absolute_deficit">绝对缺口</view>
-        <view class="seg-item {{form.energyMode==='absolute_target'?'on':''}}" bindtap="setEnergy" data-m="absolute_target">直接填热量</view>
-      </view>
-      <block wx:if="{{form.energyMode!=='absolute_target'}}">
-        <view class="cap" style="margin-top:16rpx">BMR 用 Mifflin-St Jeor，TDEE = BMR × 活动系数。不选活动水平就不会偷偷套一个系数。</view>
-        <view class="row choice">
-          <view class="chip {{form.sex==='male'?'on':''}}" bindtap="setSex" data-m="male">男</view>
-          <view class="chip {{form.sex==='female'?'on':''}}" bindtap="setSex" data-m="female">女</view>
-        </view>
-        <view class="field hairline-b"><text class="field-label lab">年龄</text><input class="field-input num" type="number" data-k="age" value="{{form.age}}" placeholder="岁" bindinput="onForm"/></view>
-        <view class="field hairline-b"><text class="field-label lab">身高</text><input class="field-input num" type="digit" data-k="heightCm" value="{{form.heightCm}}" placeholder="cm" bindinput="onForm"/><text class="field-unit">cm</text></view>
-        <scroll-view scroll-x class="chips">
-          <view wx:for="{{activities}}" wx:key="id" class="chip {{form.activity===item.id?'on':''}}" bindtap="setActivity" data-m="{{item.id}}">{{item.label}} {{item.factor}}</view>
-        </scroll-view>
-        <view wx:if="{{form.energyMode==='tdee_pct'}}" class="field hairline-b"><text class="field-label lab">缺口</text><input class="field-input num" type="digit" data-k="deficitPct" value="{{form.deficitPct}}" bindinput="onForm"/><text class="field-unit">%</text></view>
-        <view wx:else class="field hairline-b"><text class="field-label lab">缺口</text><input class="field-input num" type="digit" data-k="deficitKcal" value="{{form.deficitKcal}}" placeholder="kcal" bindinput="onForm"/><text class="field-unit">kcal</text></view>
-      </block>
-      <view wx:else class="field hairline-b"><text class="field-label lab">目标热量</text><input class="field-input num" type="digit" data-k="absoluteTarget" value="{{form.absoluteTarget}}" placeholder="kcal" bindinput="onForm"/><text class="field-unit">kcal</text></view>
-      <view class="seg" style="margin-top:16rpx">
-        <view class="seg-item {{form.macroMode==='s4b'?'on':''}}" bindtap="setMacro" data-m="s4b">蛋白按体重</view>
-        <view class="seg-item {{form.macroMode==='532'?'on':''}}" bindtap="setMacro" data-m="532">532</view>
-      </view>
-      <block wx:if="{{form.macroMode==='s4b'}}">
-        <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="proteinPerKg" value="{{form.proteinPerKg}}" bindinput="onForm"/><text class="field-unit">g/kg</text></view>
-        <view class="field hairline-b"><text class="field-label lab">脂肪热量</text><input class="field-input num" type="digit" data-k="fatPct" value="{{form.fatPct}}" bindinput="onForm"/><text class="field-unit">%</text></view>
-        <view class="cap">默认蛋白 1.5 g/kg，脂肪占目标热量 22.5%，剩下的给碳水。观察窗 7 天。</view>
-      </block>
-      <view wx:else class="cap">532 是热量比：碳 50% / 蛋白 30% / 脂 20%，再换成克。</view>
-      <view class="stack sub hit" bindtap="toggleOverride">{{form.overrideOn?'收起克数微调':'按这个结果微调克数'}}</view>
-      <block wx:if="{{form.overrideOn}}">
-        <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{form.carbsG}}" bindinput="onForm"/><text class="field-unit">g</text></view>
-        <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="proteinG" value="{{form.proteinG}}" bindinput="onForm"/><text class="field-unit">g</text></view>
-        <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{form.fatG}}" bindinput="onForm"/><text class="field-unit">g</text></view>
-      </block>
-    </block>
+    <view class="stack"><btn disabled="{{readOnly}}" bind:press="openLog">+ 记录饮食</btn></view>
 
-    <block wx:else>
-      <view class="cap" style="margin-top:16rpx">体型自己选。蛋白默认 1.2 g/kg（有训练基础）。外胚脂肪默认 1.1。</view>
-      <view class="row choice">
-        <view class="chip {{form.bodyType==='endo'?'on':''}}" bindtap="setBody" data-m="endo">内胚</view>
-        <view class="chip {{form.bodyType==='ecto'?'on':''}}" bindtap="setBody" data-m="ecto">外胚</view>
+    <view class="row between stack">
+      <text class="h2">今日记录</text>
+      <view class="row">
+        <text class="sub">{{board.mealCount}} 餐</text>
+        <text wx:if="{{board.recorded && !readOnly}}" class="more" bindtap="openMore">⋯</text>
       </view>
-      <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="cycleProtein" value="{{form.cycleProtein}}" bindinput="onForm"/><text class="field-unit">g/kg</text></view>
-      <view class="cap">初期大约 0.8–1，有训练基础 1.2–1.5。</view>
-      <view wx:if="{{form.bodyType==='ecto'}}" class="row choice">
-        <view class="chip {{form.fatPerKg=='1'||form.fatPerKg=='1.0'?'on':''}}" bindtap="setFatKg" data-m="1">脂 1.0</view>
-        <view class="chip {{form.fatPerKg=='1.1'?'on':''}}" bindtap="setFatKg" data-m="1.1">脂 1.1</view>
-        <view class="chip {{form.fatPerKg=='1.2'?'on':''}}" bindtap="setFatKg" data-m="1.2">脂 1.2</view>
-      </view>
-      <view wx:elif="{{form.bodyType==='endo'}}" class="cap">内胚脂肪固定 0.8 g/kg，碳水 2 g/kg。</view>
-      <view class="stack h2">一周怎么排</view>
-      <view class="cap">{{restHint}} 点某一天可在高 / 中 / 低之间换。要正好 2 高、3 中、2 低才能保存。</view>
-      <view class="week">
-        <view wx:for="{{weekCells}}" wx:key="date" class="week-cell" bindtap="cyclePattern" data-i="{{index}}">
-          <view class="tiny">{{item.label}}<text wx:if="{{item.rest}}"> 休息</text></view>
-          <view style="font-weight:700">{{item.typeLabel}}</view>
-          <view class="tiny">{{item.kcal}}</view>
-        </view>
-      </view>
-      <view class="cap">{{patternText}}</view>
-      <view class="stack"><btn type="secondary" bind:press="applyRest">把本周休息日标成低碳</btn></view>
-      <view class="note">{{kcalNote}}</view>
-      <view wx:if="{{compare}}" class="cap" style="margin-top:12rpx">{{compare}}</view>
-      <view class="row between stack">
-        <text class="sub">博客园部位对照</text>
-        <text class="sub hit" bindtap="toggleBlog">{{form.showBlogMap?'已打开':'关闭'}}</text>
-      </view>
-      <view class="cap">默认关闭。打开后每条都标「{{blogDisclaimer}}」，不会自动改日历。</view>
-      <view wx:if="{{form.showBlogMap}}" class="block">
-        <view wx:for="{{blogMap}}" wx:key="type" class="cap">{{item.label}}：{{item.text}}（{{blogDisclaimer}}）</view>
-      </view>
-    </block>
-
-      <view wx:if="{{preview&&preview.mode==='taper'}}" class="block"><card>
-        <view class="h2">将要锁定的一天</view>
-        <view class="macro-row">
-          <view class="macro"><view class="cap">碳水</view><view class="num macro-n">{{preview.c}}<text class="unit">g</text></view></view>
-          <view class="macro"><view class="cap">蛋白</view><view class="num macro-n">{{preview.p}}<text class="unit">g</text></view></view>
-          <view class="macro"><view class="cap">脂肪</view><view class="num macro-n">{{preview.f}}<text class="unit">g</text></view></view>
-        </view>
-        <view class="sub" style="margin-top:12rpx">{{preview.k}} kcal<text wx:if="{{preview.tdee}}"> · TDEE {{preview.tdee}} · 目标 {{preview.target}}</text></view>
-      </card></view>
-    <view wx:if="{{preview&&preview.mode==='cycle'}}" class="block"><card>
-        <view class="h2">高 / 中 / 低每天的热量</view>
-        <view wx:for="{{preview.days}}" wx:key="type" class="li hairline-b">
-          <text class="tag tag-accent">{{item.label}}</text>
-          <text class="flex1 cap">碳 {{item.c}} · 蛋白 {{item.p}} · 脂 {{item.f}} g</text>
-          <text class="num">{{item.k}}</text>
-        </view>
-      </card></view>
-    <view wx:if="{{previewError}}" class="err-text">{{previewError}}</view>
-    <view class="stack"><btn disabled="{{readOnly}}" bind:press="commitPlan">{{hasPlan?'确认新阶段':'创建计划'}}</btn></view>
-
-    <block wx:if="{{hasPlan}}">
-      <view class="stack h2">只改提示，不改目标</view>
-      <view class="cap">底线默认是这次渐降开始时碳水的 40%。留空就回到这个比例。碰到底线只提示，不会自己降碳。</view>
-      <view class="field hairline-b"><text class="field-label lab">碳水底线</text><input class="field-input num" type="digit" data-k="floor" value="{{hint.floor}}" placeholder="用 40%" bindinput="onHint"/><text class="field-unit">g</text></view>
-      <view class="field hairline-b"><text class="field-label lab">未记录提示</text><input class="field-input num" type="number" data-k="noLog" value="{{hint.noLog}}" bindinput="onHint"/><text class="field-unit">天</text></view>
-      <view class="stack"><btn type="secondary" disabled="{{readOnly}}" bind:press="saveHints">保存提示</btn></view>
-    </block>
-  </block>
-
-  <block wx:else>
-    <empty-state wx:if="{{!review||review.empty}}" title="还没有可以复盘的计划" action="去创建计划" bind:action="goCreate"></empty-state>
-    <block wx:else>
-      <view class="stack h2">体重</view>
-      <view class="cap">用的是身体数据里的体重，不是饮食计划锁住的参考体重。</view>
-      <view wx:if="{{review.chart}}" class="block"><line-chart series="{{review.chart}}" unit="kg" height="{{360}}"></line-chart></view>
-      <view wx:else class="note">{{review.sample}}</view>
-      <view class="block"><card>
-        <view class="cap">锁定的参考体重</view>
-        <view class="macro-n num">{{review.locked}}<text class="unit">kg</text></view>
-        <view class="cap" style="margin-top:8rpx">身体数据最新 {{review.latest}}</view>
-        <view wx:if="{{review.drift}}" class="cap">两边不一样。每日目标仍按锁定体重，直到你在下面确认。</view>
-      </card></view>
-      <view class="stack"><btn type="secondary" disabled="{{readOnly}}" bind:press="openWeight">更新参考体重</btn></view>
-      <view wx:if="{{review.observe}}" class="note">{{review.observe}}</view>
-      <view class="note">{{review.sumText}}</view>
-      <view wx:if="{{review.noLog}}" class="note">{{review.noLogText}}</view>
-      <view wx:if="{{review.floorText}}" class="cap" style="margin-top:16rpx">{{review.floorText}}</view>
-      <view wx:if="{{review.declineText}}" class="note">{{review.declineText}}</view>
-      <view class="stack"><btn disabled="{{readOnly}}" bind:press="openAdjust" data-kind="{{review.mode==='cycle'?'manual':'stuck'}}">{{review.mode==='cycle'?'调整三日克数':'查看降碳建议'}}</btn></view>
-      <view class="stack"><btn type="secondary" disabled="{{readOnly}}" bind:press="openAdjust" data-kind="strength">力量下滑，建议加碳</btn></view>
-      <view class="cap" style="margin-top:12rpx">{{review.mode==='cycle'?'确认前不会改任何一天的目标。':'卡住时的默认建议是碳水 −15 g，也可以选 −20 / −30，或按米饭份量。不点确认，目标不变。'}}</view>
-      <view class="stack h2">阶段</view>
-      <view wx:for="{{review.stages}}" wx:key="id" class="li-2 hairline-b">
-        <view class="flex1">
-          <view>{{item.title}}<text wx:if="{{item.current}}" class="tag tag-solid">当前</text></view>
-          <view class="cap">{{item.sub}}</view>
-          <view class="cap">{{item.weight}}</view>
-        </view>
-      </view>
-    </block>
-  </block>
-</view>
-
-<view wx:if="{{sheet}}" class="mask" bindtap="closeSheet"></view>
-<view wx:if="{{sheet==='food'}}" class="sheet" catchtap="noop">
-  <view class="h2">食物换算</view>
-  <view class="cap">先选口径，才能加入这天。不同口径的食物分开记，不把生重和熟重混成一个数。</view>
-  <scroll-view scroll-x class="chips">
-    <view wx:for="{{foods.examples}}" wx:key="id" class="chip {{foodForm.foodId===item.id?'on':''}}" bindtap="pickFood" data-id="{{item.id}}">{{item.name}} · 口播例</view>
-    <view wx:for="{{foods.custom}}" wx:key="id" class="chip {{foodForm.foodId===item.id?'on':''}}" bindtap="pickFood" data-id="{{item.id}}">{{item.name}}</view>
-  </scroll-view>
-  <view class="row choice">
-    <view wx:for="{{basisList}}" wx:key="id" class="chip {{foodForm.basis===item.id?'on':''}}" bindtap="setBasis" data-m="{{item.id}}">{{item.label}}</view>
-  </view>
-  <view class="field hairline-b"><text class="field-label lab">{{foodForm.basis==='perServing'?'份数':'重量'}}</text><input class="field-input num" type="digit" value="{{foodForm.qty}}" bindinput="onFoodQty"/><text class="field-unit">{{foodForm.basis==='perServing'?'份':'g'}}</text></view>
-  <view wx:if="{{foodPreview}}" class="sub">{{foodPreview}}</view>
-  <view class="stack"><btn disabled="{{readOnly}}" bind:press="addFoodToDay">加入这天</btn></view>
-  <view class="stack"><btn type="secondary" disabled="{{readOnly}}" bind:press="openCustom">自定义食物</btn></view>
-  <view wx:for="{{foods.custom}}" wx:key="id" class="row between entry-line hairline-b">
-    <text class="flex1">{{item.name}} · {{item.basisLabel}}</text>
-    <text class="sub hit" data-id="{{item.id}}" bindtap="deleteCustom">删除</text>
-  </view>
-</view>
-<view wx:if="{{sheet==='custom'}}" class="sheet" catchtap="noop">
-  <view class="h2">自定义食物</view>
-  <view class="cap">数字是这一口径下每 100 g（或每 1 份）的碳、蛋白、脂肪。</view>
-  <view class="field hairline-b"><text class="field-label lab">名称</text><input class="field-input" data-k="name" value="{{customForm.name}}" bindinput="onCustom"/></view>
-  <view class="row choice">
-    <view wx:for="{{basisList}}" wx:key="id" class="chip {{customForm.basis===item.id?'on':''}}" bindtap="setCustomBasis" data-m="{{item.id}}">{{item.label}}</view>
-  </view>
-  <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{customForm.carbsG}}" bindinput="onCustom"/><text class="field-unit">g</text></view>
-  <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="proteinG" value="{{customForm.proteinG}}" bindinput="onCustom"/><text class="field-unit">g</text></view>
-  <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{customForm.fatG}}" bindinput="onCustom"/><text class="field-unit">g</text></view>
-  <view class="stack"><btn disabled="{{readOnly}}" bind:press="saveCustom">保存到食物</btn></view>
-</view>
-<view wx:if="{{sheet==='adjust'}}" class="sheet" catchtap="noop">
-  <view class="h2">{{adjust.kind==='strength'?'力量下滑的建议':'调整建议'}}</view>
-  <view class="sub">{{adjust.note}}</view>
-  <view wx:if="{{adjust.windowNote}}" class="cap" style="margin-top:8rpx">{{adjust.windowNote}}</view>
-  <view wx:if="{{adjust.trend}}" class="cap" style="margin-top:8rpx">{{adjust.trend}}</view>
-  <view wx:if="{{adjust.floorNote}}" class="note">{{adjust.floorNote}}</view>
-  <block wx:if="{{adjust.mode==='taper'}}">
-    <view class="row choice">
-      <view wx:for="{{stuckChoices}}" wx:key="*this" class="chip" bindtap="setChip" data-d="{{item}}">{{item}} g</view>
-      <view class="chip" bindtap="setChip" data-d="15">+15 g</view>
     </view>
-    <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{adjust.carbsG}}" bindinput="onAdjust"/><text class="field-unit">g</text></view>
-    <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-k="proteinG" value="{{adjust.proteinG}}" bindinput="onAdjust"/><text class="field-unit">g</text></view>
-    <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{adjust.fatG}}" bindinput="onAdjust"/><text class="field-unit">g</text></view>
-    <view class="cap">按米饭减碳时，必须先选生重或熟重。口播例每 100 g 约 25 g 碳，生熟系数相同，但口径会记下来。</view>
-    <view class="row choice">
-      <view class="chip {{adjust.basis==='raw'?'on':''}}" bindtap="setAdjustBasis" data-m="raw">生重</view>
-      <view class="chip {{adjust.basis==='cooked'?'on':''}}" bindtap="setAdjustBasis" data-m="cooked">熟重</view>
+    <view wx:if="{{board && !board.recorded}}" class="empty-copy">这一天还没有饮食记录。</view>
+    <view wx:for="{{board.meals}}" wx:key="id" class="meal" bindtap="openMeal" data-meal="{{item.id}}">
+      <view class="flex1">
+        <view class="meal-name">{{item.label}}</view>
+        <view class="cap ell">{{item.summary}}</view>
+      </view>
+      <text class="num meal-kcal">{{item.kcal}} kcal</text>
+      <text class="chev">›</text>
     </view>
-    <view class="field hairline-b"><text class="field-label lab">米饭</text><input class="field-input num" type="digit" data-k="rice" value="{{adjust.rice}}" bindinput="onAdjust"/><text class="field-unit">g</text></view>
-    <view class="stack"><btn type="secondary" bind:press="applyRice">按这份米饭填碳水</btn></view>
-    <view wx:if="{{adjust.riceNote}}" class="cap">{{adjust.riceNote}}</view>
+    <view wx:if="{{!hasPlan}}" class="cap goal-hint" bindtap="openGoal">还没有饮食目标。点这里设置。没设目标时，这一天不会被当成吃了 0。</view>
   </block>
-  <block wx:else>
-    <view wx:for="{{adjust.days}}" wx:key="type">
-      <view class="h2" style="margin-top:16rpx">{{item.label}}碳</view>
-      <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-i="{{index}}" data-k="carbsG" value="{{item.carbsG}}" bindinput="onAdjustDay"/><text class="field-unit">g</text></view>
-      <view class="field hairline-b"><text class="field-label lab">蛋白</text><input class="field-input num" type="digit" data-i="{{index}}" data-k="proteinG" value="{{item.proteinG}}" bindinput="onAdjustDay"/><text class="field-unit">g</text></view>
-      <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-i="{{index}}" data-k="fatG" value="{{item.fatG}}" bindinput="onAdjustDay"/><text class="field-unit">g</text></view>
-    </view>
-  </block>
-  <view class="stack"><btn disabled="{{readOnly}}" bind:press="confirmAdjust">确认新阶段</btn></view>
-</view>
-<view wx:if="{{sheet==='weight'}}" class="sheet" catchtap="noop">
-  <view class="h2">更新参考体重</view>
-  <view class="cap">当前锁定 {{weightForm.locked}} kg。改完并确认后，从今天起按新体重重算。更早的日期不变。</view>
-  <view class="field hairline-b"><text class="field-label lab">新体重</text><input class="field-input num" type="digit" value="{{weightForm.refWeightKg}}" bindinput="onWeight"/><text class="field-unit">kg</text></view>
-  <view class="sub hit" bindtap="toggleKeep">{{weightForm.keepGrams?'克数保持不变（已选）':'克数按原系数重算（点此改为保持克数）'}}</view>
-  <view wx:if="{{weightForm.error}}" class="err-text">{{weightForm.error}}</view>
-  <block wx:elif="{{weightForm.preview&&weightForm.preview.mode==='taper'}}">
-    <view class="sub">碳 {{weightForm.preview.c}} · 蛋白 {{weightForm.preview.p}} · 脂 {{weightForm.preview.f}} g · {{weightForm.preview.k}} kcal</view>
-  </block>
-  <block wx:elif="{{weightForm.preview&&weightForm.preview.mode==='cycle'}}">
-    <view wx:for="{{weightForm.preview.days}}" wx:key="type" class="cap">{{item.label}} 碳 {{item.c}} · 蛋白 {{item.p}} · 脂 {{item.f}} · {{item.k}} kcal</view>
-  </block>
-  <view class="stack"><btn disabled="{{readOnly}}" bind:press="confirmWeight">确认更新</btn></view>
 </view>

@@ -1,0 +1,13 @@
+.block { margin-top: 24rpx; }
+.macro-row { display: flex; margin-top: 12rpx; }
+.macro { flex: 1; min-width: 0; }
+.macro-n { font-size: 40rpx; font-weight: 700; line-height: 1.2; }
+.unit { font-size: 22rpx; color: var(--c-text-3); font-weight: 400; margin-left: 4rpx; }
+.note { background: var(--c-accent-weak); border-radius: var(--r-card); padding: 20rpx 24rpx; margin-top: 16rpx; color: var(--c-text-2); font-size: 26rpx; }
+.week { display: flex; margin-top: 12rpx; }
+.week-cell { flex: 1; text-align: center; padding: 12rpx 0; border-radius: 12rpx; }
+.tiny { font-size: 20rpx; line-height: 1.3; }
+.stack { margin-top: 28rpx; }
+.lab { width: 220rpx; }
+.choice { margin-top: 8rpx; }
+.page { padding-bottom: 48rpx; }

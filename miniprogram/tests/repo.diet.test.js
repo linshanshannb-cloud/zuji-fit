@@ -179,6 +179,100 @@ test('taper TDEE path uses Mifflin-St Jeor times the chosen activity factor, the
   assert.strictEqual(repo.diet.getPlan().mode, 'taper');
 });
 
+test('reference-weight update opens a new stage and leaves the previous date on the old snapshot', () => {
+  const { repo, setTime } = fresh();
+  const first = repo.diet.commit({ mode: 'cycle', refWeightKg: 92, bodyType: 'endo', proteinPerKg: 1.2 });
+  assert.strictEqual(first.ok, true, first.message);
+  assert.deepStrictEqual([
+    first.data.stage.days.high.kcal, first.data.stage.days.mid.kcal, first.data.stage.days.low.kcal,
+  ], [2077, 1584, 1987]);
+  const before = repo.diet.dayTarget('2026-10-17');
+  assert.strictEqual(before.dayType, 'mid');
+  assert.deepStrictEqual([before.kcal, before.refWeightKg], [1584, 92]);
+  setTime(new Date(2026, 9, 18, 10, 0, 0).getTime());
+  const next = repo.diet.commit({
+    mode: 'cycle', refWeightKg: 80, bodyType: 'endo', proteinPerKg: 1.2, confirmExisting: true, reason: 'refweight',
+  });
+  assert.strictEqual(next.ok, true, next.message);
+  assert.strictEqual(repo.diet.dayTarget('2026-10-17').kcal, 1584);
+  assert.strictEqual(repo.diet.dayTarget('2026-10-17').refWeightKg, 92);
+  assert.strictEqual(repo.diet.dayTarget('2026-10-18').refWeightKg, 80);
+  assert.notStrictEqual(repo.diet.dayTarget('2026-10-18').kcal, 1584);
+  assert.strictEqual(repo.diet.stages().length, 2);
+});
+
+test('nutrient rows, food snapshots, remain copy, and migration rollback', () => {
+  let fail = false;
+  const { repo, be } = fresh({}, { failOn: k => fail && k === K.DIET_LOGS });
+  assert.strictEqual(repo.diet.commit(TAPER).ok, true);
+  const planBefore = JSON.stringify(be.data[K.DIET_PLAN]);
+  const rejected = repo.diet.addNutrient('2026-10-17', { carbsG: 'abc', proteinG: 1, fatG: 1, meal: 'lunch' });
+  assert.strictEqual(rejected.ok, false);
+  assert.strictEqual(repo.diet.addNutrient('2026-10-17', { carbsG: -1, proteinG: 1, fatG: 1 }).ok, false);
+  assert.strictEqual(repo.diet.getLog('2026-10-17'), null);
+  const custom = repo.diet.saveCustomFood({ name: '熟米饭', basis: 'cooked', carbsG: 25, proteinG: 2, fatG: 1 });
+  assert.strictEqual(custom.ok, true, custom.message);
+  const food = repo.diet.addFood('2026-10-17', { foodId: custom.data.id, basis: 'cooked', qty: 200, meal: 'lunch' });
+  assert.strictEqual(food.ok, true, food.message);
+  assert.strictEqual(food.data.entries[0].carbsG, 50);
+  assert.strictEqual(food.data.entries[0].snap.carbsG, 25);
+  assert.strictEqual(repo.diet.saveCustomFood({ id: custom.data.id, name: '熟米饭', basis: 'cooked', carbsG: 99, proteinG: 9, fatG: 9 }).ok, true);
+  const edited = repo.diet.updateEntry('2026-10-17', food.data.entries[0].id, { qty: 100 });
+  assert.strictEqual(edited.ok, true, edited.message);
+  assert.strictEqual(edited.data.entry.carbsG, 25);
+  assert.strictEqual(edited.data.entry.proteinG, 2);
+  assert.strictEqual(edited.data.entry.fatG, 1);
+  const moved = repo.diet.updateEntry('2026-10-17', food.data.entries[0].id, { date: '2026-10-16', meal: 'breakfast' });
+  assert.strictEqual(moved.ok, true, moved.message);
+  assert.strictEqual(repo.diet.getLog('2026-10-17'), null);
+  assert.strictEqual(repo.diet.getLog('2026-10-16').entries[0].meal, 'breakfast');
+  assert.strictEqual(repo.diet.addNutrient('2026-10-17', { name: '训练后', carbsG: 10, proteinG: 20, fatG: 5, meal: 'dinner' }).ok, true);
+  const board = repo.diet.dayBoard('2026-10-17');
+  assert.strictEqual(board.intake.kcalLine, '165 / 2400 kcal');
+  assert.strictEqual(board.intake.remain, '剩余 2235 kcal');
+  assert.strictEqual(board.intake.rows[0].gap, '还差 335g');
+  assert.strictEqual(board.intake.rows[0].right, '10 / 345g');
+  assert.ok(board.intake.rows.every(row => row.bar <= 100 && !String(row.gap).includes('-') && !String(row.right).includes('-')));
+  assert.strictEqual(board.meals[0].label, '晚餐');
+  assert.strictEqual(board.meals[0].summary, '训练后');
+  const quick = repo.diet.saveQuick('2026-10-15', { carbsG: 10, proteinG: 20, fatG: 5 });
+  assert.strictEqual(quick.data.entries[0].kind, 'quick');
+  assert.strictEqual(quick.data.entries[0].name, '快速记录');
+  fail = true;
+  const logsBefore = JSON.stringify(be.data[K.DIET_LOGS]);
+  const failed = repo.diet.migrateLogs();
+  assert.strictEqual(failed.ok, false);
+  assert.strictEqual(JSON.stringify(be.data[K.DIET_LOGS]), logsBefore);
+  assert.strictEqual(JSON.stringify(be.data[K.DIET_PLAN]), planBefore);
+  fail = false;
+  const migrated = repo.diet.migrateLogs();
+  assert.strictEqual(migrated.ok, true, migrated.message);
+  assert.strictEqual(migrated.data.changed, true);
+  const old = repo.diet.getLog('2026-10-15').entries[0];
+  assert.strictEqual(old.kind, 'nutrient');
+  assert.strictEqual(old.meal, 'other');
+  assert.strictEqual(old.name, '');
+  assert.deepStrictEqual([old.carbsG, old.proteinG, old.fatG], [10, 20, 5]);
+  assert.strictEqual(repo.diet.dayBoard('2026-10-15').meals[0].label, '其他记录');
+  assert.strictEqual(repo.diet.dayBoard('2026-10-15').meals[0].summary, '营养素记录');
+  const again = repo.diet.migrateLogs();
+  assert.strictEqual(again.ok, true);
+  assert.strictEqual(again.data.changed, false);
+  assert.strictEqual(JSON.stringify(be.data[K.DIET_PLAN]), planBefore);
+  const over = repo.diet.addNutrient('2026-10-17', { carbsG: 400, proteinG: 0, fatG: 0, meal: 'snack' });
+  assert.strictEqual(over.ok, true, over.message);
+  const hot = repo.diet.dayBoard('2026-10-17');
+  const carb = hot.intake.rows[0];
+  assert.strictEqual(carb.bar, 100);
+  assert.ok(carb.gap.startsWith('超出 ') && !carb.gap.includes('-'));
+  const bare = fresh();
+  const emptyBoard = bare.repo.diet.dayBoard('2026-10-17');
+  assert.strictEqual(emptyBoard.emptyText, '这一天还没有饮食记录。');
+  assert.strictEqual(emptyBoard.intake.remain, '未设置目标');
+  assert.strictEqual(emptyBoard.intake.kcalLine, '0 kcal');
+  assert.ok(emptyBoard.intake.rows.every(row => row.right === '未设置目标' && row.bar === 0));
+});
+
 test('three days without a log is a streak, and a log breaks it', () => {
   const { repo, setTime } = fresh();
   assert.strictEqual(repo.diet.commit(TAPER).ok, true);

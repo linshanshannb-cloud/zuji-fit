@@ -1,0 +1,35 @@
+<nav-bar title="{{title}}"></nav-bar>
+<view class="page">
+  <view class="cap">{{dateTitle}} · {{title}}</view>
+  <view wx:if="{{!entries.length}}" class="empty-copy">这一餐还没有记录。</view>
+  <view wx:for="{{entries}}" wx:key="id" class="item">
+    <view class="row between">
+      <view class="flex1">
+        <view class="meal-name">{{item.displayName}}</view>
+        <view wx:if="{{item.basisText}}" class="cap">{{item.basisText}}<text wx:if="{{item.qtyText}}"> · {{item.qtyText}}</text></view>
+        <view class="cap">{{item.line}}</view>
+      </view>
+    </view>
+    <view class="row acts">
+      <text class="sub hit" data-id="{{item.id}}" bindtap="startEdit">编辑</text>
+      <text class="sub hit danger" data-id="{{item.id}}" bindtap="removeEntry">删除</text>
+    </view>
+    <block wx:if="{{editing===item.id}}">
+      <view wx:if="{{edit.kind==='food'}}" class="field hairline-b"><text class="field-label lab">{{edit.basis==='perServing'?'份数':'重量'}}</text><input class="field-input num" type="digit" data-k="qty" value="{{edit.qty}}" bindinput="onEdit"/><text class="field-unit">{{edit.basis==='perServing'?'份':'g'}}</text></view>
+      <block wx:else>
+        <view class="field hairline-b"><text class="field-label lab">名称</text><input class="field-input" data-k="name" value="{{edit.name}}" placeholder="可选" bindinput="onEdit"/></view>
+        <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{edit.carbsG}}" bindinput="onEdit"/><text class="field-unit">g</text></view>
+        <view class="field hairline-b"><text class="field-label lab">蛋白质</text><input class="field-input num" type="digit" data-k="proteinG" value="{{edit.proteinG}}" bindinput="onEdit"/><text class="field-unit">g</text></view>
+        <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{edit.fatG}}" bindinput="onEdit"/><text class="field-unit">g</text></view>
+      </block>
+      <scroll-view scroll-x class="chips">
+        <view wx:for="{{meals}}" wx:for-item="mealItem" wx:key="id" class="chip {{edit.meal===mealItem.id?'on':''}}" bindtap="setEditMeal" data-m="{{mealItem.id}}">{{mealItem.label}}</view>
+      </scroll-view>
+      <picker mode="date" value="{{edit.date}}" end="{{todayStr}}" bindchange="onEditDate">
+        <view class="sub hit">日期 {{edit.date}}</view>
+      </picker>
+      <view class="stack"><btn disabled="{{readOnly || saving}}" loading="{{saving}}" bind:press="saveEdit">保存记录</btn></view>
+      <view class="stack"><btn type="ghost" bind:press="cancelEdit">取消</btn></view>
+    </block>
+  </view>
+</view>
