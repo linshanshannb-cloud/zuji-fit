@@ -204,11 +204,13 @@ flow('F4 edit completed: no cleanup, >=1 done set gate, delete with confirm', ()
 
 flow('F5 library: search, filter panel, load more, quick add creates today draft; detail adds to existing', () => {
   reset(); const lib = open('pages/library/library');
-  assert.strictEqual(lib.data.total, 284); assert.strictEqual(lib.data.groups.reduce((t, g) => t + g.items.length, 0), 30);
+  const catalogueN = require('../utils/exercises').builtin.length;
+  assert.ok(catalogueN >= 1324);
+  assert.strictEqual(lib.data.total, catalogueN); assert.strictEqual(lib.data.groups.reduce((t, g) => t + g.items.length, 0), 30);
   lib.more(); assert.strictEqual(lib.data.groups.reduce((t, g) => t + g.items.length, 0), 60);
   lib.openPanel(); lib.pBP(ev({ v: 'chest' })); assert.ok(lib.data.panelCount > 0); lib.applyPanel();
   assert.ok(lib.data.groups.every(g => g.key === 'chest')); assert.match(lib.data.groups[0].title, /^胸 · \d+$/);
-  lib.onQ(ev({}, { value: 'zzzz' })); tick(); assert.strictEqual(lib.data.total, 0); lib.clearAll(); assert.strictEqual(lib.data.total, 284);
+  lib.onQ(ev({}, { value: 'zzzz' })); tick(); assert.strictEqual(lib.data.total, 0); lib.clearAll(); assert.strictEqual(lib.data.total, catalogueN);
   const any = lib.data.groups[0].items[0].id;
   lib.quickAdd(ev({ id: any })); assert.strictEqual(cur().route, 'pages/workout-edit/workout-edit'); assert.strictEqual(draftHeader().exerciseCount, 1);
   wx.navigateBack(); lib.open(ev({ id: '0025' })); const dt = cur();
@@ -321,7 +323,7 @@ flow('about / data source page reachable from library', () => {
   reset(); const lib = open('pages/library/library'); lib.openAbout();
   assert.strictEqual(cur().route, 'pages/about/about');
   const wxml = fs.readFileSync(path.join(ROOT, 'pages/about/about.wxml'), 'utf8');
-  ['openGym', 'github.com/DuarteSantos8/openGym', 'e348fc1', 'AGPL-3.0', '修改', '未使用 openGym 的任何图片'].forEach(t => assert.ok(wxml.includes(t), t));
+  ['exercises-dataset-zh', 'c335dbc', 'openGym', 'e348fc1', 'AGPL', 'Gym visual', '修改'].forEach(t => assert.ok(wxml.includes(t), t));
   cur().toggle(); assert.ok(cur().data.license.includes('GNU AFFERO'));
   assert.ok(fs.existsSync(path.join(ROOT, 'LICENSE-openGym.txt')));
 });

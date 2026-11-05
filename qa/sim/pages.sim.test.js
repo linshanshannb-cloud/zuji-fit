@@ -111,8 +111,10 @@ test('PG6 身体数据页：图表点 / 记录行 / 当前值 / 日历标记与�
 test('PG7 动作库：分批 30 条、搜索中英文、筛选面板、清除、快速加入当前训练', async () => {
   const { repo } = seed();
   const c = P.renderPage('pages/library/library'); await sleep(5);
-  assert.strictEqual(c.dom.querySelectorAll('.main--lib-li').length, 30);
-  assert.ok(c.dom.textContent.includes('共 284 个'));
+  assert.strictEqual(c.dom.querySelectorAll('.main--ex-cell').length, 30);
+  const catalogueN = require('../../miniprogram/utils/exercises').builtin.length;
+  assert.ok(catalogueN >= 1324);
+  assert.ok(c.dom.textContent.includes('共 ' + catalogueN + ' 个'));
   c.instance.onQ({ detail: { value: '  BENCH press ' } }); await sleep(350);
   const names = c.instance._all.map(e => e.nameEn);
   assert.ok(names.length > 0 && names.every(n => n.includes('bench press')), names.join(','));
@@ -131,8 +133,9 @@ test('PG7 动作库：分批 30 条、搜索中英文、筛选面板、清除、
 test('PG8 动作详情：步骤与数据一致、我的最佳 = 最重的已完成正式组、加入当前训练', async () => {
   const { repo } = seed();
   const c = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
-  const ex = repo.exercises.get('0025');
-  assert.strictEqual(c.dom.querySelectorAll('.main--step').length, ex.steps.length);
+  const steps = require('../../miniprogram/pages/exercise-detail/exercise-text')['0025'].s;
+  assert.ok(steps.length >= 5);
+  assert.strictEqual(c.dom.querySelectorAll('.main--step').length, steps.length);
   assert.ok(c.dom.textContent.includes('60kg × 8'), '我的最佳');
   const pend = repo.exercises.all().find(e => e.translationPending);
   if (pend) { // 2026-10-17 起内置数据已全部中文化；保留分支以防日后再引入待翻译数据
@@ -199,11 +202,10 @@ test('PG12 训练编辑页：信息面板改日期 → 日历移到新日期；�
 
 test('PG13 媒体：有视频显示 video / 无媒体文字占位 / 错误回退不裂图', async () => {
   const { repo } = seed();
-  // 有视频（0025）：业务先进 image（等分包），loadSubpackage success 后再切 video
+  // 有云视频（0025）：getTempFileURL 的 https 地址用于播放，封面仍是主包海报。
   const withV = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
-  assert.strictEqual(withV.instance.data.ex.mediaMode, 'video', '分包就绪后应为 video');
+  assert.strictEqual(withV.instance.data.ex.mediaMode, 'video', '云地址就绪后应为 video');
   assert.strictEqual(withV.instance.data.ex._pendingVideo, false);
-  assert.ok(withV.instance.data.ex._pkg === 'videoA' || withV.instance.data.ex.videoSrc.includes('packageVideoA'));
   assert.ok(withV.instance.data.ex.videoSrc.includes('0025.mp4'));
   assert.ok(withV.instance.data.ex.posterSrc.includes('0025.jpg'));
   assert.ok(
@@ -214,10 +216,10 @@ test('PG13 媒体：有视频显示 video / 无媒体文字占位 / 错误回退
   assert.ok(withV.dom.querySelector('.main--media') || withV.dom.querySelector('.main--vid') || withV.dom.querySelector('video') || withV.dom.innerHTML.includes('video') || withV.instance.data.ex.mediaMode === 'video');
   assert.ok(withV.dom.textContent.includes('杠铃卧推'));
 
-  // 无视频且无线稿 → text
-  const plain = repo.exercises.all().find(e => !e.video && !e.illustration);
-  assert.ok(plain, '应存在无媒体动作');
-  const noM = P.renderPage('pages/exercise-detail/exercise-detail', { id: plain.id }); await sleep(5);
+  // 无云视频、无线稿、也不在数据集里 → 文字占位（1204 是保留的 openGym 条目）
+  const plain = repo.exercises.get('1204');
+  assert.ok(plain && !plain.unknown && !plain.video && !plain.illustration);
+  const noM = P.renderPage('pages/exercise-detail/exercise-detail', { id: '1204' }); await sleep(5);
   assert.strictEqual(noM.instance.data.ex.mediaMode, 'text');
   assert.ok(noM.dom.querySelector('.main--ph-big'), '无媒体应显示文字占位');
 
@@ -229,11 +231,11 @@ test('PG13 媒体：有视频显示 video / 无媒体文字占位 / 错误回退
     assert.ok(img.instance.data.ex.illSrc.includes(illOnly.id));
   }
 
-  // 视频 binderror：首次会再拉分包重试；第二次（或已 _videoRetry）才回退 image/text
+  // 视频 binderror：https 失败先退回 downloadFile，再失败才回封面。
   const bad = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
   assert.strictEqual(bad.instance.data.ex.mediaMode, 'video');
-  bad.instance._videoRetry = true; // 跳过重试，直接测回退
-  bad.instance.onVideoError(); await sleep(5);
+  bad.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_NETWORK' } }); await sleep(5);
+  bad.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_SRC_NOT_SUPPORTED' } }); await sleep(5);
   assert.ok(['image', 'text'].includes(bad.instance.data.ex.mediaMode), '视频失败应回退 image/text');
   if (bad.instance.data.ex.mediaMode === 'image') {
     bad.instance.onIllError(); await sleep(5);
@@ -242,95 +244,45 @@ test('PG13 媒体：有视频显示 video / 无媒体文字占位 / 错误回退
   assert.ok(bad.dom.querySelector('.main--ph-big') || bad.instance.data.ex.mediaMode === 'text' || bad.instance.data.ex.mediaMode === 'image');
 });
 
-test('PG14 V11–V13：点击暂停/继续、onHide/onUnload 暂停、坏路径逐级回退', async () => {
+test('PG14 云视频：点击暂停/继续、离开页暂停、坏路径退回封面再退文字', async () => {
   const { repo } = seed();
-  // ensure createVideoContext exists (installWx 不带此 API)
-  const calls = { pause: 0, play: 0, loadPkg: 0 };
-  global.wx.createVideoContext = () => ({
-    pause() { calls.pause++; },
-    play() { calls.play++; },
-    stop() {},
-    seek() {},
-  });
-  // 覆盖 harness 默认：记录 loadSubpackage 调用（仍同步 success）
-  global.wx.loadSubpackage = o => {
-    calls.loadPkg++;
-    if (o && typeof o.success === 'function') o.success({});
-  };
-
-  // V11: togglePlay 同步 playing 与图标（先进 image，分包 success 后 video）
   const c = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
-  assert.ok(calls.loadPkg >= 1, '进详情应 loadSubpackage');
   assert.strictEqual(c.instance.data.ex.mediaMode, 'video');
   assert.strictEqual(c.instance.data.playing, true);
-  if (c.instance.onReady) c.instance.onReady();
-  assert.ok(c.instance._ctx, 'onReady 应创建 video context');
+  assert.ok(c.instance.data.ex.steps.length >= 5);
   c.instance.togglePlay(); await sleep(5);
   assert.strictEqual(c.instance.data.playing, false);
-  assert.ok(calls.pause >= 1, '应调用 pause');
-  assert.ok(c.dom.textContent.includes('▶') || c.instance.data.playing === false, '暂停图标');
+  assert.strictEqual(c.instance.data.ex.mediaMode, 'image');
   c.instance.togglePlay(); await sleep(5);
-  assert.strictEqual(c.instance.data.playing, true);
-  assert.ok(calls.play >= 1, '应调用 play');
-
-  // V11b: 卡在封面时 onCoverTap 应再拉分包并切回 video
-  calls.loadPkg = 0;
-  c.instance.setData({
-    'ex.mediaMode': 'image',
-    'ex._pendingVideo': false,
-    playing: false,
-  });
-  c.instance.onCoverTap(); await sleep(5);
-  assert.ok(calls.loadPkg >= 1, 'onCoverTap 应再 loadSubpackage');
-  assert.strictEqual(c.instance.data.ex.mediaMode, 'video', '封面点击重试后应为 video');
+  assert.strictEqual(c.instance.data.ex.mediaMode, 'video', '封面点击应重新取视频');
   assert.strictEqual(c.instance.data.playing, true);
 
-  // V12: onHide / onUnload 调用暂停
-  calls.pause = 0;
   c.instance.onHide(); await sleep(5);
   assert.strictEqual(c.instance.data.playing, false);
-  assert.ok(calls.pause >= 1, 'onHide 应 pause');
-  // 再 play 后 unload
   c.instance.togglePlay(); await sleep(5);
   assert.strictEqual(c.instance.data.playing, true);
-  calls.pause = 0;
   c.instance.onUnload(); await sleep(5);
   assert.strictEqual(c.instance.data.playing, false);
-  assert.ok(calls.pause >= 1, 'onUnload 应 pause');
 
-  // V13: 故意坏路径 — 有 poster 时 video error → image → ill error → text
-  // 首次 onVideoError 会再拉分包；设 _videoRetry 测最终回退
   const bad = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
-  if (bad.instance.onReady) bad.instance.onReady();
-  bad.instance.setData({
-    'ex.videoSrc': '/packageVideoA/videos/____missing.mp4',
-    'ex.posterSrc': '/assets/video-posters/____missing.jpg',
-    'ex.illSrc': '/assets/video-posters/____missing.jpg',
-  });
-  assert.strictEqual(bad.instance.data.ex.mediaMode, 'video');
-  bad.instance._videoRetry = true;
-  bad.instance.onVideoError(); await sleep(5);
-  assert.strictEqual(bad.instance.data.ex.mediaMode, 'image', '坏 video 应回退 image');
+  bad.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_NETWORK' } }); await sleep(5);
+  bad.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_SRC_NOT_SUPPORTED' } }); await sleep(5);
+  assert.strictEqual(bad.instance.data.ex.mediaMode, 'image', '坏 video 应回退封面');
   bad.instance.onIllError(); await sleep(5);
   assert.strictEqual(bad.instance.data.ex.mediaMode, 'text', '坏封面应回退 text');
-  assert.ok(
-    bad.dom.querySelector('.ph-big') ||
-    bad.dom.querySelector('.main--ph-big') ||
-    bad.instance.data.ex.mediaMode === 'text',
-    '最终文字占位，无裂图'
-  );
 
-  // V13b: 无海报无图时 video error 直接 text（无 _pkg 时不走分包重试）
-  const plain = repo.exercises.all().find(e => !e.video && !e.illustration);
-  const synth = P.renderPage('pages/exercise-detail/exercise-detail', { id: plain.id }); await sleep(5);
+  const plain = repo.exercises.get('1204');
+  assert.ok(plain && !plain.video && !plain.illustration);
+  const synth = P.renderPage('pages/exercise-detail/exercise-detail', { id: '1204' }); await sleep(5);
   synth.instance.setData({
     'ex.mediaMode': 'video',
     'ex.videoSrc': '/bad.mp4',
     'ex.posterSrc': '',
     'ex.illSrc': '',
-    'ex._pkg': '',
+    'ex._localCover': '',
+    'ex.remoteGif': false,
     playing: true,
   });
-  synth.instance.onVideoError(); await sleep(5);
+  synth.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_SRC_NOT_SUPPORTED' } }); await sleep(5);
   assert.strictEqual(synth.instance.data.ex.mediaMode, 'text');
 });

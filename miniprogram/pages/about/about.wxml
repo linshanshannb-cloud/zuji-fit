@@ -4,16 +4,17 @@
   <view class="p">组迹以 GNU Affero General Public License v3.0（AGPL-3.0）开源，源码地址（长按可复制）：</view>
   <text class="p mono" style="display:block" user-select>https://github.com/linshanshannb-cloud/zuji-fit</text>
   <view class="h2">动作数据来源</view>
-  <view class="p">动作库中的文字资料（中英文名称、目标与辅助肌群、器械、动作步骤）来自开源项目 openGym：</view>
-  <view class="p mono" user-select>github.com/DuarteSantos8/openGym</view>
-  <view class="p">使用版本：commit e348fc1。</view>
+  <view class="p">动作库文字（中英文名称、部位、器械、目标肌群、中文步骤）来自 Devillmy/exercises-dataset-zh，commit c335dbc。它是 hasaneyldrm/exercises-dataset 的中文增强版本，动作条目源自 ExerciseDB v1（AscendAPI）。</view>
+  <view class="p mono" user-select>github.com/Devillmy/exercises-dataset-zh</view>
+  <view class="p">英文名、肌群和步骤说明按 MIT 许可使用，Copyright (c) 2026 Hasan Emir Yıldırım。中文动作名来自该仓库的 name_zh。原先已收录、且不在这 1,324 条里的动作（含 openGym 补充条目）仍保留原来的编号、中文名和云视频。</view>
+  <view class="p">openGym（github.com/DuarteSantos8/openGym，commit e348fc1）仍是早期筛选与部分中文校对的来源。openGym 以 GNU AGPL v3.0 发布，Copyright (C) 2026 Duarte Santos。完整许可证随本小程序代码包分发（LICENSE-openGym.txt）。</view>
   <view class="h2">许可</view>
-  <view class="p">openGym 以 GNU Affero General Public License v3.0（AGPL-3.0）发布；其中源自 exercisedb 的部分另附 MIT 许可声明。版权声明：openGym — Copyright (C) 2026 Duarte Santos；源自 ExerciseDB v1（AscendAPI）的条目按 MIT 许可，Copyright (c) 2026 Hasan Emir Yıldırım。完整许可证文本随本小程序代码包分发（LICENSE-openGym.txt）。</view>
+  <view class="p">本小程序源码为 GNU AGPL v3.0。动作文字里的 MIT 部分保留 Hasan Emir Yıldırım 的版权声明；中文名与数据集结构以 exercises-dataset-zh 为准。媒体方面：缩略图和 GIF 版权归 Gym visual（© Gym visual — https://gymvisual.com/），不随安装包分发。没有云视频的动作，详情页通过远程地址播放 180×180 GIF。</view>
   <view class="link hit" bindtap="toggle">{{full ? '收起许可证全文' : '查看许可证全文'}}</view>
   <text wx:if="{{full}}" class="lic" user-select>{{license}}</text>
   <view class="h2">修改说明</view>
-  <view class="p">本小程序对原始数据做了修改：只选取了部分动作与字段，进行了中文翻译与校对、重命名了少量中文名称，并整理了部位 / 器械 / 肌群的分类。其中 46 个动作的简介与步骤在 openGym 中只有英文，由本小程序自行译为中文。</view>
-  <view class="p">本小程序未使用 openGym 的任何图片、动图或视频素材。</view>
+  <view class="p">相对数据集，本小程序把身体部位收成胸、背、肩、腿、手臂、核心六类（有氧和颈部归入核心，细分仍保留），器械和肌群用下划线英文枚举，并去掉了中文名里汉字之间的空格。已经在用的动作编号没有改含义。已有的云存储视频、主包海报和线稿都保留。</view>
+  <view class="p">详情页在没有云视频时播放数据集 GIF，并标明 © Gym visual — https://gymvisual.com/。这些 GIF 不放进小程序包。</view>
   <view class="p">部分动作示意图与动画来自 Workout Guide（Bryl Lim，基于 Everkinetic），CC BY-SA 4.0，已修改（白底黑线、缩放、合成循环动画）：</view>
   <view class="p mono" user-select>github.com/bryllim/workout-guide</view>
   <view class="p mono" user-select>creativecommons.org/licenses/by-sa/4.0/</view>

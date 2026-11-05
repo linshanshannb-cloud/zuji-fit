@@ -5,7 +5,7 @@ const V = require('./validate');
 const C = require('./core');
 const E = require('../exercises');
 const { newId } = require('./ids');
-const CATEGORY_ZH = { strength: '力量', calisthenics: '自重训练', isometric: '等长训练' };
+const CATEGORY_ZH = { strength: '力量', calisthenics: '自重训练', isometric: '等长训练', cardio: '有氧', stretching: '拉伸' };
 const bodyPartValues = () => E.bodyParts.map(o => o.value);
 const equipmentValues = () => E.equipments.map(o => o.value);
 

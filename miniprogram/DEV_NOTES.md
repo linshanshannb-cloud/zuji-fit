@@ -4,10 +4,12 @@ Current as of Phase 5 (2026-10-17). Older phase notes were removed; this file de
 
 ## Open / run
 - 微信开发者工具 → 导入项目 → 目录选 `fitness-miniapp/miniprogram/`，AppID `touristappid`（或测试号）。基础库 ≥ 2.9（canvas 2d）。
-- `node --test tests/` — unit tests (repo, migration, validation, format, components, chart scale).
+- `node --test tests/*.test.js` — unit tests (repo, migration, validation, format, components, chart scale). Node 22 does not accept the `tests/` directory argument.
 - `node scripts/smoke-pages.js` — page flows on a fake wx runtime (not a renderer) + static WXML-handler check + showModal button-length check.
 - `bash ../qa/run-all.sh` — dev unit + smoke + QA adversarial + QA miniprogram-simulate pages + TZ matrix.
-- `node scripts/build-data.js` regenerates `data/exercises.js` from `../data/exercises.json` (fallbacks: `exercises.sample.json`, then a marked 10-item placeholder).
+- `node scripts/import-dataset-zh.js --exercises <exercises.json> --names <name_zh.json>` merges Devillmy/exercises-dataset-zh into `../data/exercises.json` and refreshes `filters.json`. Existing ids keep their names, cloud videos, posters and illustrations.
+- `node scripts/build-data.js` regenerates the compact main-package index `data/exercises.js` and the detail-subpackage copy `pages/exercise-detail/exercise-text.js` (fallbacks: `exercises.sample.json`, then a marked placeholder).
+- Library filtering is a linear scan over the full catalogue (about 1,370 items). The list page only needs the index; steps load with the detail subpackage.
 
 ## Structure
 - `utils/storage.js` — the only module touching `wx.*Storage`; injectable backend; read-only switch; corrupt/unreadable key tracking.
@@ -68,4 +70,3 @@ Current as of Phase 5 (2026-10-17). Older phase notes were removed; this file de
 - No WeChat devtools or device run in this environment: real rendering, canvas drawing and touch bubble, keyboard behaviour, 320pt layout and the actual showModal failure are verified only statically / in simulators.
 - After a failed save, the next *successful* edit reloads from storage, so an earlier unsaved value is replaced by the stored one unless 重试 was tapped first.
 - List pages under a corrupt key show normal empty states beneath the banner.
-- Library filtering is a linear scan (fine for 284 items).

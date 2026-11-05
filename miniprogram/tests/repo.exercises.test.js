@@ -4,17 +4,22 @@ const E = require('../utils/exercises');
 const V = require('../utils/repo/validate');
 
 test('catalogue loaded from data/exercises.json with new fields', () => {
-  assert.strictEqual(E.builtin.length, 284); assert.strictEqual(E.placeholder, false);
+  const raw = require('../../data/exercises.json');
+  assert.ok(E.builtin.length >= 1324); assert.strictEqual(E.builtin.length, raw.length); assert.strictEqual(E.placeholder, false);
   const e = E.byId['0025'];
   for (const k of ['id', 'nameZh', 'nameEn', 'bodyPart', 'bodyPartDetail', 'target', 'secondary', 'equipment', 'category', 'categoryZh', 'description', 'steps', 'translationPending', 'untranslatedFields']) assert.ok(k in e, k);
+  assert.strictEqual(e.nameZh, '杠铃卧推');
+  assert.ok(String(e.video).endsWith('/anim/0025.mp4'));
   assert.strictEqual(typeof e.target, 'string');
   assert.deepStrictEqual(E.bodyParts.map(o => o.value), ['chest', 'back', 'shoulders', 'legs', 'arms', 'core']);
+  assert.ok(E.bodyParts.every(o => o.count > 0));
   assert.ok(E.equipments.some(o => o.value === 'body_weight'));
+  assert.ok(E.search(E.builtin, '仰卧起坐').some(x => x.id === '0001'));
 });
 test('search zh/en, filter bodyPart/equipment/target', () => {
   assert.ok(E.search(E.builtin, '卧推').some(e => e.id === '0025'));
   assert.ok(E.search(E.builtin, 'BENCH PRESS').some(e => e.id === '0025'));
-  assert.strictEqual(E.search(E.builtin, '').length, 284);
+  assert.strictEqual(E.search(E.builtin, '').length, E.builtin.length);
   const r = E.filter(E.builtin, { bodyPart: 'chest', equipment: 'barbell', target: E.byId['0025'].target });
   assert.ok(r.length > 0 && r.every(e => e.bodyPart === 'chest' && e.equipment === 'barbell' && e.target === 'chest'));
   const sec = E.filter(E.builtin, { target: 'triceps', includeSecondary: true });
