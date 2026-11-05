@@ -1,6 +1,74 @@
-# 动作库数据说明（v1）
+# 动作库数据说明
 
-更新：2026-10-17（UTC+8）。本文的条数、字段、枚举均已对照当日的 `exercises.json`、`exercises.sample.json`、`filters.json` 用脚本核对一致。
+## 当前版本（2026-11-05）
+
+动作库 **1,370** 条。其中 **1,324** 条来自 [Devillmy/exercises-dataset-zh](https://github.com/Devillmy/exercises-dataset-zh) commit `c335dbc6c9f21d70e585ebffec2481496c059b92`（2026-08-30），它是 [hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset) 的 fork，并补了中文动作名。另外 **46** 条是原先已经收录、但不在这 1,324 条里的 openGym 补充动作，编号、中文名、步骤和云视频原样保留。
+
+| 文件 | 内容 |
+|---|---|
+| `data/exercises.json` | 全文字段，构建输入，不进小程序主包 |
+| `data/filters.json` | 枚举显示名和计数，由导入脚本按当前数据重算 |
+| `miniprogram/data/exercises.js` | 主包索引。`scripts/build-data.js` 生成。不含步骤和简介正文 |
+| `miniprogram/pages/exercise-detail/exercise-text.js` | 详情分包：`description`、`steps`、数据集 `mediaId` |
+
+导入与重建：
+
+```bash
+node miniprogram/scripts/import-dataset-zh.js \
+  --exercises /path/to/exercises-dataset-zh/data/exercises.json \
+  --names /path/to/exercises-dataset-zh/data/name_zh.json
+node miniprogram/scripts/build-data.js
+```
+
+已有 id（例如 `0025` 杠铃卧推）不改含义。这些记录继续用原来的中文名、分类、步骤、`video`、`poster`、`illustration`。新增 id 用源库原 id。
+
+### 部位
+
+源库 `body_part` 收进现有六类。侧栏六类都有条目。
+
+| 源库 body_part | bodyPart | bodyPartDetail |
+|---|---|---|
+| chest / back / shoulders | 同名 | 同名 |
+| upper arms / lower arms | arms | upper_arms / lower_arms |
+| upper legs / lower legs | legs | upper_legs / lower_legs |
+| waist | core | waist |
+| cardio | core | cardio |
+| neck | core | neck |
+
+有氧 29 条、颈部 2 条因此出现在「核心」。当前计数：胸 163、背 210、肩 149、腿 305、手臂 330、核心 213。
+
+器械把空格改成下划线（`body weight` → `body_weight`），并沿用原来的显示名（`leverage_machine` 固定器械，`sled_machine` 45°腿举机）。源库多出来的器械（稳定球、药球、阻力带、波速球、跳绳、泡沫轴、椭圆机等）追加到 `filters.json`。肌群继续用原来的同义词合并（如 pectorals→chest、quadriceps→quads），新出现的心肺、前锯肌、手腕等另立枚举。
+
+新条目的类别：有氧 → `cardio`；名称含 stretch 或部位为 neck → `stretching`；plank/hold → `isometric`；自重 → `calisthenics`；其余 → `strength`。已有 284 条不改类别。
+
+中文名：新条目用 `name_zh.json`，并去掉汉字之间的空格（`杠铃 卧推` → `杠铃卧推`）。5 个英文名里的 `в°` 视为损坏的度数符号，改成 `°`。已有条目的中文名不覆盖。
+
+### 媒体与体积
+
+- 210 条云视频 `cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/<id>.mp4` 全部保留。没有云视频的新动作不写 `video`。
+- 58 张主包海报、152 张主包线稿保留，路径仍是 `/assets/video-posters/<id>.jpg` 和 `/assets/exercises/<id>.png`。
+- 列表不展示的条目在运行时标 `hidden: true`（打包标志位，不删记录、不删海报/线稿/云视频）。包括没有 `mediaId` 的 46 条，以及仍有旧 AI 封面的 `0493`、`0576`、`0180`、`1327`、`0276`。动作库和挑选器只用 `visible`（1,319 条）。主包现为 **1,869,925 字节（1826.1 KB）**。`get(id)` 仍返回名称和云视频。
+- 有 `mediaId` 时，列表封面是数据集 180×180 JPEG，失败只退回线稿再占位，**不**退回 `video-posters`。没有 `mediaId` 的条目才用本地海报。这些图不进安装包。详情页云视频播放不变；没有云视频时播放同目录 GIF。
+- 精选模板里三条不在数据集中的 id 已改映射：`3948` 徒手深蹲 → `1685` 深蹲至过头伸展；`0463` 前平板支撑 → `0464` 平板支撑带转体；`1162` 杠铃站姿军事推举 → `1456` 杠铃站姿窄距军事推举。
+- 正式版要在微信公众平台把 `cdn.jsdelivr.net` 配进 downloadFile 合法域名。开发者工具里 `urlCheck` 已关闭，预览可以直接看。
+- 主包：更新前 1,910,760 字节（1866.0 KB）。接入全量索引后 1,853,842 字节；列表封面改为远程缩略图后又写入 mediaId，软隐藏 5 条旧 AI 封面后现为 **1,869,925 字节（1826.1 KB）**，仍低于 2MB 和 1900KB 门槛。详情分包约 1054 KB。
+
+同部位排序仍走 `utils/exercise-sort.js`：有封面（本地海报、数据集缩略图或线稿）和云视频的靠前。1,370 条里 1,364 条列表有封面；剩下 6 条是源库没有、本地也没有图的 openGym 补充动作。
+
+### 许可
+
+- 英文名、肌群、步骤说明：MIT，Copyright (c) 2026 Hasan Emir Yıldırım。全文见 `data/LICENSE-exercises-dataset-zh.txt`。
+- 中文动作名：该仓库的 `name_zh`。
+- `images/`、`videos/`：© Gym visual — https://gymvisual.com/ 。MIT 不覆盖这些媒体。见 `data/NOTICE-exercises-dataset-zh.md` 和仓库根目录 `NOTICE.md`。
+- 保留下来的 46 条 openGym 补充动作，以及早期校对过的中文，仍按 openGym 的 AGPL 说明处理，见 `NOTICE-openGym.md`。
+
+下面 2026-10-17 的章节记录的是当时 284 条筛选版，条数和「未使用媒体」的结论已被本节取代。
+
+---
+
+# 历史说明（v1，2026-10-17）
+
+更新：2026-10-17（UTC+8）。以下条数描述的是当时的 284 条筛选库，不是现在的 1,370 条。
 
 ## 与 spec/DATA_MODEL.md 的关系
 - 本文件说明**动作库数据本身**：来源、筛选、枚举、修改、待校对条目、许可。

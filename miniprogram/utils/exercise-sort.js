@@ -1,9 +1,9 @@
 // 动作库 / 选择器同部位内排序：有图有视频靠前，缺图垫底。
-// 图 = poster 或 illustration（与 card.js 一致）；视频 = video 非空。
+// 图 = 本地海报、数据集缩略图（mediaId）或线稿，与 card.js 的可见封面一致；视频 = video 非空。
 const abs = p => (!p || typeof p !== 'string' ? '' : p.indexOf('://') > 0 || p[0] === '/' ? p : '/' + p);
 
 function hasImage(e) {
-  return !!(abs(e && e.poster) || abs(e && e.illustration));
+  return !!(abs(e && e.poster) || (e && e.mediaId) || abs(e && e.illustration));
 }
 function hasVideo(e) {
   return !!(e && e.video);

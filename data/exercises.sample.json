@@ -23,11 +23,13 @@
       "伸展双臂，将杠铃推回到起始位置。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0025.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0025.mp4",
+    "poster": "/assets/video-posters/0025.jpg",
+    "mediaId": "EIeI8Vf"
   },
   {
     "id": "0027",
@@ -52,11 +54,13 @@
       "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0027.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0027.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0027.mp4",
+    "mediaId": "eZyBC3j"
   },
   {
     "id": "0652",
@@ -80,11 +84,13 @@
       "在动作的最高点暂停，然后慢慢降低身体回到起始位置。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0652.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "illustration": "/assets/exercises/0652.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0652.mp4",
+    "mediaId": "lBDjFxJ"
   },
   {
     "id": "0334",
@@ -107,11 +113,13 @@
       "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
       "重复所需的重复次数。"
     ],
-    "illustration": "assets/exercises/0334.png",
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0334.mp4",
+    "poster": "/assets/video-posters/0334.jpg",
+    "mediaId": "DsgkuIt"
   },
   {
     "id": "0043",
@@ -143,7 +151,10 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0043.mp4",
+    "illustration": "/assets/exercises/0043.png",
+    "mediaId": "qXTaZnJ"
   },
   {
     "id": "0032",
@@ -171,7 +182,10 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0032.mp4",
+    "poster": "/assets/video-posters/0032.jpg",
+    "mediaId": "ila4NZS"
   },
   {
     "id": "0294",
@@ -198,7 +212,10 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0294.mp4",
+    "poster": "/assets/video-posters/0294.jpg",
+    "mediaId": "NbVPDMW"
   },
   {
     "id": "0860",
@@ -226,7 +243,8 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "mediaId": "HEJ6DIX"
   },
   {
     "id": "0463",
@@ -243,21 +261,19 @@
     "equipment": "body_weight",
     "category": "isometric",
     "categoryZh": "等长训练",
-    "description": "The classic forearm plank. Holding a straight line from head to heels builds core endurance and stability.",
+    "description": "经典的前臂平板支撑，保持从头到脚跟成一条直线，增强核心耐力和稳定性。",
     "steps": [
-      "Lie face down and prop yourself on your forearms, elbows under your shoulders.",
-      "Lift your hips and knees off the floor, resting on your toes.",
-      "Keep your body in a straight line from head to heels.",
-      "Squeeze your abs and glutes.",
-      "Hold for 20-60 seconds while breathing steadily.",
-      "Don't let your hips sag or pike up."
+      "俯卧，用前臂撑起身体，手肘位于肩膀正下方。",
+      "抬起髋部和膝盖离地，用脚尖支撑。",
+      "身体从头到脚跟保持一条直线。",
+      "收紧腹部和臀部。",
+      "保持 20–60 秒，均匀呼吸。",
+      "不要塌腰或撅臀。"
     ],
-    "illustration": "assets/exercises/0463.png",
-    "translationPending": true,
-    "untranslatedFields": [
-      "steps",
-      "description"
-    ]
+    "translationPending": false,
+    "untranslatedFields": [],
+    "illustration": "/assets/exercises/0463.png",
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0463.mp4"
   },
   {
     "id": "0585",
@@ -284,6 +300,9 @@
     "translationPending": false,
     "untranslatedFields": [
       "description"
-    ]
+    ],
+    "video": "cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/0585.mp4",
+    "poster": "/assets/video-posters/0585.jpg",
+    "mediaId": "my33uHU"
   }
 ]

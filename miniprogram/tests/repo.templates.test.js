@@ -40,7 +40,7 @@ test('复制进本机，不改精选；改名、删除只动 fit_templates', () 
   assert.ok(copied.ok);
   assert.strictEqual(copied.data.kind, 'mine');
   assert.strictEqual(copied.data.sourcePresetId, 'preset_home_full');
-  assert.deepStrictEqual(copied.data.exercises.map(e => e.id), ['0662', '3948', '0499', '0463']);
+  assert.deepStrictEqual(copied.data.exercises.map(e => e.id), ['0662', '1685', '0499', '0464']);
   assert.strictEqual(repo.templates.listPresets().length, 6);
   assert.strictEqual(be.data[K.TEMPLATES].length, 1);
   assert.strictEqual(be.data[K.WORKOUTS], undefined, '复制不写训练');

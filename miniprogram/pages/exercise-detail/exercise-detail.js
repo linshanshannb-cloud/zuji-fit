@@ -2,6 +2,8 @@ const F = require('../../utils/format');
 const E = require('../../utils/exercises');
 const repo = require('../../utils/repo/index');
 const ui = require('../../utils/ui');
+const TEXT = require('./exercise-text');
+const MEDIA = require('../../utils/dataset-media');
 function bestText(b) {
   if (!b) return '—';
   if (b.mode === 'time' || (b.durationSec != null && b.reps == null)) return F.bestLabel(b);
@@ -69,37 +71,54 @@ function _dropCache(src) {
 
 
 
-/** 封面只用主包资源（poster 已迁到 assets/video-posters，或 illustration） */
-function coverOf(ex) {
+/** 主包封面：海报优先，其次自制线稿。 */
+function localCover(ex) {
   return absPath(ex && ex.poster) || absPath(ex && ex.illustration) || '';
+}
+
+// Index records ship without steps. The detail subpackage holds the copy and the dataset media id.
+function withDataset(ex) {
+  if (!ex || ex.custom || ex.unknown) return ex;
+  const t = TEXT[ex.id];
+  if (!t) return ex;
+  const next = Object.assign({}, ex, {
+    description: t.d != null ? t.d : (ex.description || ''),
+    steps: (t.s && t.s.length) ? t.s : (ex.steps || []),
+  });
+  if (t.m) next.gif = MEDIA.gifUrl(ex.id, t.m);
+  return next;
 }
 
 function mediaOf(ex) {
   const videoSrc = absPath(ex && ex.video);
-  const posterSrc = absPath(ex && ex.poster); // 主包 assets/video-posters
-  const illOnly = absPath(ex && ex.illustration); // 主包线稿
-  // 有视频：封面优先主包海报（真实帧），无海报再用线稿；无视频：线稿优先。绝不引用 packageVideo*
-  const cover = videoSrc ? (posterSrc || illOnly) : (illOnly || posterSrc);
-  const illSrc = cover;
+  const posterSrc = absPath(ex && ex.poster);
+  const gif = absPath(ex && ex.gif);
+  // 有云视频：封面用主包海报/线稿。无视频：优先数据集 GIF，失败再退回主包图。
+  const cover = localCover(ex);
   if (videoSrc) {
     return {
       mediaMode: 'video',
       videoSrc,
-      posterSrc: posterSrc || illSrc,
+      posterSrc: posterSrc || cover,
       illSrc: cover,
+      remoteGif: false,
+      _localCover: cover,
     };
   }
-  if (cover) {
-    return { mediaMode: 'image', videoSrc: '', posterSrc: '', illSrc: cover };
+  if (gif) {
+    return { mediaMode: 'image', videoSrc: '', posterSrc: '', illSrc: gif, remoteGif: true, _localCover: cover };
   }
-  return { mediaMode: 'text', videoSrc: '', posterSrc: '', illSrc: '' };
+  if (cover) {
+    return { mediaMode: 'image', videoSrc: '', posterSrc: '', illSrc: cover, remoteGif: false, _localCover: '' };
+  }
+  return { mediaMode: 'text', videoSrc: '', posterSrc: '', illSrc: '', remoteGif: false, _localCover: '' };
 }
 
 Page({
   data: { ex: null, mode: '', best: '—', readOnly: false, isCustom: false, playing: false, rates: [0.5, 1, 1.5, 2], rate: 1 },
   _loading: false,
   onLoad(o) {
-    const ex = repo.exercises.get(decodeURIComponent(o.id || ''));
+    const ex = withDataset(repo.exercises.get(decodeURIComponent(o.id || '')));
     this.setData({ mode: o.mode || '', readOnly: repo.isReadOnly(), isCustom: !!(ex && ex.custom && !ex.unknown) });
     if (ex.unknown) return;
     const d = repo.exercises.display(ex);
@@ -271,9 +290,14 @@ Page({
     this._toast(FAIL_MSG);
   },
   onIllError() {
-    if (!this.data.ex || this.data.ex.mediaMode === 'text') return;
-    // 主包封面挂了才退文字；等视频时也允许退，避免一直空白
-    this.setData({ 'ex.mediaMode': 'text', 'ex.illSrc': '', playing: false });
+    const ex = this.data.ex;
+    if (!ex || ex.mediaMode === 'text') return;
+    const local = ex._localCover || '';
+    if (ex.remoteGif && local && ex.illSrc !== local) {
+      this.setData({ 'ex.mediaMode': 'image', 'ex.illSrc': local, 'ex.remoteGif': false, playing: false });
+      return;
+    }
+    this.setData({ 'ex.mediaMode': 'text', 'ex.illSrc': '', 'ex.remoteGif': false, playing: false });
   },
   addToWorkout() {
     if (!ui.canWrite()) return;

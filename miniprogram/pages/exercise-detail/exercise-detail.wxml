@@ -10,6 +10,7 @@
     <view wx:if="{{ex.videoSrc}}" class="play-hint">▶</view>
   </view>
   <view wx:else class="ph-big" bindtap="onCoverTap">{{ex.ph}}</view>
+  <view wx:if="{{ex.remoteGif}}" class="sub media-credit">动画 © Gym visual — https://gymvisual.com/</view>
   <view wx:if="{{ex.videoSrc}}" class="speed seg">
     <view wx:for="{{rates}}" wx:key="*this" class="seg-item {{rate===item?'on':''}}" bindtap="setRate" data-r="{{item}}">{{item}}x</view>
   </view>

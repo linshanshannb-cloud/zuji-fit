@@ -1,5 +1,7 @@
 # 第三方声明：动作文字（来自 openGym）
 
+2026-11-05 起，动作库全文以 Devillmy/exercises-dataset-zh（commit c335dbc）为主，见 `NOTICE-exercises-dataset-zh.md` 和仓库根目录 `NOTICE.md`。本文件继续覆盖原先从 openGym 保留下来的补充条目和早期中文校对。
+
 本目录 `exercises.json`、`exercises.sample.json`、`filters.json` 的动作文字取自 openGym（https://github.com/DuarteSantos8/openGym ，commit e348fc1），openGym — Copyright (C) 2026 Duarte Santos，按 GNU AGPL v3.0 授权，全文见同目录 `LICENSE-openGym`。我们对数据做了筛选、字段重组、肌群合并和部分中文名修正。
 
 其中 exercisedb 来源部分另有 MIT 许可，以下为 openGym `NOTICE.md` 对应原文（按 MIT 要求保留版权与许可声明）：

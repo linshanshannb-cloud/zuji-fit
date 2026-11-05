@@ -18,8 +18,22 @@ function wxUi() {
     navigateTo: o => ui.nav.push(o.url), navigateBack: () => ui.nav.push('back'), redirectTo: o => ui.nav.push('redirect ' + o.url), switchTab: o => ui.nav.push('tab ' + o.url),
     vibrateShort() {}, getWindowInfo: () => ({ statusBarHeight: 20, windowWidth: 375, pixelRatio: 2 }), getSystemInfoSync: () => ({ statusBarHeight: 20, windowWidth: 375, pixelRatio: 2 }),
     getMenuButtonBoundingClientRect: () => ({ top: 24, height: 32, left: 281 }),
-    createVideoContext: global.wx.createVideoContext || (() => ({ play() {}, pause() {}, stop() {}, seek() {} })),
-    // 详情页有视频时会先封面再 wx.loadSubpackage；默认同步 success，模拟分包已缓存
+    createVideoContext: global.wx.createVideoContext || (() => ({ play() {}, pause() {}, stop() {}, seek() {}, playbackRate() {} })),
+    // 云视频：同步拿到临时 https 地址，和详情页 getTempFileURL 优先路径一致。
+    cloud: global.wx.cloud || {
+      getTempFileURL(o) {
+        const id = (o.fileList && o.fileList[0]) || '';
+        o.success && o.success({ fileList: [{ status: 0, tempFileURL: 'https://cdn.example/anim/' + String(id).split('/').pop() }] });
+      },
+      downloadFile(o) {
+        o.success && o.success({ statusCode: 200, tempFilePath: 'wxfile://tmp/a.mp4' });
+      },
+    },
+    getFileSystemManager: global.wx.getFileSystemManager || (() => ({
+      saveFile() {},
+      access(o) { if (o && o.fail) o.fail(); },
+      getFileInfo(o) { if (o && o.success) o.success({ size: 1 }); },
+    })),
     loadSubpackage: global.wx.loadSubpackage || (o => {
       if (o && typeof o.success === 'function') o.success({});
     }),

@@ -8,7 +8,6 @@ const H = require('./_harness');
 const ROOT = path.resolve(__dirname, '../..');
 const MP = H.MP;
 const PILOT = path.join(ROOT, 'data/illustration-pilot-20.md');
-const VIDEO_PILOT = path.join(ROOT, 'data/VIDEO_PILOT_24.md');
 const ASSETS = path.join(MP, 'assets/exercises');
 
 function pilotIds() {
@@ -16,37 +15,37 @@ function pilotIds() {
   return [...md.matchAll(/`(\d{4})`/g)].map(m => m[1]);
 }
 
-function videoIds() {
-  const md = fs.readFileSync(VIDEO_PILOT, 'utf8');
-  return [...md.matchAll(/`(\d{4})`/g)].map(m => m[1]);
-}
-
-test('ILL1 线稿试点 20 个 id 均有 illustration，且指向已存在的本地文件；路径不含 openGym media', () => {
+test('ILL1 线稿试点 20 个 id 仍在动作库；磁盘上有 png 的都写了 illustration', () => {
   const { repo } = H.boot();
   const ids = pilotIds();
   assert.strictEqual(ids.length, 20, '名单应有 20 个 id');
+  let linked = 0;
   for (const id of ids) {
     const ex = repo.exercises.get(id);
     assert.ok(ex && !ex.unknown, id + ' 应存在');
+    const png = path.join(ASSETS, id + '.png');
+    if (!fs.existsSync(png)) continue;
     assert.ok(ex.illustration && typeof ex.illustration === 'string', id + ' 应有 illustration 字符串');
     assert.ok(!/openGym|catalogue\/media/i.test(ex.illustration), id + ' 禁止 openGym media 路径');
-    assert.strictEqual(ex.illustration, `assets/exercises/${id}.png`);
-    const abs = path.join(MP, ex.illustration);
-    assert.ok(fs.existsSync(abs), abs + ' 文件应存在');
+    assert.strictEqual(ex.illustration.replace(/^\//, ''), `assets/exercises/${id}.png`);
+    linked++;
   }
+  assert.ok(linked >= 1, '至少一条试点线稿仍挂在动作上');
 });
 
-test('ILL2 非线稿试点动作 illustration 为空/缺省；assets 目录无多余 png', () => {
-  const { repo } = H.boot();
-  const ids = new Set(pilotIds());
-  const extras = [];
-  for (const ex of repo.exercises.all()) {
-    if (ids.has(ex.id)) continue;
-    if (ex.illustration) extras.push(ex.id + '=' + ex.illustration);
+test('ILL2 每条 illustration 都指向已存在的主包 png，目录里没有未被引用的文件', () => {
+  const E = require(path.join(MP, 'utils/exercises'));
+  const referenced = [];
+  for (const ex of E.builtin) {
+    if (!ex.illustration) continue;
+    const rel = ex.illustration.replace(/^\//, '');
+    assert.ok(/^assets\/exercises\/\d+\.png$/.test(rel), ex.id + ' ' + rel);
+    assert.ok(fs.existsSync(path.join(MP, rel)), rel);
+    referenced.push(path.basename(rel));
   }
-  assert.deepStrictEqual(extras, [], '非试点不应挂图');
-  const files = fs.readdirSync(ASSETS).filter(f => f.endsWith('.png'));
-  assert.deepStrictEqual(files.sort(), [...ids].map(i => i + '.png').sort());
+  const files = fs.readdirSync(ASSETS).filter(f => f.endsWith('.png')).sort();
+  assert.deepStrictEqual(files, referenced.slice().sort());
+  assert.ok(referenced.length >= 20);
 });
 
 test('ILL3 详情页 mediaMode 契约：有 video→video；仅 illustration→image；皆无→text；错误回退', () => {
@@ -55,32 +54,31 @@ test('ILL3 详情页 mediaMode 契约：有 video→video；仅 illustration→i
   assert.ok(/mediaMode==='video'/.test(wxml));
   assert.ok(/mediaMode==='image'/.test(wxml));
   assert.ok(/ph-big/.test(wxml));
-  assert.ok(/binderror="onVideoError"/.test(wxml));
+  assert.ok(/binderror="onAnimError"/.test(wxml));
   assert.ok(/binderror="onIllError"/.test(wxml));
   assert.ok(/function mediaOf\s*\(/.test(js));
-  assert.ok(/wx\.loadSubpackage\s*\(/.test(js), '详情应 loadSubpackage');
   assert.ok(/onCoverTap\s*\(/.test(js), '封面应可点重试');
-  assert.ok(/onVideoError\s*\(/.test(js));
+  assert.ok(/onAnimError\s*\(/.test(js));
   assert.ok(/onIllError\s*\(/.test(js));
+  assert.ok(/remoteGif/.test(wxml), '无云视频时可显示数据集 GIF，并保留 Gym visual 署名');
   assert.ok(/mediaMode': 'image'/.test(js) || /mediaMode": "image"/.test(js) || /'ex\.mediaMode': 'image'/.test(js));
   assert.ok(/mediaMode': 'text'/.test(js) || /'ex\.mediaMode': 'text'/.test(js));
 });
 
-test('VID1 视频试点 24 个 id 均有 video+poster 且文件存在；非试点无这两字段', () => {
-  const { repo } = H.boot();
-  const ids = videoIds();
-  assert.strictEqual(ids.length, 24, '视频名单应有 24 个 id');
-  const idSet = new Set(ids);
-  for (const id of ids) {
-    const ex = repo.exercises.get(id);
-    assert.ok(ex && !ex.unknown, id);
-    assert.ok(ex.video && ex.poster, id + ' 应有 video/poster');
-    assert.ok(!/openGym|catalogue\/media/i.test(ex.video + ex.poster));
-    assert.ok(fs.existsSync(path.join(MP, ex.video)), ex.video);
-    assert.ok(fs.existsSync(path.join(MP, ex.poster)), ex.poster);
-    assert.ok(/^packageVideo[ABC]\/videos\/\d{4}\.mp4$/.test(ex.video), id + ' video 应在分包');
-    assert.ok(/^assets\/video-posters\/\d{4}\.jpg$/.test(ex.poster), id + ' poster 应在主包');
+test('VID1 已有云视频仍指向 anim/<id>.mp4，海报文件在主包', () => {
+  const E = require(path.join(MP, 'utils/exercises'));
+  const withV = E.builtin.filter(e => e.video);
+  assert.ok(withV.length >= 200);
+  const bench = E.byId['0025'];
+  assert.ok(/\/anim\/0025\.mp4$/.test(bench.video));
+  assert.ok(bench.poster && fs.existsSync(path.join(MP, bench.poster.replace(/^\//, ''))));
+  for (const ex of withV) {
+    assert.ok(ex.video.startsWith('cloud://') && ex.video.endsWith('/anim/' + ex.id + '.mp4'), ex.id);
+    assert.ok(!/catalogue\/media/i.test(ex.video));
+    if (ex.poster) {
+      const rel = ex.poster.replace(/^\//, '');
+      assert.ok(/^assets\/video-posters\/\d+\.jpg$/.test(rel), ex.id);
+      assert.ok(fs.existsSync(path.join(MP, rel)), rel);
+    }
   }
-  const extras = repo.exercises.all().filter(e => !idSet.has(e.id) && (e.video || e.poster)).map(e => e.id);
-  assert.deepStrictEqual(extras, []);
 });

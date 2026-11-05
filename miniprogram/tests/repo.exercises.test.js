@@ -4,17 +4,57 @@ const E = require('../utils/exercises');
 const V = require('../utils/repo/validate');
 
 test('catalogue loaded from data/exercises.json with new fields', () => {
-  assert.strictEqual(E.builtin.length, 284); assert.strictEqual(E.placeholder, false);
+  const raw = require('../../data/exercises.json');
+  assert.ok(E.builtin.length >= 1324); assert.strictEqual(E.builtin.length, raw.length); assert.strictEqual(E.placeholder, false);
   const e = E.byId['0025'];
   for (const k of ['id', 'nameZh', 'nameEn', 'bodyPart', 'bodyPartDetail', 'target', 'secondary', 'equipment', 'category', 'categoryZh', 'description', 'steps', 'translationPending', 'untranslatedFields']) assert.ok(k in e, k);
+  assert.strictEqual(e.nameZh, '杠铃卧推');
+  assert.ok(String(e.video).endsWith('/anim/0025.mp4'));
   assert.strictEqual(typeof e.target, 'string');
   assert.deepStrictEqual(E.bodyParts.map(o => o.value), ['chest', 'back', 'shoulders', 'legs', 'arms', 'core']);
+  assert.ok(E.bodyParts.every(o => o.count > 0));
   assert.ok(E.equipments.some(o => o.value === 'body_weight'));
+  assert.ok(E.search(E.builtin, '仰卧起坐').some(x => x.id === '0001'));
+});
+test('hidden legacy rows stay out of the library but get() still resolves them', () => {
+  const { fresh } = require('./helpers');
+  const hidden = E.builtin.filter(e => e.hidden);
+  assert.strictEqual(hidden.length, 51);
+  assert.strictEqual(hidden.filter(e => !e.mediaId).length, 46);
+  ['0493', '0576', '0180', '1327', '0276'].forEach(id => {
+    assert.ok(E.byId[id].hidden && E.byId[id].mediaId, id);
+  });
+  assert.strictEqual(E.visible.length, 1319);
+  assert.strictEqual(E.byId['3948'].nameZh, '徒手深蹲');
+  assert.ok(E.byId['3948'].hidden && E.byId['3948'].video);
+  const { repo } = fresh();
+  repo.init();
+  assert.strictEqual(repo.exercises.all().length, 1319);
+  ['0493', '0576', '0180', '1327', '0276'].forEach(id => {
+    assert.strictEqual(repo.exercises.get(id).nameZh, E.byId[id].nameZh);
+    assert.ok(!repo.exercises.all().some(e => e.id === id));
+  });
+  assert.ok(!repo.exercises.filter({ q: '上斜俯卧撑' }).some(e => e.id === '0493'));
+  assert.ok(repo.exercises.all().every(e => !e.hidden && e.mediaId));
+  assert.strictEqual(repo.exercises.get('0463').nameZh, '前平板支撑');
+  assert.ok(!repo.exercises.filter({ q: '前平板支撑' }).some(e => e.id === '0463'));
+  const PRESETS = require('../data/preset-templates');
+  const ids = PRESETS.flatMap(p => p.exerciseIds);
+  assert.strictEqual(PRESETS.length, 6);
+  ids.forEach(id => {
+    const e = repo.exercises.get(id);
+    assert.ok(e && !e.unknown && !e.hidden && e.mediaId, id + ' ' + (e && e.nameZh));
+  });
+  assert.deepStrictEqual(PRESETS.find(p => p.id === 'preset_home_full').exerciseIds, ['0662', '1685', '0499', '0464']);
+  assert.strictEqual(PRESETS.find(p => p.id === 'preset_gym_shoulders').exerciseIds[0], '1456');
+  assert.strictEqual(repo.exercises.get('1685').nameZh, '深蹲至过头伸展');
+  assert.strictEqual(repo.exercises.get('0464').nameZh, '平板支撑带转体');
+  assert.strictEqual(repo.exercises.get('1456').nameZh, '杠铃站姿窄距军事推举');
 });
 test('search zh/en, filter bodyPart/equipment/target', () => {
   assert.ok(E.search(E.builtin, '卧推').some(e => e.id === '0025'));
   assert.ok(E.search(E.builtin, 'BENCH PRESS').some(e => e.id === '0025'));
-  assert.strictEqual(E.search(E.builtin, '').length, 284);
+  assert.strictEqual(E.search(E.builtin, '').length, E.builtin.length);
   const r = E.filter(E.builtin, { bodyPart: 'chest', equipment: 'barbell', target: E.byId['0025'].target });
   assert.ok(r.length > 0 && r.every(e => e.bodyPart === 'chest' && e.equipment === 'barbell' && e.target === 'chest'));
   const sec = E.filter(E.builtin, { target: 'triceps', includeSecondary: true });

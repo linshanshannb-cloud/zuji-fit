@@ -5,7 +5,7 @@ const V = require('./validate');
 const C = require('./core');
 const E = require('../exercises');
 const { newId } = require('./ids');
-const CATEGORY_ZH = { strength: '力量', calisthenics: '自重训练', isometric: '等长训练' };
+const CATEGORY_ZH = { strength: '力量', calisthenics: '自重训练', isometric: '等长训练', cardio: '有氧', stretching: '拉伸' };
 const bodyPartValues = () => E.bodyParts.map(o => o.value);
 const equipmentValues = () => E.equipments.map(o => o.value);
 
@@ -18,7 +18,7 @@ function healCustom() {
   const raw = rawCustom();
   if (raw.some(c => c.custom !== true)) S.set(K.CUSTOM, raw.map(c => Object.assign({}, c, { custom: true })));
 }
-function all() { return listCustom().concat(E.builtin); }
+function all() { return listCustom().concat(E.visible); }
 // Never throws for unknown ids (§1 引用完整性): returns placeholder.
 function get(id) {
   if (E.byId[id]) return E.byId[id];

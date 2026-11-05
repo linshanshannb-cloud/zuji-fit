@@ -68,32 +68,38 @@ test('T4 wx.showModal 的 confirmText / cancelText 最多 4 个字符（微信�
   }
   assert.deepStrictEqual(bad, []);
 });
-test('T5 不引用 openGym media；内置动作数据 = data/exercises.json 原样打包（284 条）；本地视频仅走 packageVideo 分包', () => {
+test('T5 动作库全量打包：主包只有索引，步骤在详情分包；云视频保留；不把 GIF 打进包', () => {
   const files = walk(MP, '.js').concat(walk(MP, '.wxml'), walk(MP, '.json'));
   const src = files.map(f => fs.readFileSync(f, 'utf8')).join('\n');
-  assert.ok(!/catalogue\/media|gymvisual/i.test(src), '禁止 openGym media / gymvisual');
-  // .gif 仍禁止；.mp4 仅允许出现在 packageVideo* 路径或 video 字段值中
-  const mp4Hits = [];
-  for (const f of files) {
-    const text = fs.readFileSync(f, 'utf8');
-    if (!/\.mp4/i.test(text)) continue;
-    const rel = path.relative(MP, f).replace(/\\/g, '/');
-    // 打包数据与详情页可含 packageVideo*/videos/*.mp4（非业务硬编码）
-    if (rel === 'data/exercises.js' || rel === 'data/exercises.json' || rel.startsWith('pages/exercise-detail/')) continue;
-    if (rel.includes('packageVideo')) continue;
-    mp4Hits.push(rel);
-  }
-  assert.deepStrictEqual(mp4Hits, [], '主包业务文件不应硬编码 mp4: ' + mp4Hits.join(','));
-  const js = require(path.join(MP, 'data/exercises.js')), raw = require(path.resolve(MP, '../data/exercises.json'));
-  assert.strictEqual(js.placeholder, false); assert.strictEqual(js.list.length, 284);
-  assert.deepStrictEqual(js.list, raw);
+  assert.ok(!/catalogue\/media/i.test(src), '禁止 openGym catalogue/media 路径');
+  const gifFiles = walk(MP, '.gif');
+  assert.deepStrictEqual(gifFiles, [], '数据集 GIF 不进安装包');
+  const js = require(path.join(MP, 'data/exercises.js'));
+  const raw = require(path.resolve(MP, '../data/exercises.json'));
+  const text = require(path.join(MP, 'pages/exercise-detail/exercise-text.js'));
+  assert.strictEqual(js.placeholder, false);
+  assert.ok(js.list.length >= 1324);
+  assert.strictEqual(js.list.length, raw.length);
+  assert.strictEqual(js.generatedFrom.packed, true);
+  const bench = js.list.find(e => e.id === '0025');
+  assert.strictEqual(bench.nameZh, '杠铃卧推');
+  assert.ok(/^cloud:\/\/.+\/anim\/0025\.mp4$/.test(bench.video));
+  assert.strictEqual(bench.steps.length, 0, '主包索引不带步骤正文');
+  assert.strictEqual(text['0025'].s.length, raw.find(e => e.id === '0025').steps.length);
+  assert.ok(text['0001'] && text['0001'].s.length > 0 && text['0001'].m);
   const withV = js.list.filter(e => e.video);
-  assert.strictEqual(withV.length, 24);
+  assert.strictEqual(withV.length, raw.filter(e => e.video).length);
+  assert.ok(withV.length >= 200);
   withV.forEach(e => {
-    assert.ok(/^packageVideo[ABC]\/videos\/\d{4}\.mp4$/.test(e.video), e.id + ' video path');
-    // 海报已迁主包，避免分包未就绪时真机封面空白
-    assert.ok(/^assets\/video-posters\/\d{4}\.jpg$/.test(e.poster), e.id + ' poster path');
+    assert.ok(e.video === 'cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/' + e.id + '.mp4', e.id);
   });
+  js.list.filter(e => e.poster).forEach(e => {
+    assert.strictEqual(e.poster, '/assets/video-posters/' + e.id + '.jpg');
+    assert.ok(fs.existsSync(path.join(MP, e.poster.replace(/^\//, ''))), e.poster);
+  });
+  for (const part of ['chest', 'back', 'shoulders', 'legs', 'arms', 'core']) {
+    assert.ok(js.list.some(e => e.bodyPart === part), part);
+  }
 });
 test('T6 动作数据可追溯到 openGym 原始仓库（存在时核对）：每个 id 都在 catalogue/exercises，英文名一致', { skip: !fs.existsSync('/workspace/openGym/catalogue/exercises') && 'openGym 不在本机' }, () => {
   const raw = require(path.resolve(MP, '../data/exercises.json'));
@@ -105,20 +111,13 @@ test('T7 WXSS 尺寸以 rpx 为主（px 只用于 1px 细线/边框）', () => {
   for (const f of walk(MP, '.wxss')) fs.readFileSync(f, 'utf8').split('\n').forEach((l, i) => { for (const m of l.matchAll(/(?<![\w.])(\d+(?:\.\d+)?)px/g)) if (Number(m[1]) > 1) bad.push(path.relative(MP, f) + ':' + (i + 1) + ' ' + m[0]); });
   assert.deepStrictEqual(bad, []);
 });
-test('T8 中文名/步骤可追溯到 openGym zh.json：仅 DATA_NOTES 列出的 10 个改名；不一致的步骤 = 46 条已补中文译文（英文原文可追溯）；filters 计数与数据一致', { skip: !fs.existsSync('/workspace/openGym/catalogue/i18n/zh.json') && 'openGym 不在本机' }, () => {
+test('T8 filters 计数与 exercises.json 一致，六大部位都有条目', () => {
   const raw = require(path.resolve(MP, '../data/exercises.json')), f = require(path.resolve(MP, '../data/filters.json'));
-  const zh = JSON.parse(fs.readFileSync('/workspace/openGym/catalogue/i18n/zh.json', 'utf8'));
-  const og = id => JSON.parse(fs.readFileSync(`/workspace/openGym/catalogue/exercises/${id}.json`, 'utf8'));
-  const renamed = raw.filter(e => zh[e.id].name !== e.nameZh).map(e => e.id).sort();
-  assert.deepStrictEqual(renamed, ['0060', '0377', '0550', '0739', '0860', '1489', '2963', '3193', '3914', '5107']);
-  const stepDiff = raw.filter(e => JSON.stringify(zh[e.id].instructions) !== JSON.stringify(e.steps));
-  assert.strictEqual(stepDiff.length, 46);
-  // 2026-10-17：这 46 条已补中文译文（data/translations/zh-pending-46.json，含英文原文 en）。校验：译文落库、英文原文可追溯到 openGym、步数一致
-  const tr = require(path.resolve(MP, '../data/translations/zh-pending-46.json'));
-  assert.deepStrictEqual(stepDiff.map(e => e.id).sort(), Object.keys(tr).sort());
-  stepDiff.forEach(e => { assert.ok(!e.translationPending); assert.deepStrictEqual(e.untranslatedFields, []); assert.deepStrictEqual(e.steps, tr[e.id].steps); assert.deepStrictEqual(tr[e.id].en.steps, og(e.id).instructions); assert.strictEqual(e.steps.length, og(e.id).instructions.length); });
+  assert.ok(raw.length >= 1324);
   for (const k of ['bodyPart', 'bodyPartDetail', 'equipment', 'category']) f[k].forEach(o => assert.strictEqual(raw.filter(e => e[k] === o.value).length, o.count, k + ':' + o.value));
   f.muscles.forEach(o => assert.strictEqual(raw.filter(e => e.target === o.value || e.secondary.includes(o.value)).length, o.count, o.value));
+  assert.deepStrictEqual(f.bodyPart.map(o => o.value), ['chest', 'back', 'shoulders', 'legs', 'arms', 'core']);
+  f.bodyPart.forEach(o => assert.ok(o.count > 0, o.value));
 });
 test('T9 许可：AGPL/MIT 署名与许可证是否随小程序分发（DATA_NOTES 列为使用方待决事项）', () => {
   const src = walk(MP, '.wxml').concat(walk(MP, '.js').filter(f => !f.endsWith('data/exercises.js'))).map(f => fs.readFileSync(f, 'utf8')).join('\n');

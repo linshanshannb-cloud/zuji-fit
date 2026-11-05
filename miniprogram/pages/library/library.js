@@ -101,6 +101,13 @@ Page({
     this.setData({ groups });
   },
   more() { if (this.data.shown < this.data.total) { this.setData({ shown: this.data.shown + BATCH }); this.render(); } },
+  onCoverError(e) {
+    const id = e.currentTarget.dataset.id;
+    const groups = (this.data.groups || []).map(g => Object.assign({}, g, {
+      items: g.items.map(it => it.id === id ? CARD.coverFallback(it) : it),
+    }));
+    this.setData({ groups });
+  },
   open(e) { wx.navigateTo({ url: '/pages/exercise-detail/exercise-detail?id=' + encodeURIComponent(e.currentTarget.dataset.id) }); },
   goCustom() {
     if (!ui.canWrite()) return;

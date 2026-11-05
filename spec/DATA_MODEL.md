@@ -46,26 +46,26 @@ BodyMeasurement（独立实体，每个 date 最多一条）
 
 ### 3.1 内置动作（只读）
 
-来源：`/workspace/fitness-miniapp/data/exercises.json`（数组），构建时打包进小程序，**不写入 storage**。字段名统一用下表的英文 camelCase，与 `data/exercises.json`、`data/exercises.sample.json` 一致。
+来源：仓库根目录 `data/exercises.json`（数组），由 `miniprogram/scripts/build-data.js` 生成运行时数据，**不写入 storage**。主包 `miniprogram/data/exercises.js` 是压缩后的索引（搜索、筛选、云视频和主包封面）；`description` 与 `steps` 在详情分包 `pages/exercise-detail/exercise-text.js`，打开详情时合并回同一套字段。字段名用英文 camelCase，与 `data/exercises.json`、`data/exercises.sample.json` 一致。
 
 | 字段 | 类型 | 必填 | 说明 / 校验 |
 |---|---|---|---|
-| `id` | string | ✓ | openGym 动作编号，例如 `"0025"`，永久不变，全库唯一 |
+| `id` | string | ✓ | 动作编号，例如 `"0025"`。已有编号含义不变；新增条目用 exercises-dataset-zh 的原 id。全库唯一 |
 | `nameZh` | string | ✓ | 中文名，非空 |
 | `nameEn` | string | ✓ | 英文名（openGym 原名，小写） |
 | `bodyPart` | enum string | ✓ | 稳定英文枚举：`chest` `back` `shoulders` `legs` `arms` `core`；中英显示名查 `data/filters.json` 的 `bodyPart` |
-| `bodyPartDetail` | enum string | ✓ | 细分部位，snake_case 英文枚举（来自 openGym 原 bodyPart）：`back` `chest` `lower_arms` `lower_legs` `shoulders` `upper_arms` `upper_legs` `waist`；中英显示名查 `filters.json` 的 `bodyPartDetail`（如 `upper_arms` → 上臂）。以 filters.json 为准，代码里不要写死。 |
+| `bodyPartDetail` | enum string | ✓ | 细分部位，snake_case。除 `back` `chest` `lower_arms` `lower_legs` `shoulders` `upper_arms` `upper_legs` `waist` 外，有氧为 `cardio`、颈部为 `neck`（二者的 `bodyPart` 仍是 `core`）。显示名查 `filters.json`。以 filters.json 为准，代码里不要写死。 |
 | `target` | enum string | ✓ | 主要目标肌群。规范 snake_case 肌群枚举（与 `secondary` 共用一套），取值和中英显示名查 `data/filters.json` 的 `muscles`，例如 `chest` `lats` `delts` `quads` `glutes`。openGym 的同义词已合并（如 pectorals→chest、latissimus_dorsi→lats、trapezius→traps、deltoids/shoulders→delts、quadriceps→quads），映射表见 data/DATA_NOTES.md。以 filters.json 为准，代码里不要写死。 |
 | `secondary` | enum string[] | ✓ | 次要肌群，取值同样来自 `filters.json` 的 `muscles`；已去重，不含与 `target` 相同的值；可以是 `[]` |
 | `equipment` | enum string | ✓ | 稳定 snake_case 英文枚举，目前有 `band` `barbell` `body_weight` `cable` `dumbbell` `ez_barbell` `kettlebell` `leverage_machine`（显示为「固定器械」） `sled_machine`（显示为「45°腿举机」） `smith_machine` `trap_bar` `weighted` `wheel_roller`；中英显示名查 `filters.json` 的 `equipment`。以 filters.json 为准，代码里不要写死。 |
-| `category` | enum string | ✓ | `strength` / `calisthenics` / `isometric`（与 `filters.json` 的 `category` 一致） |
-| `categoryZh` | string | ✓ | 力量 / 自重训练 / 等长训练 |
-| `description` | string | ✓ | 简介，**目前全部是英文原文** |
-| `steps` | string[] | ✓ | 步骤；没有中文的保留英文 |
+| `category` | enum string | ✓ | 与 `filters.json` 的 `category` 一致，目前含 `strength` / `calisthenics` / `isometric` / `cardio` / `stretching` |
+| `categoryZh` | string | ✓ | 力量 / 自重训练 / 等长训练 / 有氧 / 拉伸 |
+| `description` | string | ✓ | 简介。数据集新条目为英文步骤原文；早期保留条目里有一部分已是中文 |
+| `steps` | string[] | ✓ | 步骤。主包索引里为空数组，详情页从分包文本合并中文步骤 |
 | `translationPending` | boolean | ✓ | `true` 表示中文名或步骤缺翻译 |
 | `untranslatedFields` | string[] | ✓ | 仍是英文的字段名，例如 `["description"]` 或 `["steps","description"]` |
 
-不包含任何图片或视频字段（openGym media 不得使用，见 data/DATA_NOTES.md）。
+可选媒体字段（没有则省略）：`video`（已有云存储 `cloud://…/anim/<id>.mp4`，不给新动作编造）、`poster`（主包 `/assets/video-posters/<id>.jpg`）、`illustration`（主包线稿）、`mediaId`（数据集 GIF 的媒体 id，只进详情分包，用来拼远程 180×180 GIF）。详见 `data/DATA_NOTES.md`。
 
 示例（`data/exercises.json` 中的一条，`description` 原文略）：
 ```json

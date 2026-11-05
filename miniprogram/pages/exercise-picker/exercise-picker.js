@@ -89,6 +89,10 @@ Page({
     this.setData({ items });
   },
   more() { if (this.data.shown < this.data.total) { this.setData({ shown: this.data.shown + BATCH }); this.render(); } },
+  onCoverError(e) {
+    const id = e.currentTarget.dataset.id;
+    this.setData({ items: (this.data.items || []).map(it => it.id === id ? CARD.coverFallback(it) : it) });
+  },
   toggle(e) { this.toggleId(e.currentTarget.dataset.id); },
   toggleId(id, forceOn) {
     let sel = this.data.selected.slice();
