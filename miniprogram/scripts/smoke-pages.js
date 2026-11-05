@@ -205,7 +205,7 @@ flow('F4 edit completed: no cleanup, >=1 done set gate, delete with confirm', ()
 flow('F5 library: search, filter panel, load more, quick add creates today draft; detail adds to existing', () => {
   reset(); const lib = open('pages/library/library');
   const catalogueN = require('../utils/exercises').visible.length;
-  assert.strictEqual(catalogueN, 1324);
+  assert.strictEqual(catalogueN, 1319);
   assert.strictEqual(lib.data.total, catalogueN); assert.strictEqual(lib.data.groups.reduce((t, g) => t + g.items.length, 0), 30);
   lib.more(); assert.strictEqual(lib.data.groups.reduce((t, g) => t + g.items.length, 0), 60);
   lib.openPanel(); lib.pBP(ev({ v: 'chest' })); assert.ok(lib.data.panelCount > 0); lib.applyPanel();

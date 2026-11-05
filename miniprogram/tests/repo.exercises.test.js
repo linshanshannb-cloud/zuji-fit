@@ -19,14 +19,22 @@ test('catalogue loaded from data/exercises.json with new fields', () => {
 test('hidden legacy rows stay out of the library but get() still resolves them', () => {
   const { fresh } = require('./helpers');
   const hidden = E.builtin.filter(e => e.hidden);
-  assert.strictEqual(hidden.length, 46);
-  assert.ok(hidden.every(e => !e.mediaId));
-  assert.strictEqual(E.visible.length, 1324);
+  assert.strictEqual(hidden.length, 51);
+  assert.strictEqual(hidden.filter(e => !e.mediaId).length, 46);
+  ['0493', '0576', '0180', '1327', '0276'].forEach(id => {
+    assert.ok(E.byId[id].hidden && E.byId[id].mediaId, id);
+  });
+  assert.strictEqual(E.visible.length, 1319);
   assert.strictEqual(E.byId['3948'].nameZh, '徒手深蹲');
   assert.ok(E.byId['3948'].hidden && E.byId['3948'].video);
   const { repo } = fresh();
   repo.init();
-  assert.strictEqual(repo.exercises.all().length, 1324);
+  assert.strictEqual(repo.exercises.all().length, 1319);
+  ['0493', '0576', '0180', '1327', '0276'].forEach(id => {
+    assert.strictEqual(repo.exercises.get(id).nameZh, E.byId[id].nameZh);
+    assert.ok(!repo.exercises.all().some(e => e.id === id));
+  });
+  assert.ok(!repo.exercises.filter({ q: '上斜俯卧撑' }).some(e => e.id === '0493'));
   assert.ok(repo.exercises.all().every(e => !e.hidden && e.mediaId));
   assert.strictEqual(repo.exercises.get('0463').nameZh, '前平板支撑');
   assert.ok(!repo.exercises.filter({ q: '前平板支撑' }).some(e => e.id === '0463'));

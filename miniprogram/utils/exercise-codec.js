@@ -13,7 +13,9 @@ const F_VIDEO = 1;
 const F_POSTER = 2;
 const F_ILL = 4;
 const F_UF_EMPTY = 8;
-const F_HIDDEN = 16; // no dataset mediaId: kept for history, omitted from the library list
+const F_HIDDEN = 16; // kept for history, omitted from the library list
+// Dataset rows the library must not show (old AI covers). Still resolved by id.
+const EXTRA_HIDDEN = { '0493': 1, '0576': 1, '0180': 1, '1327': 1, '0276': 1 };
 
 function expectedVideo(id) { return CLOUD_PREFIX + id + '.mp4'; }
 function expectedPoster(id) { return '/assets/video-posters/' + id + '.jpg'; }
@@ -37,7 +39,7 @@ function packRecord(e) {
   if (!uf.length) flags |= F_UF_EMPTY;
   else if (!(uf.length === 1 && uf[0] === 'description')) throw new Error('unexpected untranslatedFields for ' + e.id + ': ' + JSON.stringify(uf));
   if (e.translationPending) throw new Error('translationPending is not packed for ' + e.id);
-  if (!e.mediaId || e.hidden) flags |= F_HIDDEN;
+  if (!e.mediaId || e.hidden || EXTRA_HIDDEN[e.id]) flags |= F_HIDDEN;
   const row = [
     e.id, e.nameZh, e.nameEn, e.bodyPart, e.bodyPartDetail || '', e.target || '',
     (e.secondary || []).join(','), e.equipment, e.category, flags,

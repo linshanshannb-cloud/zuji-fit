@@ -1,5 +1,5 @@
-// 动作库卡片封面：数据集 180×180 缩略图 > 本地视频海报 > 自制线稿。
-// 缩略图是远程 URL，不进主包。加载失败时 coverFallback 按同一顺序退一级。
+// 有数据集图时列表封面：JPEG → 线稿 → 占位。不回退本地 video-posters（AI 抽帧）。
+// 没有 mediaId 的隐藏条目若被单独展示，仍可用本地海报。详情页云视频不走这里。
 const MEDIA = require('./dataset-media');
 const abs = p => (!p || typeof p !== 'string' ? '' : p.indexOf('://') > 0 || p[0] === '/' ? p : '/' + p);
 
@@ -7,8 +7,9 @@ function covers(e) {
   const poster = abs(e && e.poster);
   const ill = abs(e && e.illustration);
   const remote = e && e.mediaId ? MEDIA.thumbUrl(e.id, e.mediaId) : '';
-  const chain = [remote, poster, ill].filter(Boolean);
-  return { img: chain[0] || '', fallback: chain[1] || '', fallbacks: chain.slice(1) };
+  const chain = e && e.mediaId ? [remote, ill] : [poster, ill];
+  const list = chain.filter(Boolean);
+  return { img: list[0] || '', fallback: list[1] || '', fallbacks: list.slice(1) };
 }
 
 function cardOf(e, zhOf, groupZh) {
