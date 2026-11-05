@@ -47,11 +47,11 @@ node miniprogram/scripts/build-data.js
 
 - 210 条云视频 `cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/<id>.mp4` 全部保留。没有云视频的新动作不写 `video`。
 - 58 张主包海报、152 张主包线稿保留，路径仍是 `/assets/video-posters/<id>.jpg` 和 `/assets/exercises/<id>.png`。
-- 数据集的 1,324 张缩略图和 GIF（© Gym visual）不打进安装包。详情页在没有云视频时用 jsDelivr 上钉死的 commit 播放 180×180 GIF：`https://cdn.jsdelivr.net/gh/Devillmy/exercises-dataset-zh@c335dbc6c9f21d70e585ebffec2481496c059b92/videos/<id>-<mediaId>.gif`。加载失败则退回主包线稿/海报，再退回文字占位。
+- 数据集的 1,324 张缩略图和 GIF（© Gym visual）不打进安装包。列表封面优先用已有的本地视频抽帧海报（58 张）；没有海报时用同一条的 180×180 JPEG：`https://cdn.jsdelivr.net/gh/Devillmy/exercises-dataset-zh@c335dbc6c9f21d70e585ebffec2481496c059b92/images/<id>-<mediaId>.jpg`。加载失败再退回主包线稿，最后才是占位。详情页在没有云视频时播放同目录的 GIF。云端 mp4 不在仓库里，无法在构建时抽首帧，所以没有本地海报的云视频也用这张数据集静帧当列表封面，播放标记仍表示有云视频。
 - 正式版要在微信公众平台把 `cdn.jsdelivr.net` 配进 downloadFile 合法域名。开发者工具里 `urlCheck` 已关闭，预览可以直接看。
-- 主包：更新前 1,910,760 字节（1866.0 KB），更新后 1,853,842 字节（1810.4 KB），低于 2MB，也低于仓库里 1900KB 的内部门槛。详情分包约 1054 KB。
+- 主包：更新前 1,910,760 字节（1866.0 KB）。接入全量索引后 1,853,842 字节；列表封面改为远程缩略图后又写入 mediaId，现为 **1,868,975 字节（1825.2 KB）**，仍低于 2MB 和 1900KB 门槛。详情分包约 1054 KB。
 
-同部位排序仍走 `utils/exercise-sort.js`：有主包图和云视频的靠前。远程 GIF 不参与列表封面，所以新动作排在有图/有视频的后面。
+同部位排序仍走 `utils/exercise-sort.js`：有封面（本地海报、数据集缩略图或线稿）和云视频的靠前。1,370 条里 1,364 条列表有封面；剩下 6 条是源库没有、本地也没有图的 openGym 补充动作。
 
 ### 许可
 

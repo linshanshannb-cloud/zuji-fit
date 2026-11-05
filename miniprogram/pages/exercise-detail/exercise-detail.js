@@ -3,7 +3,7 @@ const E = require('../../utils/exercises');
 const repo = require('../../utils/repo/index');
 const ui = require('../../utils/ui');
 const TEXT = require('./exercise-text');
-const MEDIA = require('./dataset-media');
+const MEDIA = require('../../utils/dataset-media');
 function bestText(b) {
   if (!b) return '—';
   if (b.mode === 'time' || (b.durationSec != null && b.reps == null)) return F.bestLabel(b);

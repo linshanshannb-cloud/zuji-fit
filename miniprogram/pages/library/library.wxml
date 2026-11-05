@@ -23,7 +23,7 @@
         <view class="ex-grid">
           <view wx:for="{{g.items}}" wx:key="id" class="ex-cell" bindtap="open" data-id="{{item.id}}">
             <view class="ex-img">
-              <image wx:if="{{item.img}}" src="{{item.img}}" mode="aspectFill" lazy-load="{{true}}"/>
+              <image wx:if="{{item.img}}" src="{{item.img}}" mode="aspectFill" lazy-load="{{true}}" data-id="{{item.id}}" binderror="onCoverError"/>
               <view wx:else class="ex-ph"><view class="db"><view class="db-p"></view><view class="db-p s"></view><view class="db-b"></view><view class="db-p s"></view><view class="db-p"></view></view><text class="ex-ini">{{item.initial}}</text></view>
               <view wx:if="{{item.hasVideo}}" class="ex-play"></view>
               <text wx:if="{{item.custom}}" class="ex-badge">自定</text>

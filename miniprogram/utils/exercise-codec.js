@@ -36,10 +36,13 @@ function packRecord(e) {
   if (!uf.length) flags |= F_UF_EMPTY;
   else if (!(uf.length === 1 && uf[0] === 'description')) throw new Error('unexpected untranslatedFields for ' + e.id + ': ' + JSON.stringify(uf));
   if (e.translationPending) throw new Error('translationPending is not packed for ' + e.id);
-  return [
+  const row = [
     e.id, e.nameZh, e.nameEn, e.bodyPart, e.bodyPartDetail || '', e.target || '',
     (e.secondary || []).join(','), e.equipment, e.category, flags,
   ];
+  // Dataset media id only. The JPEG/GIF stay on jsDelivr; nothing is bundled.
+  if (e.mediaId) row.push(e.mediaId);
+  return row;
 }
 
 function expandRow(row) {
@@ -57,6 +60,7 @@ function expandRow(row) {
   if (flags & F_VIDEO) e.video = expectedVideo(id);
   if (flags & F_POSTER) e.poster = expectedPoster(id);
   if (flags & F_ILL) e.illustration = expectedIllustration(id);
+  if (row[10]) e.mediaId = row[10];
   return e;
 }
 

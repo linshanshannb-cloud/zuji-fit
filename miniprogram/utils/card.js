@@ -1,11 +1,30 @@
-// 动作库卡片数据：封面只用主包图片（视频海报 > 自制线稿），没有图就由 WXML 渲染 CSS 占位符。
+// 动作库卡片封面：本地视频抽帧海报 > 数据集 180×180 缩略图 > 自制线稿。
+// 缩略图是远程 URL，不进主包。加载失败时交给 coverFallback 退到下一级。
+const MEDIA = require('./dataset-media');
 const abs = p => (!p || typeof p !== 'string' ? '' : p.indexOf('://') > 0 || p[0] === '/' ? p : '/' + p);
+
+function covers(e) {
+  const poster = abs(e && e.poster);
+  const ill = abs(e && e.illustration);
+  const remote = e && e.mediaId ? MEDIA.thumbUrl(e.id, e.mediaId) : '';
+  if (poster) return { img: poster, fallback: remote || ill };
+  if (remote) return { img: remote, fallback: ill };
+  return { img: ill, fallback: '' };
+}
+
 function cardOf(e, zhOf, groupZh) {
-  const img = abs(e.poster) || abs(e.illustration);
+  const c = covers(e);
   return {
     id: e.id, nameZh: e.nameZh, pending: !!e.translationPending, custom: !!e.custom,
-    img, hasVideo: !!e.video, initial: String(e.nameZh || '').slice(0, 1),
+    img: c.img, fallback: c.fallback, hasVideo: !!e.video, initial: String(e.nameZh || '').slice(0, 1),
     part: groupZh || '', equip: zhOf ? zhOf('equipment', e.equipment) : '',
   };
 }
-module.exports = { cardOf, abs };
+
+function coverFallback(item) {
+  if (!item) return item;
+  if (item.fallback && item.img !== item.fallback) return Object.assign({}, item, { img: item.fallback, fallback: '' });
+  return Object.assign({}, item, { img: '', fallback: '' });
+}
+
+module.exports = { cardOf, covers, coverFallback, abs };

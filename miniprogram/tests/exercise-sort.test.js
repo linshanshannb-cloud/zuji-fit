@@ -12,6 +12,7 @@ test('mediaTier: image+video < image < video-only < neither', () => {
   assert.strictEqual(SORT.mediaTier({ id: 'z' }), 3);
   assert.ok(SORT.hasImage({ poster: '/a.jpg' }));
   assert.ok(SORT.hasImage({ illustration: '/b.png' }));
+  assert.ok(SORT.hasImage({ mediaId: 'abc' }));
   assert.ok(!SORT.hasImage({}));
   assert.ok(SORT.hasVideo({ video: 'cloud://x' }));
   assert.ok(!SORT.hasVideo({}));
