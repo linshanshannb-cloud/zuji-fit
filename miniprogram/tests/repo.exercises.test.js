@@ -16,6 +16,33 @@ test('catalogue loaded from data/exercises.json with new fields', () => {
   assert.ok(E.equipments.some(o => o.value === 'body_weight'));
   assert.ok(E.search(E.builtin, '仰卧起坐').some(x => x.id === '0001'));
 });
+test('hidden legacy rows stay out of the library but get() still resolves them', () => {
+  const { fresh } = require('./helpers');
+  const hidden = E.builtin.filter(e => e.hidden);
+  assert.strictEqual(hidden.length, 46);
+  assert.ok(hidden.every(e => !e.mediaId));
+  assert.strictEqual(E.visible.length, 1324);
+  assert.strictEqual(E.byId['3948'].nameZh, '徒手深蹲');
+  assert.ok(E.byId['3948'].hidden && E.byId['3948'].video);
+  const { repo } = fresh();
+  repo.init();
+  assert.strictEqual(repo.exercises.all().length, 1324);
+  assert.ok(repo.exercises.all().every(e => !e.hidden && e.mediaId));
+  assert.strictEqual(repo.exercises.get('0463').nameZh, '前平板支撑');
+  assert.ok(!repo.exercises.filter({ q: '前平板支撑' }).some(e => e.id === '0463'));
+  const PRESETS = require('../data/preset-templates');
+  const ids = PRESETS.flatMap(p => p.exerciseIds);
+  assert.strictEqual(PRESETS.length, 6);
+  ids.forEach(id => {
+    const e = repo.exercises.get(id);
+    assert.ok(e && !e.unknown && !e.hidden && e.mediaId, id + ' ' + (e && e.nameZh));
+  });
+  assert.deepStrictEqual(PRESETS.find(p => p.id === 'preset_home_full').exerciseIds, ['0662', '1685', '0499', '0464']);
+  assert.strictEqual(PRESETS.find(p => p.id === 'preset_gym_shoulders').exerciseIds[0], '1456');
+  assert.strictEqual(repo.exercises.get('1685').nameZh, '深蹲至过头伸展');
+  assert.strictEqual(repo.exercises.get('0464').nameZh, '平板支撑带转体');
+  assert.strictEqual(repo.exercises.get('1456').nameZh, '杠铃站姿窄距军事推举');
+});
 test('search zh/en, filter bodyPart/equipment/target', () => {
   assert.ok(E.search(E.builtin, '卧推').some(e => e.id === '0025'));
   assert.ok(E.search(E.builtin, 'BENCH PRESS').some(e => e.id === '0025'));

@@ -112,8 +112,8 @@ test('PG7 动作库：分批 30 条、搜索中英文、筛选面板、清除、
   const { repo } = seed();
   const c = P.renderPage('pages/library/library'); await sleep(5);
   assert.strictEqual(c.dom.querySelectorAll('.main--ex-cell').length, 30);
-  const catalogueN = require('../../miniprogram/utils/exercises').builtin.length;
-  assert.ok(catalogueN >= 1324);
+  const catalogueN = require('../../miniprogram/utils/exercises').visible.length;
+  assert.strictEqual(catalogueN, 1324);
   assert.ok(c.dom.textContent.includes('共 ' + catalogueN + ' 个'));
   c.instance.onQ({ detail: { value: '  BENCH press ' } }); await sleep(350);
   const names = c.instance._all.map(e => e.nameEn);

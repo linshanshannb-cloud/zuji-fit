@@ -3,6 +3,8 @@ const data = require('../data/exercises.js');
 const builtin = data.list;
 const filters = data.filters || {};
 const byId = {}; builtin.forEach(e => { byId[e.id] = e; });
+// Library / picker default. Hidden rows stay in builtin and byId for history.
+const visible = builtin.filter(e => !e.hidden);
 const opts = k => (filters[k] || []).map(o => ({ value: o.value, zh: o.zh, en: o.en, count: o.count }));
 const zhOf = (k, v) => { const o = (filters[k] || []).find(x => x.value === v); return o ? o.zh : v; };
 // muscles.json (optional, from data teammate): accept {value:{zh}} | {value:"zh"} | [{value,zh}]
@@ -40,7 +42,7 @@ function display(e) {
   return Object.assign({}, e, { bodyPartZh: zhOf('bodyPart', e.bodyPart), equipmentZh: zhOf('equipment', e.equipment),
     targetZh: e.target ? muscleZh(e.target) : '', secondaryZh: (e.secondary || []).map(muscleZh) });
 }
-module.exports = { builtin, byId, filters, source: data.source, placeholder: data.placeholder,
+module.exports = { builtin, visible, byId, filters, source: data.source, placeholder: data.placeholder,
   bodyParts: opts('bodyPart'), equipments: opts('equipment'), bodyPartDetails: opts('bodyPartDetail'),
   muscles: opts('muscles').length ? opts('muscles') : opts('target').concat(opts('secondary')),
   // target-muscle filter options: muscles that actually occur as a primary target

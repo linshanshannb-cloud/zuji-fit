@@ -13,6 +13,7 @@ const F_VIDEO = 1;
 const F_POSTER = 2;
 const F_ILL = 4;
 const F_UF_EMPTY = 8;
+const F_HIDDEN = 16; // no dataset mediaId: kept for history, omitted from the library list
 
 function expectedVideo(id) { return CLOUD_PREFIX + id + '.mp4'; }
 function expectedPoster(id) { return '/assets/video-posters/' + id + '.jpg'; }
@@ -36,6 +37,7 @@ function packRecord(e) {
   if (!uf.length) flags |= F_UF_EMPTY;
   else if (!(uf.length === 1 && uf[0] === 'description')) throw new Error('unexpected untranslatedFields for ' + e.id + ': ' + JSON.stringify(uf));
   if (e.translationPending) throw new Error('translationPending is not packed for ' + e.id);
+  if (!e.mediaId || e.hidden) flags |= F_HIDDEN;
   const row = [
     e.id, e.nameZh, e.nameEn, e.bodyPart, e.bodyPartDetail || '', e.target || '',
     (e.secondary || []).join(','), e.equipment, e.category, flags,
@@ -61,6 +63,7 @@ function expandRow(row) {
   if (flags & F_POSTER) e.poster = expectedPoster(id);
   if (flags & F_ILL) e.illustration = expectedIllustration(id);
   if (row[10]) e.mediaId = row[10];
+  if (flags & F_HIDDEN) e.hidden = true;
   return e;
 }
 

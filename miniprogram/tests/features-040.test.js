@@ -84,27 +84,22 @@ test('rest-timer component: counts by timestamp, +/-15, vibrateLong at 0, skip',
   t.mock.timers.tick(70000); assert.strictEqual(buzz, 1, 'no buzz after skip');
 });
 
-test('card: local video poster > dataset thumb > illustration; remote thumbs are not bundled', () => {
+test('card: dataset thumb > local poster > illustration; remote thumbs are not bundled', () => {
   const C = require('../utils/card');
   const z = (k, v) => v + '!';
-  const a = C.cardOf({ id: '1', nameZh: '杠铃卧推', poster: '/assets/video-posters/1.jpg', illustration: 'assets/exercises/1.png', mediaId: 'abc', video: 'cloud://x', equipment: 'barbell' }, z, '胸');
-  assert.strictEqual(a.img, '/assets/video-posters/1.jpg'); assert.ok(a.hasVideo); assert.strictEqual(a.equip, 'barbell!'); assert.strictEqual(a.part, '胸');
+  const a = C.cardOf({ id: '0025', nameZh: '杠铃卧推', poster: '/assets/video-posters/0025.jpg', illustration: 'assets/exercises/0025.png', mediaId: 'EIeI8Vf', video: 'cloud://x', equipment: 'barbell' }, z, '胸');
+  assert.ok(a.img.includes('/images/0025-EIeI8Vf.jpg')); assert.strictEqual(a.fallback, '/assets/video-posters/0025.jpg');
+  assert.ok(a.hasVideo); assert.strictEqual(a.equip, 'barbell!'); assert.strictEqual(a.part, '胸');
   const remote = C.cardOf({ id: '0009', nameZh: '辅助胸部臂屈伸 (跪姿)', mediaId: 'abc', illustration: 'assets/exercises/0009.png' }, z, '胸');
   assert.ok(remote.img.includes('/images/0009-abc.jpg')); assert.strictEqual(remote.fallback, '/assets/exercises/0009.png');
   const b = C.cardOf({ id: '2', nameZh: '平板支撑', illustration: 'assets/exercises/2.png' }, z, '核心/腹');
   assert.strictEqual(b.img, '/assets/exercises/2.png'); assert.ok(!b.hasVideo);
   const c = C.cardOf({ id: '3', nameZh: '卷腹' }, z, '');
   assert.strictEqual(c.img, ''); assert.strictEqual(c.initial, '卷');
-  assert.strictEqual(C.coverFallback(remote).img, '/assets/exercises/0009.png');
+  assert.strictEqual(C.coverFallback(a).img, '/assets/video-posters/0025.jpg');
   const data = require('../data/exercises.js').list;
-  const bare = data.find(e => e.id === '0009');
-  assert.ok(bare && bare.mediaId && !bare.poster);
-  assert.ok(C.cardOf(bare, z).img.includes('/images/0009-' + bare.mediaId + '.jpg'));
   const bench = data.find(e => e.id === '0025');
-  assert.ok(C.cardOf(bench, z).img.includes('/assets/video-posters/0025.jpg'));
-  assert.ok(data.every(e => {
-    const img = C.cardOf(e, z).img;
-    if (!img) return true;
-    return /^\/assets\/(video-posters|exercises)\//.test(img) || /^https:\/\/cdn\.jsdelivr\.net\/gh\/Devillmy\/exercises-dataset-zh@/.test(img);
-  }), 'covers are local posters or the pinned dataset CDN');
+  assert.ok(bench.mediaId && bench.poster);
+  assert.ok(C.cardOf(bench, z).img.includes('/images/0025-' + bench.mediaId + '.jpg'));
+  assert.ok(data.filter(e => e.mediaId).every(e => C.cardOf(e, z).img.includes('/images/' + e.id + '-' + e.mediaId + '.jpg')));
 });

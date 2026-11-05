@@ -18,7 +18,7 @@ function healCustom() {
   const raw = rawCustom();
   if (raw.some(c => c.custom !== true)) S.set(K.CUSTOM, raw.map(c => Object.assign({}, c, { custom: true })));
 }
-function all() { return listCustom().concat(E.builtin); }
+function all() { return listCustom().concat(E.visible); }
 // Never throws for unknown ids (§1 引用完整性): returns placeholder.
 function get(id) {
   if (E.byId[id]) return E.byId[id];

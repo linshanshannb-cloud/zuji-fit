@@ -34,9 +34,9 @@ test('ILL1 线稿试点 20 个 id 仍在动作库；磁盘上有 png 的都写�
 });
 
 test('ILL2 每条 illustration 都指向已存在的主包 png，目录里没有未被引用的文件', () => {
-  const { repo } = H.boot();
+  const E = require(path.join(MP, 'utils/exercises'));
   const referenced = [];
-  for (const ex of repo.exercises.all()) {
+  for (const ex of E.builtin) {
     if (!ex.illustration) continue;
     const rel = ex.illustration.replace(/^\//, '');
     assert.ok(/^assets\/exercises\/\d+\.png$/.test(rel), ex.id + ' ' + rel);
@@ -66,10 +66,10 @@ test('ILL3 详情页 mediaMode 契约：有 video→video；仅 illustration→i
 });
 
 test('VID1 已有云视频仍指向 anim/<id>.mp4，海报文件在主包', () => {
-  const { repo } = H.boot();
-  const withV = repo.exercises.all().filter(e => e.video);
+  const E = require(path.join(MP, 'utils/exercises'));
+  const withV = E.builtin.filter(e => e.video);
   assert.ok(withV.length >= 200);
-  const bench = repo.exercises.get('0025');
+  const bench = E.byId['0025'];
   assert.ok(/\/anim\/0025\.mp4$/.test(bench.video));
   assert.ok(bench.poster && fs.existsSync(path.join(MP, bench.poster.replace(/^\//, ''))));
   for (const ex of withV) {

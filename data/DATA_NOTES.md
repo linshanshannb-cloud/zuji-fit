@@ -47,9 +47,11 @@ node miniprogram/scripts/build-data.js
 
 - 210 条云视频 `cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/<id>.mp4` 全部保留。没有云视频的新动作不写 `video`。
 - 58 张主包海报、152 张主包线稿保留，路径仍是 `/assets/video-posters/<id>.jpg` 和 `/assets/exercises/<id>.png`。
-- 数据集的 1,324 张缩略图和 GIF（© Gym visual）不打进安装包。列表封面优先用已有的本地视频抽帧海报（58 张）；没有海报时用同一条的 180×180 JPEG：`https://cdn.jsdelivr.net/gh/Devillmy/exercises-dataset-zh@c335dbc6c9f21d70e585ebffec2481496c059b92/images/<id>-<mediaId>.jpg`。加载失败再退回主包线稿，最后才是占位。详情页在没有云视频时播放同目录的 GIF。云端 mp4 不在仓库里，无法在构建时抽首帧，所以没有本地海报的云视频也用这张数据集静帧当列表封面，播放标记仍表示有云视频。
+- 没有 `mediaId` 的 46 条旧补充动作在运行时标 `hidden: true`（打包标志位，不删记录、不删海报/线稿/云视频）。动作库和挑选器只用 `visible`（1,324 条）。`get(id)` 仍返回这些旧条目的名称和视频，历史训练点开不受影响。
+- 有 `mediaId` 时，列表封面优先数据集 180×180 JPEG：`https://cdn.jsdelivr.net/gh/Devillmy/exercises-dataset-zh@c335dbc6c9f21d70e585ebffec2481496c059b92/images/<id>-<mediaId>.jpg`，再退回本地视频海报、线稿、占位。这些图不进安装包。详情页在没有云视频时播放同目录 GIF。
+- 精选模板里三条不在数据集中的 id 已改映射：`3948` 徒手深蹲 → `1685` 深蹲至过头伸展；`0463` 前平板支撑 → `0464` 平板支撑带转体；`1162` 杠铃站姿军事推举 → `1456` 杠铃站姿窄距军事推举。
 - 正式版要在微信公众平台把 `cdn.jsdelivr.net` 配进 downloadFile 合法域名。开发者工具里 `urlCheck` 已关闭，预览可以直接看。
-- 主包：更新前 1,910,760 字节（1866.0 KB）。接入全量索引后 1,853,842 字节；列表封面改为远程缩略图后又写入 mediaId，现为 **1,868,975 字节（1825.2 KB）**，仍低于 2MB 和 1900KB 门槛。详情分包约 1054 KB。
+- 主包：更新前 1,910,760 字节（1866.0 KB）。接入全量索引后 1,853,842 字节；列表封面改为远程缩略图后又写入 mediaId，现为 **1,869,684 字节（1825.9 KB）**，仍低于 2MB 和 1900KB 门槛。详情分包约 1054 KB。
 
 同部位排序仍走 `utils/exercise-sort.js`：有封面（本地海报、数据集缩略图或线稿）和云视频的靠前。1,370 条里 1,364 条列表有封面；剩下 6 条是源库没有、本地也没有图的 openGym 补充动作。
 
