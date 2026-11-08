@@ -10,7 +10,7 @@ function setup({ tempOk = true, dlOk = true } = {}) {
     createVideoContext: () => ({ playbackRate() {} }),
     getFileSystemManager: () => ({ saveFile() {}, access: o => o.fail(), getFileInfo: o => o.success({ size: 1 }) }),
     cloud: {
-      getTempFileURL: o => (tempOk ? o.success({ fileList: [{ status: 0, tempFileURL: 'https://x/anim/0025.mp4' }] }) : o.fail({ errMsg: 'boom' })),
+      getTempFileURL: o => (tempOk ? o.success({ fileList: [{ status: 0, tempFileURL: 'https://x/anim/0463.mp4' }] }) : o.fail({ errMsg: 'boom' })),
       downloadFile: o => { log.dl++; return dlOk ? o.success({ statusCode: 200, tempFilePath: 'wxfile://tmp/a.mp4' }) : o.fail({ errMsg: 'file data is empty' }); },
     },
   };
@@ -19,12 +19,14 @@ function setup({ tempOk = true, dlOk = true } = {}) {
   require('../pages/exercise-detail/exercise-detail.js');
   const p = Object.assign({}, def); p.data = JSON.parse(JSON.stringify(def.data));
   p.setData = function (d, cb) { Object.keys(d).forEach(k => { const ks = k.split('.'); let o = this.data; ks.slice(0, -1).forEach(x => { o = o[x]; }); o[ks[ks.length - 1]] = d[k]; }); if (cb) cb(); };
-  p.onLoad({ id: '0025' });
+  p.onLoad({ id: '0463' });
   return { p, log };
 }
 test('https temp url is used first', () => {
+  const E = require('../utils/exercises');
+  assert.ok(E.byId['0463'].video && !E.byId['0463'].mediaId, '0463 只有旧 mp4，没有数据集动图');
   const { p, log } = setup();
-  assert.strictEqual(p.data.ex.mediaMode, 'video'); assert.strictEqual(p.data.ex.videoSrc, 'https://x/anim/0025.mp4'); assert.strictEqual(log.dl, 0);
+  assert.strictEqual(p.data.ex.mediaMode, 'video'); assert.strictEqual(p.data.ex.videoSrc, 'https://x/anim/0463.mp4'); assert.strictEqual(log.dl, 0);
 });
 test('getTempFileURL fail → downloadFile local path', () => {
   const { p, log } = setup({ tempOk: false });

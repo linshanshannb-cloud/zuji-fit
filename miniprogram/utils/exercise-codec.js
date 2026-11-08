@@ -44,7 +44,7 @@ function packRecord(e) {
     e.id, e.nameZh, e.nameEn, e.bodyPart, e.bodyPartDetail || '', e.target || '',
     (e.secondary || []).join(','), e.equipment, e.category, flags,
   ];
-  // Dataset media id only. The JPEG/GIF stay on jsDelivr; nothing is bundled.
+  // 只存数据集 mediaId。JPEG / GIF 由 dataset-media.js 拼云存储 fileID，不打进包。
   if (e.mediaId) row.push(e.mediaId);
   return row;
 }

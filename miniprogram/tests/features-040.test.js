@@ -84,15 +84,17 @@ test('rest-timer component: counts by timestamp, +/-15, vibrateLong at 0, skip',
   t.mock.timers.tick(70000); assert.strictEqual(buzz, 1, 'no buzz after skip');
 });
 
-test('card: dataset thumb > local poster > illustration; remote thumbs are not bundled', () => {
+test('card: mediaId cover is cloud JPEG then illustration, never video-posters', () => {
   const C = require('../utils/card');
   const z = (k, v) => v + '!';
+  const cloudImg = 'cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/images/';
   const a = C.cardOf({ id: '0025', nameZh: '杠铃卧推', poster: '/assets/video-posters/0025.jpg', illustration: 'assets/exercises/0025.png', mediaId: 'EIeI8Vf', video: 'cloud://x', equipment: 'barbell' }, z, '胸');
-  assert.ok(a.img.includes('/images/0025-EIeI8Vf.jpg')); assert.strictEqual(a.fallback, '/assets/exercises/0025.png');
+  assert.strictEqual(a.img, cloudImg + '0025-EIeI8Vf.jpg'); assert.strictEqual(a.fallback, '/assets/exercises/0025.png');
   assert.ok(![a.img].concat(a.fallbacks || []).some(p => String(p).includes('video-posters')));
+  assert.ok(!a.img.includes('jsdelivr') && !a.img.includes('github'));
   assert.ok(a.hasVideo); assert.strictEqual(a.equip, 'barbell!'); assert.strictEqual(a.part, '胸');
   const remote = C.cardOf({ id: '0009', nameZh: '辅助胸部臂屈伸 (跪姿)', mediaId: 'abc', illustration: 'assets/exercises/0009.png' }, z, '胸');
-  assert.ok(remote.img.includes('/images/0009-abc.jpg')); assert.strictEqual(remote.fallback, '/assets/exercises/0009.png');
+  assert.strictEqual(remote.img, cloudImg + '0009-abc.jpg'); assert.strictEqual(remote.fallback, '/assets/exercises/0009.png');
   const b = C.cardOf({ id: '2', nameZh: '平板支撑', illustration: 'assets/exercises/2.png' }, z, '核心/腹');
   assert.strictEqual(b.img, '/assets/exercises/2.png'); assert.ok(!b.hasVideo);
   const c = C.cardOf({ id: '3', nameZh: '卷腹' }, z, '');
@@ -103,10 +105,11 @@ test('card: dataset thumb > local poster > illustration; remote thumbs are not b
   const data = require('../data/exercises.js').list;
   const bench = data.find(e => e.id === '0025');
   assert.ok(bench.mediaId && bench.poster);
-  assert.ok(C.cardOf(bench, z).img.includes('/images/0025-' + bench.mediaId + '.jpg'));
+  assert.strictEqual(C.cardOf(bench, z).img, cloudImg + '0025-' + bench.mediaId + '.jpg');
   assert.ok(data.filter(e => e.mediaId).every(e => {
     const c = C.cardOf(e, z);
-    return c.img.includes('/images/' + e.id + '-' + e.mediaId + '.jpg')
+    return c.img === cloudImg + e.id + '-' + e.mediaId + '.jpg'
+      && !c.img.includes('jsdelivr')
       && ![c.img].concat(c.fallbacks || []).some(p => String(p).includes('video-posters'));
   }));
 });

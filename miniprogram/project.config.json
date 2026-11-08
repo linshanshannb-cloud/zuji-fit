@@ -4,6 +4,9 @@
   "compileType": "miniprogram",
   "libVersion": "3.0.0",
   "packOptions": {
+    "include": [
+      { "type": "folder", "value": "images/tabbar" }
+    ],
     "ignore": [
       { "type": "folder", "value": "tests" },
       { "type": "folder", "value": "scripts" },

@@ -14,6 +14,6 @@
 
 > © Gym visual — https://gymvisual.com/
 
-这些文件没有打进小程序安装包。没有云存储 mp4 的动作，详情页通过 jsDelivr 读取上述 commit 里的 GIF。已有的云视频、主包海报和线稿不是这套媒体。
+这些文件没有打进小程序安装包。列表封面读云存储 `images/<id>-<mediaId>.jpg`。有这份动图的动作，详情页读云存储 `videos/<id>-<mediaId>.gif`，不优先旧的 `anim/<id>.mp4`。没有动图时才使用已有的 mp4、主包海报和线稿。
 
 媒体条款原文见 `data/NOTICE-exercises-dataset-zh.md`。

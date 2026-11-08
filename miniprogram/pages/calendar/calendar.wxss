@@ -24,5 +24,7 @@
 .ex-line { padding-top: 12rpx; font-size: 28rpx; }
 .unrest { text-align: center; padding: 8rpx 0 24rpx; }
 .unrest .sub { text-decoration: underline; padding: 16rpx 24rpx; }
+.tabbar-keep { position: absolute; width: 0; height: 0; overflow: hidden; opacity: 0; pointer-events: none; }
+.tabbar-keep image { width: 0; height: 0; }
 .aero-link { text-align: center; padding: 32rpx 0 120rpx; }
 .aero-link .sub { padding: 16rpx 24rpx; font-weight: 600; }

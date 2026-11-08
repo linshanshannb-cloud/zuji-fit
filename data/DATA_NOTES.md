@@ -48,9 +48,9 @@ node miniprogram/scripts/build-data.js
 - 210 条云视频 `cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/anim/<id>.mp4` 全部保留。没有云视频的新动作不写 `video`。
 - 58 张主包海报、152 张主包线稿保留，路径仍是 `/assets/video-posters/<id>.jpg` 和 `/assets/exercises/<id>.png`。
 - 列表不展示的条目在运行时标 `hidden: true`（打包标志位，不删记录、不删海报/线稿/云视频）。包括没有 `mediaId` 的 46 条，以及仍有旧 AI 封面的 `0493`、`0576`、`0180`、`1327`、`0276`。动作库和挑选器只用 `visible`（1,319 条）。主包现为 **1,869,925 字节（1826.1 KB）**。`get(id)` 仍返回名称和云视频。
-- 有 `mediaId` 时，列表封面是数据集 180×180 JPEG，失败只退回线稿再占位，**不**退回 `video-posters`。没有 `mediaId` 的条目才用本地海报。这些图不进安装包。详情页云视频播放不变；没有云视频时播放同目录 GIF。
+- 有 `mediaId` 时，列表封面是云存储 `images/<id>-<mediaId>.jpg`（`cloud://` fileID，与 `anim/*.mp4` 同一环境 `cloud1-d8gn4xfqredd566d1`），失败只退回线稿再占位，**不**退回 `video-posters`。没有 `mediaId` 的条目才用本地海报。这些图不进安装包。详情页有 `mediaId` 时播云存储 `videos/<id>-<mediaId>.gif`，不优先旧的 `anim/<id>.mp4` 或线稿；没有 `mediaId` 时才播旧 mp4。云端 `anim/` 文件保留。封面和 GIF 由 `<image>` 直接使用 fileID，不写死临时 https 域名。
 - 精选模板里三条不在数据集中的 id 已改映射：`3948` 徒手深蹲 → `1685` 深蹲至过头伸展；`0463` 前平板支撑 → `0464` 平板支撑带转体；`1162` 杠铃站姿军事推举 → `1456` 杠铃站姿窄距军事推举。
-- 正式版要在微信公众平台把 `cdn.jsdelivr.net` 配进 downloadFile 合法域名。开发者工具里 `urlCheck` 已关闭，预览可以直接看。
+- 预览和正式版都不用把外部图床加进 downloadFile 合法域名。云存储读权限须与现有 `anim/` 视频相同（自定义安全规则 `read: true`）。`wx.cloud.init` 环境保持 `cloud1-d8gn4xfqredd566d1`。开发者工具里 `urlCheck` 已关闭。
 - 主包：更新前 1,910,760 字节（1866.0 KB）。接入全量索引后 1,853,842 字节；列表封面改为远程缩略图后又写入 mediaId，软隐藏 5 条旧 AI 封面后现为 **1,869,925 字节（1826.1 KB）**，仍低于 2MB 和 1900KB 门槛。详情分包约 1054 KB。
 
 同部位排序仍走 `utils/exercise-sort.js`：有封面（本地海报、数据集缩略图或线稿）和云视频的靠前。1,370 条里 1,364 条列表有封面；剩下 6 条是源库没有、本地也没有图的 openGym 补充动作。

@@ -76,16 +76,17 @@ function localCover(ex) {
   return absPath(ex && ex.poster) || absPath(ex && ex.illustration) || '';
 }
 
-// Index records ship without steps. The detail subpackage holds the copy and the dataset media id.
+// 主包索引不带步骤。详情分包补正文；动图 id 与列表封面用同一 mediaId。
 function withDataset(ex) {
   if (!ex || ex.custom || ex.unknown) return ex;
   const t = TEXT[ex.id];
-  if (!t) return ex;
-  const next = Object.assign({}, ex, {
-    description: t.d != null ? t.d : (ex.description || ''),
-    steps: (t.s && t.s.length) ? t.s : (ex.steps || []),
-  });
-  if (t.m) next.gif = MEDIA.gifUrl(ex.id, t.m);
+  const next = Object.assign({}, ex);
+  if (t) {
+    if (t.d != null) next.description = t.d;
+    if (t.s && t.s.length) next.steps = t.s;
+  }
+  const mediaId = ex.mediaId || (t && t.m);
+  if (mediaId) next.gif = MEDIA.gifUrl(ex.id, mediaId);
   return next;
 }
 
@@ -93,8 +94,11 @@ function mediaOf(ex) {
   const videoSrc = absPath(ex && ex.video);
   const posterSrc = absPath(ex && ex.poster);
   const gif = absPath(ex && ex.gif);
-  // 有云视频：封面用主包海报/线稿。无视频：优先数据集 GIF，失败再退回主包图。
+  // 有数据集 GIF 就播 GIF，不让旧 mp4 或线稿抢先。没有 GIF 才播旧 mp4，再退本地封面。
   const cover = localCover(ex);
+  if (gif) {
+    return { mediaMode: 'image', videoSrc: '', posterSrc: '', illSrc: gif, remoteGif: true, _localCover: cover };
+  }
   if (videoSrc) {
     return {
       mediaMode: 'video',
@@ -104,9 +108,6 @@ function mediaOf(ex) {
       remoteGif: false,
       _localCover: cover,
     };
-  }
-  if (gif) {
-    return { mediaMode: 'image', videoSrc: '', posterSrc: '', illSrc: gif, remoteGif: true, _localCover: cover };
   }
   if (cover) {
     return { mediaMode: 'image', videoSrc: '', posterSrc: '', illSrc: cover, remoteGif: false, _localCover: '' };

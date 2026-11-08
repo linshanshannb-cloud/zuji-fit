@@ -64,6 +64,12 @@ function walk(dir, acc = []) {
 const files = walk(MP);
 check('V4 no local mp4', !files.some(p => p.endsWith('.mp4')), files.filter(p => p.endsWith('.mp4')).join(','));
 check('V4 no bundled gif', !files.some(p => p.endsWith('.gif')));
+const MEDIA = require(path.join(MP, 'utils/dataset-media.js'));
+const cloudRoot = CLOUD.slice(0, CLOUD.indexOf('anim/'));
+check('V7 cover fileID', MEDIA.thumbUrl('0001', '2gPfomN') === cloudRoot + 'images/0001-2gPfomN.jpg', MEDIA.thumbUrl('0001', '2gPfomN'));
+check('V7 gif fileID', MEDIA.gifUrl('0001', '2gPfomN') === cloudRoot + 'videos/0001-2gPfomN.gif', MEDIA.gifUrl('0001', '2gPfomN'));
+const jsdelivr = files.filter(p => /\.(js|wxml|wxss|json)$/.test(p) && /jsdelivr\.net/.test(fs.readFileSync(p, 'utf8')));
+check('V7 no jsdelivr runtime', jsdelivr.length === 0, jsdelivr.map(p => path.relative(MP, p)).join(','));
 
 const app = JSON.parse(fs.readFileSync(APP, 'utf8'));
 function dirSize(d) {
