@@ -36,12 +36,40 @@ test('new dataset exercise: remote GIF + Chinese steps; image error falls back t
   assert.strictEqual(p.data.ex.nameZh, '3/4 仰卧起坐');
   assert.strictEqual(p.data.ex.mediaMode, 'image');
   assert.strictEqual(p.data.ex.remoteGif, true);
-  assert.ok(p.data.ex.illSrc.includes('/videos/0001-') && p.data.ex.illSrc.endsWith('.gif'));
+  assert.strictEqual(p.data.ex.illSrc, 'cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/videos/0001-2gPfomN.gif');
+  assert.ok(!p.data.ex.illSrc.includes('jsdelivr') && !p.data.ex.illSrc.includes('github'));
   assert.ok(p.data.ex.steps.length >= 3);
   assert.ok(/[\u4e00-\u9fff]/.test(p.data.ex.steps[0].text));
   p.onIllError();
   assert.strictEqual(p.data.ex.mediaMode, 'text');
   assert.strictEqual(p.data.ex.remoteGif, false);
+});
+
+test('covers and gifs use cloud fileIDs; existing anim mp4 is unchanged', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const MEDIA = require('../utils/dataset-media');
+  const E = require('../utils/exercises');
+  const root = 'cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/';
+  assert.strictEqual(MEDIA.CLOUD_ROOT, root);
+  assert.strictEqual(MEDIA.thumbUrl('0001', '2gPfomN'), root + 'images/0001-2gPfomN.jpg');
+  assert.strictEqual(MEDIA.gifUrl('0001', '2gPfomN'), root + 'videos/0001-2gPfomN.gif');
+  assert.strictEqual(MEDIA.thumbUrl('', 'x'), '');
+  assert.strictEqual(MEDIA.gifUrl('0001', ''), '');
+  assert.strictEqual(E.byId['0025'].video, root + 'anim/0025.mp4');
+  assert.ok(E.builtin.filter(e => e.video).every(e => e.video === root + 'anim/' + e.id + '.mp4'));
+  function walk(dir, acc) {
+    for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, ent.name);
+      if (ent.isDirectory()) {
+        if (ent.name === 'node_modules') continue;
+        walk(p, acc);
+      } else if (/\.(js|wxml|wxss|json)$/.test(ent.name)) acc.push(p);
+    }
+    return acc;
+  }
+  const hits = walk(path.join(__dirname, '..'), []).filter(p => /jsdelivr\.net/.test(fs.readFileSync(p, 'utf8')));
+  assert.deepStrictEqual(hits.map(p => path.relative(path.join(__dirname, '..'), p)), []);
 });
 
 test('kept openGym-only exercise without media stays a text placeholder', () => {
