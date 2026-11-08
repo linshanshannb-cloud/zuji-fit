@@ -60,4 +60,15 @@
   <!-- 已有卡片时提供快捷「新建有氧」 -->
   <view wx:if="{{cards.length && sel.kind!=='future' && !readOnly}}" class="aero-link" bindtap="newAerobic"><text class="sub accent">+ 新建有氧</text></view>
 </view>
-<view class="fab {{sel.kind==='future'||readOnly?'disabled':''}}" bindtap="pickNew">+</view>
+  <view class="fab {{sel.kind==='future'||readOnly?'disabled':''}}" bindtap="pickNew">+</view>
+  <!-- 底部 tab 图标。过滤无依赖文件不把 app.json 的 iconPath 当依赖，这里显式引用，避免编译时被丢掉。 -->
+  <view class="tabbar-keep">
+    <image src="/images/tabbar/calendar.png" />
+    <image src="/images/tabbar/calendar-active.png" />
+    <image src="/images/tabbar/library.png" />
+    <image src="/images/tabbar/library-active.png" />
+    <image src="/images/tabbar/diet.png" />
+    <image src="/images/tabbar/diet-active.png" />
+    <image src="/images/tabbar/body.png" />
+    <image src="/images/tabbar/body-active.png" />
+  </view>

@@ -72,6 +72,33 @@ test('covers and gifs use cloud fileIDs; existing anim mp4 is unchanged', () => 
   assert.deepStrictEqual(hits.map(p => path.relative(path.join(__dirname, '..'), p)), []);
 });
 
+test('dataset GIF wins over old mp4 and line art; GIF error stays on the local cover', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const wxml = fs.readFileSync(path.join(__dirname, '../pages/exercise-detail/exercise-detail.wxml'), 'utf8');
+  assert.ok(wxml.includes('wx:if="{{ex.videoSrc}}" class="speed'), '倍速只跟旧 mp4 走');
+  assert.ok(wxml.includes('wx:if="{{ex.remoteGif}}"'));
+  const bench = loadPage('0025');
+  assert.strictEqual(bench.data.ex.nameZh, '杠铃卧推');
+  assert.strictEqual(bench.data.ex.mediaMode, 'image');
+  assert.strictEqual(bench.data.ex.remoteGif, true);
+  assert.strictEqual(bench.data.ex.videoSrc, '');
+  assert.strictEqual(bench.data.ex.illSrc, 'cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/videos/0025-EIeI8Vf.gif');
+  bench.onIllError();
+  assert.strictEqual(bench.data.ex.mediaMode, 'image');
+  assert.strictEqual(bench.data.ex.remoteGif, false);
+  assert.strictEqual(bench.data.ex.videoSrc, '');
+  assert.ok(bench.data.ex.illSrc.includes('/assets/video-posters/0025.jpg'));
+  assert.ok(!String(bench.data.ex.illSrc).includes('.mp4'));
+  const decline = loadPage('0033');
+  assert.strictEqual(decline.data.ex.nameZh, '杠铃下斜卧推');
+  assert.strictEqual(decline.data.ex.mediaMode, 'image');
+  assert.strictEqual(decline.data.ex.remoteGif, true);
+  assert.strictEqual(decline.data.ex.videoSrc, '');
+  assert.strictEqual(decline.data.ex.illSrc, 'cloud://cloud1-d8gn4xfqredd566d1.636c-cloud1-d8gn4xfqredd566d1-1511089058/videos/0033-GrO65fd.gif');
+  assert.ok(!decline.data.ex.illSrc.includes('0033.png'));
+});
+
 test('kept openGym-only exercise without media stays a text placeholder', () => {
   const p = loadPage('1204');
   assert.strictEqual(p.data.ex.mediaMode, 'text');

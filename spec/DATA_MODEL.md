@@ -65,7 +65,7 @@ BodyMeasurement（独立实体，每个 date 最多一条）
 | `translationPending` | boolean | ✓ | `true` 表示中文名或步骤缺翻译 |
 | `untranslatedFields` | string[] | ✓ | 仍是英文的字段名，例如 `["description"]` 或 `["steps","description"]` |
 
-可选媒体字段（没有则省略）：`video`（已有云存储 `cloud://…/anim/<id>.mp4`，不给新动作编造）、`poster`（主包 `/assets/video-posters/<id>.jpg`）、`illustration`（主包线稿）、`mediaId`（数据集媒体 id。列表封面拼云存储 `images/<id>-<mediaId>.jpg`，详情无 mp4 时拼 `videos/<id>-<mediaId>.gif`；文件不进安装包）。详见 `data/DATA_NOTES.md`。
+可选媒体字段（没有则省略）：`video`（已有云存储 `cloud://…/anim/<id>.mp4`，不给新动作编造）、`poster`（主包 `/assets/video-posters/<id>.jpg`）、`illustration`（主包线稿）、`mediaId`（数据集媒体 id。列表封面拼云存储 `images/<id>-<mediaId>.jpg`，详情优先拼 `videos/<id>-<mediaId>.gif`，没有它才用旧 `anim` mp4；文件不进安装包）。详见 `data/DATA_NOTES.md`。
 
 示例（`data/exercises.json` 中的一条，`description` 原文略）：
 ```json

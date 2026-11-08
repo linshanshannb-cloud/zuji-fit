@@ -200,21 +200,18 @@ test('PG12 训练编辑页：信息面板改日期 → 日历移到新日期；�
   assert.strictEqual(repo.workouts.getDraft(), null);
 });
 
-test('PG13 媒体：有视频显示 video / 无媒体文字占位 / 错误回退不裂图', async () => {
+test('PG13 媒体：有数据集 GIF 时不播旧视频 / 无媒体文字占位 / 错误回退不裂图', async () => {
   const { repo } = seed();
-  // 有云视频（0025）：getTempFileURL 的 https 地址用于播放，封面仍是主包海报。
-  const withV = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
-  assert.strictEqual(withV.instance.data.ex.mediaMode, 'video', '云地址就绪后应为 video');
-  assert.strictEqual(withV.instance.data.ex._pendingVideo, false);
-  assert.ok(withV.instance.data.ex.videoSrc.includes('0025.mp4'));
-  assert.ok(withV.instance.data.ex.posterSrc.includes('0025.jpg'));
-  assert.ok(
-    withV.instance.data.ex.posterSrc.includes('video-posters') ||
-    withV.instance.data.ex.illSrc.includes('video-posters'),
-    '封面应来自主包 video-posters'
-  );
-  assert.ok(withV.dom.querySelector('.main--media') || withV.dom.querySelector('.main--vid') || withV.dom.querySelector('video') || withV.dom.innerHTML.includes('video') || withV.instance.data.ex.mediaMode === 'video');
-  assert.ok(withV.dom.textContent.includes('杠铃卧推'));
+  const gif = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
+  assert.strictEqual(gif.instance.data.ex.mediaMode, 'image');
+  assert.strictEqual(gif.instance.data.ex.remoteGif, true);
+  assert.strictEqual(gif.instance.data.ex.videoSrc, '');
+  assert.ok(gif.instance.data.ex.illSrc.includes('/videos/0025-'));
+  assert.ok(gif.dom.textContent.includes('杠铃卧推'));
+  assert.ok(gif.dom.textContent.includes('Gym visual'));
+  const old = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0463' }); await sleep(5);
+  assert.strictEqual(old.instance.data.ex.mediaMode, 'video', '没有数据集 GIF 时仍播旧 mp4');
+  assert.ok(old.instance.data.ex.videoSrc.includes('0463.mp4'));
 
   // 无云视频、无线稿、也不在数据集里 → 文字占位（1204 是保留的 openGym 条目）
   const plain = repo.exercises.get('1204');
@@ -231,8 +228,8 @@ test('PG13 媒体：有视频显示 video / 无媒体文字占位 / 错误回退
     assert.ok(img.instance.data.ex.illSrc.includes(illOnly.id));
   }
 
-  // 视频 binderror：https 失败先退回 downloadFile，再失败才回封面。
-  const bad = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
+  // 没有数据集 GIF 的旧视频：https 失败先退回 downloadFile，再失败才回封面。
+  const bad = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0463' }); await sleep(5);
   assert.strictEqual(bad.instance.data.ex.mediaMode, 'video');
   bad.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_NETWORK' } }); await sleep(5);
   bad.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_SRC_NOT_SUPPORTED' } }); await sleep(5);
@@ -246,7 +243,7 @@ test('PG13 媒体：有视频显示 video / 无媒体文字占位 / 错误回退
 
 test('PG14 云视频：点击暂停/继续、离开页暂停、坏路径退回封面再退文字', async () => {
   const { repo } = seed();
-  const c = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
+  const c = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0463' }); await sleep(5);
   assert.strictEqual(c.instance.data.ex.mediaMode, 'video');
   assert.strictEqual(c.instance.data.playing, true);
   assert.ok(c.instance.data.ex.steps.length >= 5);
@@ -264,7 +261,7 @@ test('PG14 云视频：点击暂停/继续、离开页暂停、坏路径退回�
   c.instance.onUnload(); await sleep(5);
   assert.strictEqual(c.instance.data.playing, false);
 
-  const bad = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0025' }); await sleep(5);
+  const bad = P.renderPage('pages/exercise-detail/exercise-detail', { id: '0463' }); await sleep(5);
   bad.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_NETWORK' } }); await sleep(5);
   bad.instance.onAnimError({ detail: { errMsg: 'MEDIA_ERR_SRC_NOT_SUPPORTED' } }); await sleep(5);
   assert.strictEqual(bad.instance.data.ex.mediaMode, 'image', '坏 video 应回退封面');
