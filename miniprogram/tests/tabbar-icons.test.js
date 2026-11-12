@@ -20,4 +20,9 @@ test('tabBar icons stay in the compile dependency graph', () => {
   assert.deepStrictEqual(paths, ICONS.map(name => 'images/tabbar/' + name + '.png').sort());
   const include = (pc.packOptions.include || []).map(rule => rule.type + ':' + rule.value);
   assert.ok(include.includes('folder:images/tabbar'));
+  assert.strictEqual(pc.setting.ignoreDevUnusedFiles, false);
+  const ignore = (pc.packOptions.ignore || []).map(rule => rule.type + ':' + rule.value);
+  assert.ok(ignore.includes('folder:assets/video-posters'));
+  assert.ok(ignore.includes('folder:assets/exercises'));
+  assert.ok(ignore.includes('folder:tests') && ignore.includes('folder:cloudfunctions'));
 });
