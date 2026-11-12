@@ -3,12 +3,16 @@ const D = require('../../../utils/date');
 const repo = require('../../../utils/repo/index');
 const P = require('../../../utils/diet-present');
 
+function g(n) { return P.fmtG(n); }
 function extra(e) {
   const bits = [];
-  if (e.fiberG !== '' && e.fiberG != null) bits.push('纤维 ' + P.fmtG(e.fiberG) + 'g');
-  if (e.sugarG !== '' && e.sugarG != null) bits.push('糖 ' + P.fmtG(e.sugarG) + 'g');
+  if (e.fiberG !== '' && e.fiberG != null) bits.push('纤维 ' + g(e.fiberG) + 'g');
+  if (e.sugarG !== '' && e.sugarG != null) bits.push('糖 ' + g(e.sugarG) + 'g');
   if (e.saltMg !== '' && e.saltMg != null) bits.push('盐 ' + Math.round(Number(e.saltMg)) + 'mg');
   return bits.join(' · ');
+}
+function macro(e) {
+  return '碳 ' + g(e.carbsG) + ' · 蛋白 ' + g(e.proteinG) + ' · 脂 ' + g(e.fatG);
 }
 
 Page({
@@ -36,9 +40,9 @@ Page({
       dateTitle: P.dayTitle(date, today),
       future,
       canAdd: !future && !repo.isReadOnly(),
-      kcalLine: board.recorded ? board.totals.kcal + ' kcal' : '未记录',
-      sub: future ? '还没到这一天' : (board.recorded ? board.entries.length + ' 条' : '这一天还没有饮食记录。'),
-      entries: (board.entries || []).map(e => Object.assign({}, e, { extra: extra(e) })),
+      kcalLine: board.recorded ? board.totals.kcal + ' kcal' : '',
+      sub: future ? '还没到这一天' : (board.recorded ? board.entries.length + ' 条' : '还没记饮食'),
+      entries: (board.entries || []).map(e => Object.assign({}, e, { extra: extra(e), macro: macro(e) })),
     });
   },
   openAi() { wx.navigateTo({ url: '/pages/diet-ai/input/input?date=' + this.date }); },

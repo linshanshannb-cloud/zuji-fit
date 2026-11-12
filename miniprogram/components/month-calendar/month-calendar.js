@@ -3,6 +3,18 @@
 // view (v0.5): 'month' 6x7 | 'week' 1x7 row containing `selected`; collapsible shows 展开/收起 (event toggle).
 const D = require('../../utils/date');
 const DM = require('../../utils/daymark');
+// 力量 + 有氧挤成一行「胸·跑」，把格子底部留给热量。有氧单独出现时仍写全称。
+function briefMark(ln) {
+  if (!ln) return '';
+  if (!ln.train && ln.rest) return '休';
+  if (!ln.train) return '';
+  if (ln.part && ln.aero) {
+    const plus = (String(ln.aero).match(/\+\d+$/) || [''])[0];
+    const name = String(ln.aero).replace(/\+\d+$/, '');
+    return ln.part + '·' + (name ? name.slice(0, 1) : '') + plus;
+  }
+  return ln.part || ln.aero || '';
+}
 Component({
   options: { styleIsolation: 'apply-shared' },
   properties: { year: Number, month: Number, selected: String, today: String, marks: { type: Object, value: {} }, variant: { type: String, value: 'dot' }, legend: Boolean, info: { type: Object, value: {} }, cals: { type: Object, value: {} }, rich: Boolean,
@@ -23,8 +35,9 @@ Component({
           date: c.date, day: c.day, inMonth: c.inMonth, sel: c.date === selected, isToday: c.date === today, future: c.date > today,
           mark: marks[c.date] === undefined ? '' : marks[c.date] === true ? '•' : String(marks[c.date]),
           part: ln.part, aero: ln.aero, train: ln.train, rest: ln.rest,
+          brief: briefMark(ln),
           showDot: !ln.train && !ln.rest && !!(marks[c.date]),
-          kcal: !ln.train && !ln.rest && cal ? String(cal) : '',
+          kcal: cal ? String(cal) : '',
         };
       });
       this.setData({ cells });

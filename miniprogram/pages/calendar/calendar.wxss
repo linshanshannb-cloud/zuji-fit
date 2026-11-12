@@ -1,10 +1,11 @@
 .day-head { margin-top: var(--sp-4); min-height: 48rpx; }
-.diet-line { min-height: 72rpx; display: flex; align-items: baseline; }
-.diet-k { font-size: 26rpx; color: var(--c-text-2); font-weight: 600; margin-right: 16rpx; }
-.diet-n { font-size: 40rpx; font-weight: 700; line-height: 1; }
-.diet-unit { margin-left: 8rpx; }
-.diet-meta { margin-left: 12rpx; }
-.diet-line .chev { margin-left: auto; align-self: center; }
+.diet-card { margin-top: 8rpx; min-height: 112rpx; padding: 0 32rpx; border-radius: 24rpx; background: #F7F7F7; display: flex; align-items: center; }
+.diet-k { font-size: 26rpx; color: #5F5F5F; font-weight: 600; margin-right: 16rpx; }
+.diet-n { font-size: 40rpx; font-weight: 700; line-height: 1; color: #111111; }
+.diet-unit { margin-left: 8rpx; font-size: 26rpx; color: #5F5F5F; }
+.diet-meta { margin-left: 16rpx; font-size: 26rpx; color: #5F5F5F; }
+.diet-empty { font-size: 30rpx; color: #5F5F5F; }
+.diet-go { margin-left: 8rpx; font-size: 40rpx; line-height: 1; color: #6B6B6B; }
 .tpl-entry { margin-left: auto; font-size: var(--fs-sub); font-weight: 600; padding: 12rpx 0 12rpx 24rpx; }
 .tag-rest { background: #EEF2F7; color: #6B7F99; }
 /* QA-01：有氧标签略加深橙字 */

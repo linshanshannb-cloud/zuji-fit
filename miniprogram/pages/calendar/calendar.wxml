@@ -11,12 +11,12 @@
     <text wx:elif="{{sel.isRest}}" class="tag tag-rest" style="margin-left:16rpx">休息日</text>
     <text class="tpl-entry accent" bindtap="openTemplates">模板 ›</text>
   </view>
-  <view wx:if="{{diet.show}}" class="diet-line" bindtap="openDietDay">
+  <view wx:if="{{diet.show}}" class="diet-card" bindtap="openDietDay">
     <text class="diet-k">饮食</text>
-    <text class="{{diet.recorded ? 'num diet-n' : 'sub'}}">{{diet.kcal}}</text>
-    <text wx:if="{{diet.unit}}" class="sub diet-unit">{{diet.unit}}</text>
-    <text class="sub diet-meta">{{diet.sub}}</text>
-    <text class="chev">›</text>
+    <text class="{{diet.recorded ? 'num diet-n' : 'diet-empty'}}">{{diet.kcal}}</text>
+    <text wx:if="{{diet.unit}}" class="diet-unit">{{diet.unit}}</text>
+    <text class="diet-meta">{{diet.sub}}</text>
+    <text class="diet-go">›</text>
   </view>
 
   <!-- 所选日汇总卡：大号关键数 -->

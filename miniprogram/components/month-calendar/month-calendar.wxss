@@ -15,8 +15,8 @@
 .val { font-size: 18rpx; color: var(--c-text-3); height: 24rpx; line-height: 24rpx; }
 .out .dot, .out .val { visibility: hidden; }
 .today-hit { height: 88rpx; display: flex; align-items: center; padding: 0 16rpx; }
-/* v0.5 紧凑格子：行高 100rpx = 6 + 数字 40 + (2 + 标签 24) × 2 */
-.rich { height: 100rpx; justify-content: flex-start; padding-top: 6rpx; box-sizing: border-box; }
+/* 日期、一行训练（胸·跑）、底部固定热量。浅底代替整块标签。 */
+.rich { height: 132rpx; justify-content: flex-start; padding-top: 4rpx; box-sizing: border-box; }
 .rich .n { width: 40rpx; height: 40rpx; line-height: 40rpx; font-size: 28rpx; }
 /* 训练日：整格浅橙底 + 日期加粗 */
 .rich.train::before { content: ''; position: absolute; top: 2rpx; bottom: 0; left: 3rpx; right: 3rpx; border-radius: 16rpx; background: #FFE4D6; }
@@ -31,7 +31,12 @@
 .ci { position: relative; max-width: 100%; padding: 0 2rpx; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center; font-size: 19rpx; line-height: 24rpx; height: 24rpx; }
 .ci-r { color: #6B7F99; font-weight: 600; margin-top: 4rpx; width: 32rpx; height: 32rpx; line-height: 32rpx; border-radius: 50%; background: #EEF2F7; font-size: 20rpx; padding: 0; }
 .out .ctag, .out .ci, .out .ckcal { visibility: hidden; }
-.ckcal { position: relative; max-width: 88rpx; margin-top: 2rpx; font-size: 18rpx; line-height: 22rpx; height: 22rpx; color: var(--c-text-3); text-align: center; }
+.markline { position: relative; max-width: 96rpx; height: 28rpx; line-height: 28rpx; font-size: 20rpx; font-weight: 600; color: #5F5F5F; text-align: center; overflow: hidden; white-space: nowrap; }
+.markline.is-aero { color: #C94412; }
+.markline.is-rest { color: #6B7F99; }
+.out .markline { visibility: hidden; }
+.ckcal { position: relative; max-width: 96rpx; height: 24rpx; line-height: 24rpx; font-size: 20rpx; font-weight: 600; color: #5F5F5F; text-align: center; }
+.lg-note { font-size: 22rpx; line-height: 32rpx; color: #5F5F5F; padding-bottom: 8rpx; }
 /* 底部一行：图例 + 展开/收起 */
 .foot { min-height: 72rpx; }
 .legend { font-size: 22rpx; color: var(--c-text-3); flex-wrap: wrap; min-width: 0; }

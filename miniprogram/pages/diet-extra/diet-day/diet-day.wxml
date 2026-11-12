@@ -1,22 +1,27 @@
-<nav-bar title="{{title}}"></nav-bar>
-<view class="page">
-  <view class="cap">{{dateTitle}}</view>
-  <view class="sum">
+<nav-bar title="{{title}}" tone="warm"></nav-bar>
+<view class="page day">
+  <view class="date">{{dateTitle}}</view>
+  <view wx:if="{{entries.length}}" class="sum">
     <text class="kcal num">{{kcalLine}}</text>
     <text class="sub">{{sub}}</text>
   </view>
-  <view wx:if="{{!entries.length && !future}}" class="empty">这一天还没有饮食记录。</view>
+  <view wx:if="{{!entries.length}}" class="empty">{{future ? '还没到这一天' : '还没记饮食'}}</view>
   <view wx:for="{{entries}}" wx:key="id" class="item" bindtap="openMeal" data-meal="{{item.meal}}">
     <view class="row between">
       <text class="name">{{item.displayName}}</text>
-      <text class="num">{{item.kcal}} kcal</text>
+      <view class="row">
+        <text class="num kcal-sm">{{item.kcal}} kcal</text>
+        <text class="go">›</text>
+      </view>
     </view>
-    <view class="cap">{{item.mealLabel}}<text wx:if="{{item.eatenAt}}"> · {{item.eatenAt}}</text><text wx:if="{{item.portion}}"> · {{item.portion}}</text><text wx:if="{{item.source==='ai-text'}}"> · 估算</text></view>
-    <view class="cap">{{item.line}}</view>
-    <view wx:if="{{item.extra}}" class="cap">{{item.extra}}</view>
-    <view wx:if="{{item.note}}" class="sub note">{{item.note}}</view>
-    <view wx:if="{{item.tips}}" class="cap">{{item.tips}}</view>
+    <view class="meta">{{item.mealLabel}}<text wx:if="{{item.eatenAt}}"> · {{item.eatenAt}}</text><text wx:if="{{item.portion}}"> · {{item.portion}}</text><text wx:if="{{item.source==='ai-text'}}"> · 估算</text></view>
+    <view class="meta">{{item.macro}}</view>
+    <view wx:if="{{item.extra}}" class="meta">{{item.extra}}</view>
+    <view wx:if="{{item.note}}" class="note">{{item.note}}</view>
+    <view wx:if="{{item.tips}}" class="tip">{{item.tips}}</view>
   </view>
-  <view wx:if="{{canAdd}}" class="stack"><btn bind:press="openAi">文字识别</btn></view>
-  <view wx:if="{{canAdd}}" class="stack"><btn type="secondary" bind:press="openLog">手动录入</btn></view>
+</view>
+<view wx:if="{{canAdd}}" class="addbar">
+  <view class="add-main" bindtap="openAi">文字识别</view>
+  <view class="add-sub" bindtap="openLog">手动录入</view>
 </view>

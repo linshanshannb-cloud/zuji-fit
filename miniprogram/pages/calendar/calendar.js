@@ -3,7 +3,6 @@ const F = require('../../utils/format');
 const repo = require('../../utils/repo/index');
 const ui = require('../../utils/ui');
 const DM = require('../../utils/daymark');
-const P = require('../../utils/diet-present');
 const ymOf = s => { const p = D.parse(s); return { year: p.getFullYear(), month: p.getMonth() + 1 }; };
 Page({
   // calView：'week'（默认，所选日所在周）| 'month'；仅存在页面内存，不写存储
@@ -49,7 +48,7 @@ Page({
         sub: future ? '还没到这一天' : (board.recorded ? (n + ' 条') : '点开可以补记'),
       };
       const raw = repo.diet.intakeMarks(grid[0].date, grid[grid.length - 1].date);
-      Object.keys(raw).forEach(d => { cals[d] = P.compactKcal(raw[d]); });
+      Object.keys(raw).forEach(d => { cals[d] = String(Math.round(Number(raw[d]))); });
     }
     const isRest = cards.length === 0 && repo.restDays.isRest(selected);
     const draft = repo.workouts.getDraft();

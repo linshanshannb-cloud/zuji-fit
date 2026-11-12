@@ -27,8 +27,9 @@ Page({
     canSend: false,
     failTitle: '',
     failText: '',
-    finderNote: '这一期还不能拍照。用上面的「输入」写一句就行，不会打开相机。',
+    cameraHint: '',
     keyboardHeight: 0,
+    dockStyle: '',
   },
   onLoad(q) {
     const today = D.today();
@@ -50,18 +51,17 @@ Page({
       canSend: tab === 'text' && String(text || '').trim().length > 0 && !loading,
     }));
   },
-  useCamera() { this.sync({ tab: 'camera', keyboardHeight: 0 }); },
-  useText() { this.sync({ tab: 'text' }); },
-  cameraLater() {
-    this.setData({ finderNote: '拍照还没接上。先切到「输入」，用一句话描述。' });
-  },
+  onCamera() { this.setData({ cameraHint: '拍照下一期开放' }); },
   onTime(e) {
     const time = e.detail.value;
     this._meal = P.inferMeal(clock(time));
     this.setData({ time, timeLabel: timeLabel(this.date, this.today, time) });
   },
   onText(e) { this.sync({ text: e.detail.value, failTitle: '', failText: '' }); },
-  onKeyboard(e) { this.setData({ keyboardHeight: (e.detail && e.detail.height) || 0 }); },
+  onKeyboard(e) {
+    const h = (e.detail && e.detail.height) || 0;
+    this.setData({ keyboardHeight: h, dockStyle: h ? ('bottom:' + (h + 12) + 'px') : '' });
+  },
   clearFail() { this.setData({ failTitle: '', failText: '' }); },
   cancel() {
     this._dead = true;
@@ -72,12 +72,9 @@ Page({
     wx.navigateTo({ url: '/pages/diet-extra/diet-log/diet-log?date=' + this.date });
   },
   confirm() {
-    if (this.data.tab !== 'text' || this._busy) return Promise.resolve();
+    if (this._busy || this.data.loading || !this.data.canSend) return Promise.resolve();
     const text = String(this.data.text || '').trim();
-    if (!text) {
-      this.setData({ failTitle: '先写一句话', failText: '比如：下午吃了一块巧克力。' });
-      return Promise.resolve();
-    }
+    if (!text) return Promise.resolve();
     this._busy = true;
     this.sync({ loading: true, failTitle: '', failText: '' });
     return call.recognize(text).then(content => {
