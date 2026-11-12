@@ -20,8 +20,12 @@
     { "root": "pages/custom-exercise-edit", "pages": ["custom-exercise-edit"] },
     { "root": "pages/body-edit", "pages": ["body-edit"] },
     { "root": "pages/settings", "pages": ["settings"] },
-    { "root": "pages/about", "pages": ["about"] }
+    { "root": "pages/about", "pages": ["about"] },
+    { "root": "pages/journal-pack", "pages": ["hold"] }
   ],
+  "preloadRule": {
+    "pages/calendar/calendar": { "network": "all", "packages": ["pages/journal-pack"] }
+  },
   "window": {
     "navigationStyle": "custom",
     "navigationBarTextStyle": "black",

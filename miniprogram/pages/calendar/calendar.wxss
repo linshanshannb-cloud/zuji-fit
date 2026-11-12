@@ -1,19 +1,48 @@
 page { background: #F6F3EE; }
+.tab-title { font-size: 64rpx; font-weight: 700; color: #121212; }
 .cal-pad { padding-bottom: 320rpx; }
-.day-head { margin-top: 28rpx; min-height: 48rpx; }
-.peer { margin-top: 24rpx; background: #fff; border-radius: 24rpx; padding: 16rpx 32rpx; min-height: 144rpx; box-sizing: border-box; }
-.peer-top { display: flex; align-items: center; min-height: 48rpx; }
-.peer-k { width: 72rpx; flex-shrink: 0; font-size: 30rpx; font-weight: 600; color: #121212; }
-.peer-status { font-size: 28rpx; color: #6B6560; }
-.peer-num { margin-left: 12rpx; font-size: 40rpx; font-weight: 700; line-height: 1; color: #111111; }
-.peer-note { margin-left: 12rpx; font-size: 22rpx; color: #6B6560; }
-.peer-go { margin-left: auto; font-size: 40rpx; line-height: 1; color: #2C241E; align-self: center; font-weight: 600; }
-.peer-sub { margin-top: 8rpx; font-size: 28rpx; color: #111111; }
-.peer-links { margin-top: 8rpx; display: flex; align-items: center; }
-.tpl { display: inline-flex; align-items: center; height: 56rpx; padding: 0 20rpx; border-radius: 16rpx; background: #FFE8DC; color: #C64B19; font-size: 26rpx; font-weight: 600; box-sizing: border-box; }
-.empty-hint { margin-top: 24rpx; font-size: 26rpx; line-height: 1.4; color: #6B6560; }
+.ruled {
+  background-image: linear-gradient(rgba(44, 36, 30, 0.07) 1px, transparent 1px);
+  background-size: 100% 56rpx;
+  margin-top: 8rpx;
+}
+.day-in { animation: day-in 160ms ease both; }
+@keyframes day-in { from { opacity: 0; transform: translateY(12rpx); } to { opacity: 1; transform: none; } }
+.day-head { margin-top: 20rpx; min-height: 48rpx; }
+.day-title { font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 40rpx; font-weight: 600; color: #2C241E; }
+.peer { margin-top: 16rpx; background: #FFFEFB; border-radius: 32rpx; padding: 28rpx 32rpx; border: 1px solid rgba(44, 36, 30, 0.04); box-shadow: 0 4rpx 20rpx rgba(44, 36, 30, 0.07), 0 2rpx 4rpx rgba(44, 36, 30, 0.05); box-sizing: border-box; }
+.tilt-train { transform: rotate(-0.4deg); }
+.tilt-diet { transform: rotate(0.35deg); margin-top: 24rpx; }
+.peer-top { display: flex; align-items: baseline; min-height: 44rpx; }
+.peer-k { font-size: 32rpx; font-weight: 700; color: #121212; }
+.peer-meta { margin-left: 16rpx; flex: 1; font-size: 26rpx; font-weight: 500; color: #6B6560; }
+.peer-meta.pop { animation: meta-pop 200ms ease; }
+@keyframes meta-pop { 0% { transform: scale(1); } 50% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.peer-note { margin-top: 8rpx; font-size: 22rpx; color: #6B6560; }
+.peer-links { margin-top: 12rpx; display: flex; align-items: center; }
+.tpl { margin-left: auto; font-size: 26rpx; font-weight: 600; color: #C64B19; padding: 8rpx 0 8rpx 16rpx; }
+.empty-slot { height: 104rpx; margin-top: 20rpx; border: 3rpx dashed #D9D1C6; border-radius: 24rpx; display: flex; align-items: center; justify-content: center; color: #A89F94; font-size: 26rpx; }
+.entry { display: flex; align-items: center; min-height: 128rpx; padding: 8rpx 0; }
+.entry + .entry { border-top: 1px dashed rgba(44, 36, 30, 0.08); }
+.sticker { width: 140rpx; height: 140rpx; flex-shrink: 0; }
+.sticker.lg { width: 168rpx; height: 168rpx; }
+.sticker.l { transform: rotate(-7deg); }
+.sticker.r { transform: rotate(6deg); }
+.sticker.land.l { animation: land-l 300ms cubic-bezier(.34, 1.56, .64, 1) both; }
+.sticker.land.r { animation: land-r 300ms cubic-bezier(.34, 1.56, .64, 1) both; }
+@keyframes land-l { from { transform: scale(1.15) rotate(-12deg); opacity: 0; } to { transform: scale(1) rotate(-7deg); opacity: 1; } }
+@keyframes land-r { from { transform: scale(1.15) rotate(-12deg); opacity: 0; } to { transform: scale(1) rotate(6deg); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .sticker.land.l, .sticker.land.r, .day-in, .peer-meta.pop { animation: fade-only 300ms linear both; }
+}
+@keyframes fade-only { from { opacity: 0; } to { opacity: 1; } }
+.entry-text { flex: 1; min-width: 0; margin-left: 24rpx; }
+.entry-name { display: block; font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 32rpx; font-weight: 600; color: #2C241E; }
+.entry-sub { display: block; margin-top: 4rpx; font-size: 24rpx; color: #6B6560; }
+.entry-kcal { font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 28rpx; font-weight: 600; color: #2C241E; margin-left: 12rpx; }
+.empty-hint { margin-top: 32rpx; text-align: center; font-size: 26rpx; line-height: 1.4; color: #6B6560; }
 .cal-mask { position: fixed; left: 0; right: 0; top: 0; bottom: 0; background: rgba(44, 36, 30, .4); z-index: 60; display: flex; align-items: flex-end; }
-.cal-panel { width: 100%; background: #fff; border-radius: 36rpx 36rpx 0 0; padding: 28rpx 32rpx calc(24rpx + env(safe-area-inset-bottom)); box-sizing: border-box; }
+.cal-panel { width: 100%; background: #FFFEFB; border-radius: 40rpx 40rpx 0 0; padding: 28rpx 32rpx calc(24rpx + env(safe-area-inset-bottom)); box-sizing: border-box; }
 .cal-sheet-title { font-size: 26rpx; line-height: 40rpx; color: #6B6560; padding: 4rpx 8rpx 8rpx; }
 .cal-row { height: 104rpx; display: flex; align-items: center; padding: 0 8rpx; font-size: 34rpx; color: #121212; }
 .cal-trail { margin-left: auto; color: #6B6560; font-size: 34rpx; }
@@ -41,4 +70,4 @@ page { background: #F6F3EE; }
 .ex-line { padding-top: 12rpx; font-size: 28rpx; }
 .tabbar-keep { position: absolute; width: 0; height: 0; overflow: hidden; opacity: 0; pointer-events: none; }
 .tabbar-keep image { width: 0; height: 0; }
-.fab.cal-fab { background: #C44714; }
+.fab.cal-fab { background: #FC5B21; right: 40rpx; bottom: 28rpx; box-shadow: 0 12rpx 32rpx rgba(252, 91, 33, 0.35); }

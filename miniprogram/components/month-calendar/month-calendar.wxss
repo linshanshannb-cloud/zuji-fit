@@ -22,9 +22,18 @@
 .today-hit { height: 88rpx; display: flex; align-items: center; padding: 0 16rpx; }
 /* 日期、一行训练、底部热量。整行都没有标签或热量时不留第二行。 */
 .rich { height: 132rpx; justify-content: flex-start; padding-top: 4rpx; box-sizing: border-box; }
-.rich.is-week { height: 156rpx; }
+.rich.is-week { height: 88rpx; padding-top: 0; justify-content: flex-start; }
 .cal-row.shut .rich,
 .cal-row.shut .rich.is-week { height: 64rpx; padding-top: 0; justify-content: center; }
+.rich.is-week .n { width: 64rpx; height: 64rpx; line-height: 64rpx; font-size: 32rpx; font-weight: 600; }
+.rich.is-week.future .n { font-weight: 500; }
+.rich.is-week.train::before { display: none; }
+.rich.is-week.sel .n { width: 64rpx; height: 64rpx; line-height: 64rpx; background: #FFE4D6; color: #C64B19; box-shadow: inset 0 0 0 3rpx #F0C4A8; }
+.jdot { width: 10rpx; height: 10rpx; border-radius: 50%; margin-top: 6rpx; }
+.jdot-train { background: #FC5B21; }
+.jdot-diet { background: #7A6A58; }
+.jdot-rest { background: #C4B8A8; }
+.jdot-both { background: #FC5B21; box-shadow: 12rpx 0 0 #7A6A58; margin-right: 12rpx; }
 .rich .n { width: 40rpx; height: 40rpx; line-height: 40rpx; font-size: 28rpx; }
 /* 训练日：整格浅橙底 + 日期加粗 */
 .rich.train::before { content: ''; position: absolute; top: 2rpx; bottom: 0; left: 3rpx; right: 3rpx; border-radius: 16rpx; background: #FFE4D6; }

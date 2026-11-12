@@ -4,61 +4,46 @@
 
   <view wx:if="{{draft}}" class="banner"><text class="sub" style="color:var(--c-ink)">{{draft.text}}</text><text class="accent hit" style="font-weight:600;padding-left:24rpx" bindtap="continueDraft">继续</text></view>
 
-  <view class="day-head"><text class="h2">{{sel.label}}</text></view>
+  <view class="ruled {{dayAnim ? 'day-in' : ''}}">
+  <view class="day-head"><text class="day-title">{{sel.label}}</text></view>
 
-  <view class="peer">
-    <view class="peer-top" bindtap="openTrain">
+  <view class="peer tilt-train">
+    <view class="peer-top">
       <text class="peer-k">训练</text>
-      <text class="peer-status">{{train.status}}</text>
-      <block wx:if="{{train.min}}">
-        <text class="peer-num num">{{train.min}}</text>
-        <text class="peer-status">分钟</text>
-      </block>
-      <text wx:if="{{train.note}}" class="peer-note">{{train.note}}</text>
-      <text wx:if="{{train.oneId}}" class="peer-go">›</text>
+      <text class="peer-meta {{trainPop ? 'pop' : ''}}">{{train.head}}</text>
+      <text wx:if="{{!train.future}}" class="tpl" catchtap="openTemplates">模板 ›</text>
     </view>
-    <view wx:if="{{train.detail}}" class="peer-sub">{{train.detail}}</view>
-    <view wx:if="{{!train.future}}" class="peer-links">
-      <text class="tpl" catchtap="openTemplates">模板 ›</text>
-      <text wx:if="{{sel.isRest && !readOnly}}" class="link" catchtap="unmarkRest">取消休息日</text>
-      <text wx:if="{{sel.isRest && !readOnly}}" class="link" catchtap="pickTrain">补录训练</text>
+    <view wx:if="{{train.note}}" class="peer-note">{{train.note}}</view>
+    <view wx:for="{{trainRows}}" wx:key="id" class="entry" data-id="{{item.id}}" data-kind="{{item.kind}}" bindtap="openCard">
+      <image class="sticker {{item.rot}} {{item.fresh ? 'land' : ''}}" src="{{item.sticker}}" mode="aspectFit" />
+      <view class="entry-text">
+        <text class="entry-name">{{item.name}}</text>
+        <text wx:if="{{item.sub}}" class="entry-sub">{{item.sub}}</text>
+      </view>
+    </view>
+    <view wx:if="{{!trainRows.length && sel.kind !== 'future'}}" class="empty-slot">训练会像贴纸一样贴在这里</view>
+    <view wx:if="{{sel.isRest && !readOnly}}" class="peer-links">
+      <text class="link" catchtap="unmarkRest">取消休息日</text>
+      <text class="link" catchtap="pickTrain">补录训练</text>
     </view>
   </view>
 
-  <view class="peer" bindtap="openDietDay">
+  <view class="peer tilt-diet" bindtap="openDietDay">
     <view class="peer-top">
       <text class="peer-k">饮食</text>
-      <text wx:if="{{diet.kcal}}" class="peer-num num">{{diet.kcal}}</text>
-      <text class="peer-status">{{diet.tail}}</text>
-      <text class="peer-go">›</text>
+      <text class="peer-meta {{dietPop ? 'pop' : ''}}">{{diet.head}}</text>
     </view>
+    <view wx:for="{{dietRows}}" wx:key="id" class="entry" catchtap="openDietDay">
+      <image class="sticker {{item.lg ? 'lg' : ''}} {{item.rot}} {{item.fresh ? 'land' : ''}}" src="{{item.sticker}}" mode="aspectFit" />
+      <view class="entry-text">
+        <text class="entry-name">{{item.name}}</text>
+        <text wx:if="{{item.sub}}" class="entry-sub">{{item.sub}}</text>
+      </view>
+      <text class="entry-kcal">{{item.kcal}}</text>
+    </view>
+    <view wx:if="{{!dietRows.length && sel.kind !== 'future'}}" class="empty-slot">记一餐，贴一张专属贴纸</view>
   </view>
   <view wx:if="{{!listCount && sel.kind !== 'future'}}" class="empty-hint">点右下角 +，记训练或饮食</view>
-
-  <view wx:if="{{listCount}}" class="rec-title">当日记录 · {{listCount}}</view>
-  <view wx:for="{{cards}}" wx:key="id" class="rec">
-    <card tappable bind:press="openCard" data-id="{{item.id}}" data-kind="{{item.kind}}">
-      <view class="row between">
-        <view class="row flex1" style="min-width:0">
-          <text class="tag {{item.kind==='aerobic'?'tag-aero':'tag-gray'}}" style="margin-right:12rpx;flex-shrink:0">{{item.kind==='aerobic'?'有氧':'力量'}}</text>
-          <text class="rec-name ell">{{item.title}}</text>
-        </view>
-        <text wx:if="{{item.duration}}" class="cap" style="flex-shrink:0;margin-left:12rpx">{{item.duration}} 分钟</text>
-        <text class="peer-go">›</text>
-      </view>
-      <view class="sub num rec-meta">{{item.meta}}</view>
-      <block wx:if="{{item.kind!=='aerobic'}}">
-        <view wx:if="{{item.detailMissing}}" class="cap" style="padding-top:12rpx">训练详情丢失</view>
-        <view wx:for="{{item.top}}" wx:for-item="t" wx:key="name" class="row between ex-line"><text class="flex1 ell">{{t.name}}</text><text class="sub num">{{t.text}}</text></view>
-        <view wx:if="{{item.more}}" class="cap" style="padding-top:8rpx">等 {{item.more + 3}} 个动作</view>
-      </block>
-    </card>
-  </view>
-  <view wx:if="{{diet.recorded}}" class="rec diet-rec" bindtap="openDietDay">
-    <text class="tag tag-gray">饮食</text>
-    <text class="rec-name">{{diet.count}} 条</text>
-    <text class="sub">饮食 {{diet.kcal}} kcal</text>
-    <text class="peer-go">›</text>
   </view>
 </view>
 <view class="fab cal-fab {{sel.kind==='future'||readOnly?'disabled':''}}" bindtap="pickAdd">+</view>

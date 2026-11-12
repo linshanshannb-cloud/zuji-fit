@@ -3,10 +3,11 @@ const F = require('../../utils/format');
 const repo = require('../../utils/repo/index');
 const ui = require('../../utils/ui');
 const DM = require('../../utils/daymark');
+const JS = require('../../utils/journal-stickers');
 const ymOf = s => { const p = D.parse(s); return { year: p.getFullYear(), month: p.getMonth() + 1 }; };
 Page({
   // calView：'week'（默认，所选日所在周）| 'month'；仅存在页面内存，不写存储
-  data: { year: 0, month: 0, selected: '', today: '', calView: 'week', marks: {}, info: {}, cals: {}, cards: [], listCount: 0, day: {}, train: { status: '', min: 0, detail: '', note: '', oneId: '', oneKind: '', future: false }, draft: null, sel: {}, monthEmpty: false, readOnly: false, sheet: null, diet: { show: true, recorded: false, kcal: '', tail: '', count: 0 } },
+  data: { year: 0, month: 0, selected: '', today: '', calView: 'week', marks: {}, info: {}, cals: {}, cards: [], trainRows: [], dietRows: [], listCount: 0, dayAnim: false, trainPop: false, dietPop: false, day: {}, train: { status: '', min: 0, detail: '', note: '', oneId: '', oneKind: '', future: false, head: '' }, draft: null, sel: {}, monthEmpty: false, readOnly: false, sheet: null, diet: { show: true, recorded: false, kcal: '', tail: '', count: 0, head: '' } },
   onLoad() { const t = D.today(); this.setData(Object.assign({ selected: t, today: t }, ymOf(t))); },
   onShow() { this.refresh(); },
   refresh() {
@@ -35,11 +36,13 @@ Page({
     const cards = strength.concat(aerobic).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
     const info = DM.buildInfo(repo, grid[0].date, grid[grid.length - 1].date);
     const cals = {};
-    let diet = { show: true, recorded: false, kcal: '', tail: '还没记饮食', count: 0 };
-    if (repo.diet.problem()) diet = { show: true, recorded: false, kcal: '', tail: '读取异常', count: 0 };
+    let dietEntries = [];
+    let diet = { show: true, recorded: false, kcal: '', tail: '还没记饮食', count: 0, head: '还没记饮食' };
+    if (repo.diet.problem()) diet = { show: true, recorded: false, kcal: '', tail: '读取异常', count: 0, head: '读取异常' };
     else {
       const board = repo.diet.dayBoard(selected);
-      const n = (board.entries || []).length;
+      dietEntries = board.entries || [];
+      const n = dietEntries.length;
       const futureDay = selected > today;
       diet = {
         show: true,
@@ -47,6 +50,7 @@ Page({
         kcal: board.recorded ? String(board.totals.kcal) : '',
         count: n,
         tail: board.recorded ? ('kcal · ' + n + ' 条') : (futureDay ? '还没到这一天' : '还没记饮食'),
+        head: board.recorded ? (board.totals.kcal + ' kcal · ' + n + ' 条') : (futureDay ? '还没到这一天' : '还没记饮食'),
       };
       const raw = repo.diet.intakeMarks(grid[0].date, grid[grid.length - 1].date);
       Object.keys(raw).forEach(d => { cals[d] = String(Math.round(Number(raw[d]))); });
@@ -66,13 +70,55 @@ Page({
       detail: dp.parts.concat(dp.aeros.length ? ['有氧'] : []).join(' · '),
       oneId: cards.length === 1 ? cards[0].id : '',
       oneKind: cards.length === 1 ? cards[0].kind : '',
+      head: cards.length ? (cards.length + ' 项' + (totalMin ? ' · ' + totalMin + ' 分钟' : '')) : (kind === 'future' ? '还没到这一天' : (isRest ? '休息日' : (kind === 'today' ? '还没有训练' : '这天没有训练'))),
     };
-    this.setData({ today, marks, info, cals, diet, train, cards, readOnly: repo.isReadOnly(),
+    const seen = this._seen || (this._seen = {});
+    const same = this._primedDate === selected;
+    const trainRows = this._journal(cards.map(c => {
+      if (c.kind === 'aerobic') {
+        const src = as.find(a => a.id === c.id);
+        return {
+          id: c.id, kind: c.kind, name: c.title + ' · 有氧',
+          sub: [c.duration ? c.duration + ' 分钟' : '', src ? '消耗 ' + src.estimatedKcal + ' kcal' : ''].filter(Boolean).join(' · '),
+          sticker: JS.trainSticker('aerobic', src && src.activityType), lg: false,
+        };
+      }
+      const detail = repo.workouts.getWorkout(c.id);
+      const label = DM.partsLabel(detail && detail.exercises);
+      return {
+        id: c.id, kind: c.kind, name: (label || '力量') + ' · 力量',
+        sub: c.duration ? c.duration + ' 分钟' : '',
+        sticker: JS.trainSticker('strength'), lg: false,
+      };
+    }), same, seen);
+    const dietRows = this._journal(dietEntries.map((e, i) => ({
+      id: e.id, kind: 'diet', name: e.displayName || e.name || '饮食',
+      sub: [e.mealLabel, e.qtyText || (e.portion ? e.portion + ' 份' : '')].filter(Boolean).join(' · '),
+      kcal: (e.kcal == null ? '' : e.kcal) + ' kcal',
+      sticker: JS.foodSticker(e.displayName || e.name), lg: i === 0,
+    })), same, seen);
+    this._primedDate = selected;
+    const dayAnim = !!(this._seenDate && this._seenDate !== selected);
+    const trainPop = this._seenDate === selected && this._trainN != null && this._trainN !== trainRows.length;
+    const dietPop = this._seenDate === selected && this._dietN != null && this._dietN !== dietRows.length;
+    this._seenDate = selected;
+    this._trainN = trainRows.length;
+    this._dietN = dietRows.length;
+    this.setData({ today, marks, info, cals, diet, train, cards, trainRows, dietRows, dayAnim, trainPop, dietPop, readOnly: repo.isReadOnly(),
       listCount: cards.length + (diet.recorded ? 1 : 0),
       day: cards.length ? this.daySummary(ws, as, totalMin, partial) : {},
       monthEmpty: !Object.keys(marks).some(d => d >= from && d <= to),
       draft: draft ? { id: draft.id, text: (draft.date === today ? '今天' : F.md(draft.date)) + '有一个未完成的训练' } : null,
       sel: { label: F.dateLabel(selected, today), kind, isTraining: cards.length > 0, isRest, hasStrength, hasAerobic, totalMin } });
+  },
+  // 同一天里新出现的记录才播放贴上动画。第一次看到某一天不播。
+  _journal(rows, same, seen) {
+    rows.forEach((row, i) => {
+      row.rot = i % 2 ? 'r' : 'l';
+      row.fresh = !!(same && !seen[row.id]);
+    });
+    rows.forEach(row => { seen[row.id] = 1; });
+    return rows;
   },
   // 所选日汇总卡：力量/有氧分别累加当天全部记录
   daySummary(ws, as, totalMin, partial) {

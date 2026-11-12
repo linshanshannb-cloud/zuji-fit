@@ -169,6 +169,9 @@ test('calendar home: train and diet summaries are peers, and the list keeps ever
   assert.strictEqual(pg.data.train.detail, '胸 · 有氧');
   assert.ok(!pg.data.train.detail.includes('爬楼'));
   assert.ok(pg.data.cards.some(c => c.kind === 'aerobic' && c.title === '爬楼机'));
+  assert.ok(pg.data.trainRows.some(r => r.kind === 'strength' && r.name === '胸 · 力量' && r.sticker.endsWith('/dumbbell.png')));
+  assert.ok(pg.data.trainRows.some(r => r.name === '爬楼机 · 有氧' && r.sticker.endsWith('/shoe.png') && !r.fresh));
+  assert.ok(pg.data.dietRows.some(r => r.name === '石锅拌饭' && r.sticker.endsWith('/bibimbap.png') && r.kcal.endsWith(' kcal')));
   assert.ok(pg.data.train.min > 0);
   assert.strictEqual(pg.data.train.oneId, '');
   assert.ok(pg.data.cards.some(c => c.kind === 'aerobic' && c.meta.startsWith('消耗 ')));
@@ -183,8 +186,11 @@ test('calendar home: train and diet summaries are peers, and the list keeps ever
   const wxml = fs.readFileSync(path.join(__dirname, '../pages/calendar/calendar.wxml'), 'utf8');
   assert.ok(wxml.includes('title="日历"'));
   assert.ok(!wxml.includes('sum-big'));
-  assert.ok(wxml.includes('当日记录'));
+  assert.ok(wxml.includes('训练会像贴纸一样贴在这里'));
+  assert.ok(wxml.includes('Songti SC') === false);
   assert.ok(wxml.includes('cal-pad'));
+  const wxss = fs.readFileSync(path.join(__dirname, '../pages/calendar/calendar.wxss'), 'utf8');
+  assert.ok(wxss.includes('Songti SC') && wxss.includes('prefers-reduced-motion') && wxss.includes('rotate(-0.4deg)'));
   const js = fs.readFileSync(path.join(__dirname, '../pages/calendar/calendar.js'), 'utf8');
   assert.ok(!js.includes('showActionSheet'));
   assert.ok(js.includes("label: '记训练'") && js.includes("label: '记饮食'"));
@@ -244,4 +250,10 @@ test('calendar marks any cardio as 有氧, and the day list still names each act
   pg.onSelect({ detail: { date: '2026-10-15' } });
   assert.strictEqual(pg.data.train.detail, '胸 · 有氧');
   assert.deepStrictEqual(pg.data.cards.filter(c => c.kind === 'aerobic').map(c => c.title).sort(), ['爬楼机', '跑步机爬坡']);
+  assert.ok(pg.data.trainRows.filter(r => r.kind === 'aerobic').every(r => r.name.endsWith(' · 有氧') && !r.name.includes('有氧+1')));
+  pg.onShow();
+  assert.ok(pg.data.trainRows.every(r => !r.fresh), 'first look does not play the drop');
+  assert.ok(repo.aerobic.create({ date: '2026-10-15', activityType: 'run', durationMin: 10, estimatedKcal: 80 }).ok);
+  pg.onShow();
+  assert.ok(pg.data.trainRows.some(r => r.fresh && r.name.startsWith('跑步')), 'a new record drops on when returning');
 });

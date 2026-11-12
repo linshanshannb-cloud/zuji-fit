@@ -36,6 +36,7 @@ Component({
           brief: briefMark(ln),
           showDot: !ln.train && !ln.rest && !!(marks[c.date]),
           kcal: cal ? String(cal) : '',
+          dot: ln.train && cal ? 'both' : ln.train ? 'train' : cal ? 'diet' : ln.rest ? 'rest' : '',
         };
       });
       // 当前行没有任何标签或热量时收起第二行；图例只在真有训练标记时出现。

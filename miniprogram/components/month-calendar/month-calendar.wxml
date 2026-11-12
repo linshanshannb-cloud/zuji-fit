@@ -11,7 +11,8 @@
   <view wx:for="{{rows}}" wx:for-item="row" wx:key="key" class="cal-row {{row.open ? 'open' : 'shut'}}">
   <view wx:for="{{row.cells}}" wx:key="date" class="cell v-{{variant}} {{rich&&variant==='dot'?'rich':''}} {{view==='week'&&rich?'is-week':''}} {{item.inMonth?'':'out'}} {{item.future?'future':''}} {{item.train?'train':''}} {{item.isToday?'today':''}} {{item.sel?'sel':''}}" bindtap="onPick" data-date="{{item.date}}">
     <view class="n num">{{item.day}}</view>
-    <block wx:if="{{variant==='dot' && rich && row.open}}">
+    <view wx:if="{{view==='week' && rich && row.open && item.dot}}" class="jdot jdot-{{item.dot}}"></view>
+    <block wx:elif="{{variant==='dot' && rich && row.open}}">
       <view wx:if="{{item.brief}}" class="markline {{item.rest ? 'is-rest' : ''}} {{item.aero && !item.part ? 'is-aero' : ''}}">{{item.brief}}</view>
       <view wx:elif="{{item.showDot}}" class="dot on"></view>
       <view wx:else class="markline"></view>
@@ -28,7 +29,7 @@
   </view>
   </view>
 </view>
-<view wx:if="{{legend && hasMarks}}" class="foot row between">
+<view wx:if="{{legend && hasMarks && view!=='week'}}" class="foot row between">
   <view class="legend row"><view class="lg-box"><view class="ctag ctag-part">胸</view></view><text>力量</text><view class="lg-box"><view class="ctag ctag-aero">有氧</view></view><text>有氧</text><block wx:if="{{rich}}"><view class="lg-rest">休</view><text>休息</text></block><view class="lg-sel"></view><text>选中</text></view>
 </view>
-<view wx:if="{{legend && hasKcal}}" class="lg-note">数字为当日饮食热量</view>
+<view wx:if="{{legend && hasKcal && view!=='week'}}" class="lg-note">数字为当日饮食热量</view>
