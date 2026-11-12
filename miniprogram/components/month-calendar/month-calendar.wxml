@@ -27,6 +27,6 @@
   </view>
 </view>
 <view wx:if="{{legend || collapsible}}" class="foot row between">
-  <view class="legend row"><block wx:if="{{legend}}"><view class="lg-box"><view class="ctag ctag-part">胸</view></view><text>力量</text><view class="lg-box"><view class="ctag ctag-aero">跑步</view></view><text>有氧</text><block wx:if="{{rich}}"><view class="lg-rest">休</view><text>休息</text></block><view class="lg-sel"></view><text>选中</text></block></view>
+  <view class="legend row"><block wx:if="{{legend}}"><view class="lg-box"><view class="ctag ctag-part">胸</view></view><text>力量</text><view class="lg-box"><view class="ctag ctag-aero">有氧</view></view><text>有氧</text><block wx:if="{{rich}}"><view class="lg-rest">休</view><text>休息</text></block><view class="lg-sel"></view><text>选中</text></block></view>
 </view>
 <view wx:if="{{legend && hasKcal}}" class="lg-note">数字为当日饮食热量</view>

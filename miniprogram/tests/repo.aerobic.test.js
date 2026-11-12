@@ -55,7 +55,8 @@ test('buildInfo: strength + aerobic tags coexist; no rest when training', () => 
   assert.ok(repo.restDays.mark('2026-10-15').ok);
   const info = DM.buildInfo(repo, '2026-10-01', '2026-10-31');
   assert.ok(info['2026-10-15'].tags.some(t => t.kind === 'part'));
-  assert.ok(info['2026-10-15'].tags.some(t => t.kind === 'aero' && t.text.includes('爬楼')));
+  const aeroTags = info['2026-10-15'].tags.filter(t => t.kind === 'aero');
+  assert.deepStrictEqual(aeroTags.map(t => t.text), ['有氧']);
   assert.ok(!info['2026-10-15'].rest);
 });
 

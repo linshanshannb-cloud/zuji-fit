@@ -63,7 +63,7 @@ Page({
       status: kind === 'future' ? '还没到这一天' : (cards.length ? '已完成' : (isRest ? '休息日' : (kind === 'today' ? '还没有训练' : '这天没有训练'))),
       min: totalMin || 0,
       note: totalMin && partial ? '部分记录无时长' : '',
-      detail: dp.parts.concat(dp.aeros).join(' · '),
+      detail: dp.parts.concat(dp.aeros.length ? ['有氧'] : []).join(' · '),
       oneId: cards.length === 1 ? cards[0].id : '',
       oneKind: cards.length === 1 ? cards[0].kind : '',
     };

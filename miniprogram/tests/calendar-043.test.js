@@ -79,14 +79,14 @@ test('rest days: corrupt key is not overwritten', () => {
 });
 
 // v0.5 训练首屏重设计：紧凑格子两行标签、汇总卡部位、周视图翻周跨月
-test('cellLines: strength parts merged on one line, aerobic on the second, +N for extra aerobic; rest / legacy', () => {
+test('cellLines: strength parts stay, any cardio collapses to one 有氧; rest / legacy', () => {
   assert.deepStrictEqual(DM.cellLines(DM.buildTags(['胸', '背'], [])), { part: '胸·背', aero: '', train: true, rest: false });
-  assert.deepStrictEqual(DM.cellLines(DM.buildTags(['腿'], ['跑步机爬坡'])), { part: '腿', aero: '跑步机…', train: true, rest: false });
-  assert.deepStrictEqual(DM.cellLines(DM.buildTags([], ['跑步', '跳绳'])), { part: '', aero: '跑步+1', train: true, rest: false });
-  // 3 部位 + 2 有氧：buildTags 截到 4 个 + more 1，有氧仍算 2 种 -> +1
+  assert.deepStrictEqual(DM.cellLines(DM.buildTags(['腿'], ['跑步机爬坡'])), { part: '腿', aero: '有氧', train: true, rest: false });
+  assert.deepStrictEqual(DM.cellLines(DM.buildTags([], ['跑步', '跳绳'])), { part: '', aero: '有氧', train: true, rest: false });
+  // 多种有氧仍只算一个「有氧」，不写成「有氧+1」或项目名。
   const b = DM.buildTags(['胸', '背', '肩'], ['跑步机爬坡', '划船']);
   assert.strictEqual(b.more, 1);
-  assert.deepStrictEqual(DM.cellLines(b), { part: '胸·背·肩', aero: '跑步+1', train: true, rest: false });
+  assert.deepStrictEqual(DM.cellLines(b), { part: '胸·背·肩', aero: '有氧', train: true, rest: false });
   assert.deepStrictEqual(DM.cellLines({ rest: true }), { part: '', aero: '', train: false, rest: true });
   assert.deepStrictEqual(DM.cellLines(undefined), { part: '', aero: '', train: false, rest: false });
   assert.deepStrictEqual(DM.cellLines({ parts: '背·臂', vol: '3t' }), { part: '背·臂', aero: '', train: true, rest: false }, 'legacy {parts}');
@@ -141,7 +141,7 @@ test('calendar page: default week view; ‹ › move selected ±7 days across mo
   // 周视图翻周：10/15 -> 10/8 -> 10/1 -> 9/24（跨月）；网格范围内 9/30 有氧标签存在
   pg.onShift({ detail: { delta: -1 } }); pg.onShift({ detail: { delta: -1 } });
   assert.strictEqual(pg.data.selected, '2026-10-01');
-  assert.deepStrictEqual(pg.data.info['2026-09-30'], { tags: [{ id: 'a0', text: '划船', kind: 'aero' }], more: 0 }, 'cross-month day of the visible week has tags');
+  assert.deepStrictEqual(pg.data.info['2026-09-30'], { tags: [{ id: 'a0', text: '有氧', kind: 'aero' }], more: 0 }, 'cross-month day of the visible week has an aerobic mark, not the activity name');
   pg.onShift({ detail: { delta: -1 } });
   assert.deepStrictEqual([pg.data.selected, pg.data.year, pg.data.month], ['2026-09-24', 2026, 9]);
   assert.deepStrictEqual(pg.data.day, {}, 'no summary on an empty day');
@@ -166,7 +166,9 @@ test('calendar home: train and diet summaries are peers, and the list keeps ever
   pg.onSelect({ detail: { date: '2026-10-15' } });
   assert.strictEqual(pg.data.cards.length, 2);
   assert.strictEqual(pg.data.listCount, 3);
-  assert.ok(pg.data.train.detail.includes('胸'));
+  assert.strictEqual(pg.data.train.detail, '胸 · 有氧');
+  assert.ok(!pg.data.train.detail.includes('爬楼'));
+  assert.ok(pg.data.cards.some(c => c.kind === 'aerobic' && c.title === '爬楼机'));
   assert.ok(pg.data.train.min > 0);
   assert.strictEqual(pg.data.train.oneId, '');
   assert.ok(pg.data.cards.some(c => c.kind === 'aerobic' && c.meta.startsWith('消耗 ')));
@@ -186,4 +188,23 @@ test('calendar home: train and diet summaries are peers, and the list keeps ever
   const js = fs.readFileSync(path.join(__dirname, '../pages/calendar/calendar.js'), 'utf8');
   assert.ok(js.includes("itemList: ['记训练', '记饮食']"));
   assert.ok(wxml.includes('/images/tabbar/calendar.png') && wxml.includes('/images/tabbar/diet-active.png'));
+});
+
+test('calendar marks any cardio as 有氧, and the day list still names each activity', () => {
+  const { repo } = fresh(); repo.init();
+  assert.ok(repo.aerobic.create({ date: '2026-10-15', activityType: 'treadmill_incline', durationMin: 20, estimatedKcal: 167 }).ok);
+  let info = DM.buildInfo(repo, '2026-10-15', '2026-10-15');
+  assert.deepStrictEqual(DM.cellLines(info['2026-10-15']), { part: '', aero: '有氧', train: true, rest: false });
+  assert.ok(repo.aerobic.create({ date: '2026-10-15', activityType: 'stair_climber', durationMin: 15, estimatedKcal: 138 }).ok);
+  info = DM.buildInfo(repo, '2026-10-15', '2026-10-15');
+  assert.deepStrictEqual(info['2026-10-15'].tags.map(t => t.text), ['有氧']);
+  assert.strictEqual(DM.cellLines(info['2026-10-15']).aero, '有氧');
+  finishedWorkout(repo, '2026-10-15', ['0025']);
+  info = DM.buildInfo(repo, '2026-10-15', '2026-10-15');
+  assert.strictEqual(DM.cellLines(info['2026-10-15']).part, '胸');
+  assert.strictEqual(DM.cellLines(info['2026-10-15']).aero, '有氧');
+  const pg = loadCalendarPage(); pg.onLoad();
+  pg.onSelect({ detail: { date: '2026-10-15' } });
+  assert.strictEqual(pg.data.train.detail, '胸 · 有氧');
+  assert.deepStrictEqual(pg.data.cards.filter(c => c.kind === 'aerobic').map(c => c.title).sort(), ['爬楼机', '跑步机爬坡']);
 });

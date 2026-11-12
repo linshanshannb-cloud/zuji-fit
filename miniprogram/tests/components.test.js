@@ -50,11 +50,11 @@ test('month-calendar v0.5: week view = 7 cells of the selected week (cross-month
   assert.deepStrictEqual(c.data.cells.map(x => x.day), [28, 29, 30, 1, 2, 3, 4]);
   assert.ok(c.data.cells.every(x => x.inMonth));
   const by = d => c.data.cells.find(x => x.date === d);
-  assert.deepStrictEqual([by('2026-09-29').train, by('2026-09-29').part, by('2026-09-29').aero, by('2026-09-29').showDot], [true, '胸', '跑步', false]);
+  assert.deepStrictEqual([by('2026-09-29').train, by('2026-09-29').part, by('2026-09-29').aero, by('2026-09-29').showDot], [true, '胸', '有氧', false]);
   assert.deepStrictEqual([by('2026-10-02').rest, by('2026-10-02').train], [true, false]);
   c.setData({ cals: { '2026-10-03': '320', '2026-09-29': '900', '2026-10-02': '100' } });
   c.build();
-  assert.strictEqual(by('2026-09-29').brief, '胸·跑');
+  assert.strictEqual(by('2026-09-29').brief, '胸·有氧');
   assert.strictEqual(by('2026-10-02').brief, '休');
   assert.strictEqual(by('2026-10-03').kcal, '320');
   assert.strictEqual(by('2026-09-29').kcal, '900', '训练日底部仍显示热量');

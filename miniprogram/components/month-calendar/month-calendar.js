@@ -3,17 +3,15 @@
 // view (v0.5): 'month' 6x7 | 'week' 1x7 row containing `selected`; collapsible shows 展开/收起 (event toggle).
 const D = require('../../utils/date');
 const DM = require('../../utils/daymark');
-// 力量 + 有氧挤成一行「胸·跑」，把格子底部留给热量。有氧单独出现时仍写全称。
+// 力量部位照旧，「有氧」不缩成「跑」，也不加 +1。
 function briefMark(ln) {
   if (!ln) return '';
   if (!ln.train && ln.rest) return '休';
   if (!ln.train) return '';
-  if (ln.part && ln.aero) {
-    const plus = (String(ln.aero).match(/\+\d+$/) || [''])[0];
-    const name = String(ln.aero).replace(/\+\d+$/, '');
-    return ln.part + '·' + (name ? name.slice(0, 1) : '') + plus;
-  }
-  return ln.part || ln.aero || '';
+  const bits = [];
+  if (ln.part) bits.push(ln.part);
+  if (ln.aero) bits.push('有氧');
+  return bits.join('·');
 }
 Component({
   options: { styleIsolation: 'apply-shared' },
@@ -28,7 +26,7 @@ Component({
       const week = this.data.view === 'week' && D.isValid(selected || '');
       const grid = week ? D.weekGrid(selected) : D.monthGrid(this.data.year, this.data.month);
       const cells = grid.map(c => {
-        // 格子最多两行：力量部位合并「胸·背」+ 有氧「跑步」/「跑步+1」；有标签时禁止再画圆点
+        // 力量部位合并「胸·背」，有氧只写「有氧」；有标签时禁止再画圆点
         const ln = DM.cellLines(info[c.date]);
         const cal = (this.data.cals || {})[c.date];
         return {
