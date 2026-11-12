@@ -1,7 +1,7 @@
-<view wx:if="{{visible}}" class="rt {{finished?'fin':''}}" style="bottom:{{bottom}}rpx" catchtouchmove="noop">
-  <view class="rt-bar"><view class="rt-fill" style="width:{{pct}}%"></view></view>
+<view wx:if="{{visible}}" class="rt {{finished?'fin':''}}" style="bottom:{{bottom}}rpx;transform:translateY({{dragY}}px)" catchtouchmove="onDragMove">
+  <view class="rt-bar" bindtouchstart="onDragStart" bindtouchend="onDragEnd" bindtouchcancel="onDragEnd"><view class="rt-fill" style="width:{{pct}}%"></view></view>
   <view class="rt-row">
-    <view class="rt-info">
+    <view class="rt-info" bindtouchstart="onDragStart" bindtouchend="onDragEnd" bindtouchcancel="onDragEnd">
       <text class="rt-title">{{finished ? doneLabel : title}}</text>
       <text class="rt-time num">{{label}}</text>
     </view>

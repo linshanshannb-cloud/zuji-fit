@@ -173,14 +173,14 @@ flow('F1.2 draft exists: continue / discard-and-new with confirm; banner on cale
   assert.strictEqual(cur().data.w.persisted, false);
 });
 
-flow('F2 backfill past day: sets default done; future day blocked', () => {
+flow('F2 backfill past day: added set stays unchecked; future day blocked', () => {
   reset(); const cal = open('pages/calendar/calendar');
   const d = new Date(); d.setDate(d.getDate() - 3); const p = n => (n < 10 ? '0' : '') + n; const past = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
   cal.onSelect({ detail: { date: past } }); assert.strictEqual(cal.data.sel.kind, 'past');
   cal.newWorkout(); const ed = cur(); assert.strictEqual(ed.data.w.date, past);
   ed.onPicked(['0025'], 'add'); const s0 = ed.data.cards[0].sets[0];
   ed.onSetChange(Object.assign(ev({ s: s0.id }), { detail: { field: 'reps', value: 5 } }));
-  ed.addSet(ev({ we: ed.data.cards[0].id })); assert.strictEqual(ed.data.cards[0].sets[1].done, true);
+  ed.addSet(ev({ we: ed.data.cards[0].id })); assert.strictEqual(ed.data.cards[0].sets[1].done, false);
   assert.strictEqual(draftHeader().startedAt, null);
   wx.navigateBack(); const f = new Date(); f.setDate(f.getDate() + 2);
   cal.onSelect({ detail: { date: f.getFullYear() + '-' + p(f.getMonth() + 1) + '-' + p(f.getDate()) } });

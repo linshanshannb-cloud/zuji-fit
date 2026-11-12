@@ -84,6 +84,34 @@ test('rest-timer component: counts by timestamp, +/-15, vibrateLong at 0, skip',
   t.mock.timers.tick(70000); assert.strictEqual(buzz, 1, 'no buzz after skip');
 });
 
+test('rest bar drag moves it without breaking +/- skip or settings', t => {
+  t.mock.timers.enable({ apis: ['setInterval', 'setTimeout', 'Date'], now: 0 });
+  global.wx = { vibrateLong() {}, getSystemInfoSync: () => ({ windowHeight: 800, windowWidth: 375, statusBarHeight: 44 }) };
+  const fs = require('fs'), path = require('path');
+  const { inst } = loadComp('../components/rest-timer/rest-timer.js');
+  inst.data.bottom = 180;
+  inst.start(90, '杠铃卧推 · 组间休息');
+  inst.onDragStart({ touches: [{ clientY: 500 }] });
+  inst.onDragMove({ touches: [{ clientY: 496 }] });
+  assert.strictEqual(inst.data.dragY, 0, 'a small move is still a tap');
+  inst.onDragMove({ touches: [{ clientY: 420 }] });
+  assert.ok(inst.data.dragY < 0, 'dragging up lifts the bar');
+  const y = inst.data.dragY;
+  inst.onDragEnd();
+  inst.plus(); assert.strictEqual(inst.data.left, 105);
+  inst.minus(); assert.strictEqual(inst.data.left, 90);
+  inst.settings(); assert.ok(inst.events.some(e => e[0] === 'settings'));
+  inst.skip(); assert.ok(inst.events.some(e => e[0] === 'skip'));
+  inst.start(40, 'again');
+  assert.strictEqual(inst.data.dragY, y, 'position stays for this page session');
+  inst.onDragStart({ touches: [{ clientY: 600 }] });
+  inst.onDragMove({ touches: [{ clientY: -4000 }] });
+  assert.ok(inst.data.dragY > -800, 'the bar stays on screen');
+  const wxml = fs.readFileSync(path.join(__dirname, '../components/rest-timer/rest-timer.wxml'), 'utf8');
+  assert.ok(wxml.includes('bindtap="minus"') && wxml.includes('bindtap="plus"') && wxml.includes('bindtap="skip"') && wxml.includes('bindtap="settings"'));
+  assert.ok(!/rt-btn[\s\S]*bindtouchstart="onDragStart"/.test(wxml));
+});
+
 test('card: mediaId cover is cloud JPEG then illustration, never video-posters', () => {
   const C = require('../utils/card');
   const z = (k, v) => v + '!';

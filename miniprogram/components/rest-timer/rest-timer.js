@@ -6,7 +6,7 @@ const R = require('../../utils/rest');
 const beep = require('../../utils/beep');
 Component({
   properties: { bottom: { type: Number, value: 200 } },
-  data: { visible: false, left: 0, label: '0:00', title: '', pct: 100, finished: false, doneLabel: '休息结束', showSettings: true },
+  data: { visible: false, left: 0, label: '0:00', title: '', pct: 100, finished: false, doneLabel: '休息结束', showSettings: true, dragY: 0 },
   lifetimes: { detached() { this._clear(); this._screen(false); } },
   pageLifetimes: { show() { if (this._t) this._tick(); } },
   methods: {
@@ -54,7 +54,52 @@ Component({
     },
     skip() { this.triggerEvent('skip'); this.close(); },
     settings() { this.triggerEvent('settings'); },
-    close() { this._clear(); this._t = null; this._screen(false); this.setData({ visible: false, finished: false }); },
+    // 拖标题或进度条挪开浮层。按钮不在拖动手势里，避免把点击吃掉。dragY 留在组件上，这次打开页面都记得。
+    onDragStart(e) {
+      const t = e.touches && e.touches[0];
+      if (!t) return;
+      this._drag = { y: t.clientY, origin: this.data.dragY || 0 };
+      this._measure();
+    },
+    onDragMove(e) {
+      if (!this._drag) return;
+      const t = e.touches && e.touches[0];
+      if (!t) return;
+      const dy = t.clientY - this._drag.y;
+      if (!this._drag.moved) {
+        if (Math.abs(dy) < 8) return;
+        this._drag.moved = true;
+      }
+      const next = this._clamp(this._drag.origin + dy);
+      if (next !== this.data.dragY) this.setData({ dragY: next });
+    },
+    onDragEnd() { this._drag = null; },
+    _measure() {
+      if (this._barH || typeof wx === 'undefined' || !wx.createSelectorQuery) return;
+      try {
+        wx.createSelectorQuery().in(this).select('.rt').boundingClientRect(r => {
+          if (r && r.height) this._barH = r.height;
+        }).exec();
+      } catch (err) { /* layout can wait */ }
+    },
+    _screenSize() {
+      if (this._screenInfo && this._screenInfo.windowHeight) return this._screenInfo;
+      let info = null;
+      try { if (typeof wx !== 'undefined' && wx.getSystemInfoSync) info = wx.getSystemInfoSync(); } catch (err) { /* use fallback */ }
+      this._screenInfo = info && info.windowHeight ? info : { windowHeight: 800, windowWidth: 375, statusBarHeight: 44 };
+      return this._screenInfo;
+    },
+    _clamp(dragY) {
+      const win = this._screenSize();
+      const bottomPx = (Number(this.data.bottom) || 0) * (win.windowWidth / 750);
+      const barH = this._barH || 160;
+      const topSafe = (win.statusBarHeight || 44) + 8;
+      const maxDrag = bottomPx - 8;
+      const minDrag = topSafe + barH + bottomPx - win.windowHeight;
+      if (minDrag > maxDrag) return 0;
+      return Math.max(minDrag, Math.min(maxDrag, dragY));
+    },
+    close() { this._clear(); this._t = null; this._drag = null; this._screen(false); this.setData({ visible: false, finished: false }); },
     isRunning() { return !!this._t && !this.data.finished; },
     _clear() { clearInterval(this._iv); this._iv = null; clearTimeout(this._hide); this._hide = null; },
     _screen(on) {

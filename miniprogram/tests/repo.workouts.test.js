@@ -136,14 +136,17 @@ test('#10 sets: addSet copies weight/reps only, type normal unless explicit; don
   assert.strictEqual(repo.workouts.deleteSet(w.id, 'missing').code, 'NOT_FOUND');
 });
 
-test('backfill (F2): new sets with reps default to done', () => {
+test('addSet stays unchecked after a finished set, including backfill', () => {
   const { repo } = fresh(); repo.init();
   const w = repo.workouts.createDraft({ date: '2026-10-10', exerciseIds: [BENCH] }).data;
   const v = repo.workouts.getWorkout(w.id), we = v.exercises[0];
   assert.strictEqual(we.sets[0].done, false, 'initial empty set cannot be done (reps null)');
   repo.workouts.updateSet(w.id, we.sets[0].id, { reps: 5, weightKg: 100 });
+  assert.ok(repo.workouts.setSetDone(w.id, we.sets[0].id, true).ok);
   const s = repo.workouts.addSet(w.id, we.id).data;
-  assert.deepStrictEqual([s.done, s.doneAt > 0], [true, true]);
+  assert.deepStrictEqual([s.done, s.doneAt, s.reps, s.weightKg], [false, null, 5, 100]);
+  assert.strictEqual(repo.workouts.getHeader(w.id).startedAt, null);
+  assert.strictEqual(repo.workouts.addSet(w.id, we.id, { done: true }).data.done, true, 'explicit done still checks');
   assert.strictEqual(repo.workouts.addSet(w.id, we.id, { done: false }).data.done, false);
 });
 
