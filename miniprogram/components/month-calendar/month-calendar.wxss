@@ -1,23 +1,30 @@
 .head { height: 88rpx; }
-.ym { font-size: 34rpx; font-weight: 700; }
-.today-pill { margin-left: 16rpx; font-size: 22rpx; padding: 4rpx 16rpx; border: 1px solid var(--c-line); border-radius: var(--r-pill); color: var(--c-text-2); }
-.arrow { width: 88rpx; height: 88rpx; display: flex; align-items: center; justify-content: center; font-size: 40rpx; }
-.week, .grid { display: flex; flex-wrap: wrap; }
-.wd { width: 14.2857%; text-align: center; font-size: 24rpx; color: var(--c-text-3); padding: 8rpx 0; }
+.ym { font-size: 32rpx; font-weight: 500; color: #2C241E; }
+.today-pill { display: inline-flex; align-items: center; height: 56rpx; padding: 0 22rpx; border: 1px solid #D9D3CC; border-radius: var(--r-pill); color: #121212; font-size: 26rpx; background: #fff; box-sizing: border-box; }
+.arrow { width: 88rpx; height: 88rpx; display: flex; align-items: center; justify-content: center; }
+.nav-chev { width: 40rpx; height: 40rpx; border-top: 4rpx solid #2C241E; border-right: 4rpx solid #2C241E; box-sizing: border-box; }
+.nav-chev.prev { transform: rotate(-135deg); }
+.nav-chev.next { transform: rotate(45deg); }
+.week { display: flex; flex-wrap: wrap; }
+.grid { display: block; }
+.cal-row { display: flex; width: 100%; }
+.wd { width: 14.2857%; text-align: center; font-size: 24rpx; color: #6B6560; padding: 8rpx 0; }
 .cell { width: 14.2857%; height: 88rpx; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
 .v-value { height: 100rpx; }
-.n { width: 68rpx; height: 68rpx; line-height: 68rpx; border-radius: 50%; text-align: center; font-size: 30rpx; position: relative; }
+.n { width: 68rpx; height: 68rpx; line-height: 68rpx; border-radius: 50%; text-align: center; font-size: 30rpx; position: relative; color: #121212; }
 .v-value .n { width: 60rpx; height: 60rpx; line-height: 60rpx; }
+.future .n { color: #6B6560; }
 .out .n { color: var(--c-placeholder); }
-.future .n { color: #8A8A8A; }
 .dot { position: relative; width: 10rpx; height: 10rpx; border-radius: 50%; margin-top: 2rpx; }
 .dot.on { background: var(--c-accent); }
 .val { font-size: 18rpx; color: var(--c-text-3); height: 24rpx; line-height: 24rpx; }
 .out .dot, .out .val { visibility: hidden; }
 .today-hit { height: 88rpx; display: flex; align-items: center; padding: 0 16rpx; }
-/* 日期、一行训练（胸·跑）、底部固定热量。浅底代替整块标签。 */
+/* 日期、一行训练、底部热量。整行都没有标签或热量时不留第二行。 */
 .rich { height: 132rpx; justify-content: flex-start; padding-top: 4rpx; box-sizing: border-box; }
 .rich.is-week { height: 156rpx; }
+.cal-row.shut .rich,
+.cal-row.shut .rich.is-week { height: 64rpx; padding-top: 0; justify-content: center; }
 .rich .n { width: 40rpx; height: 40rpx; line-height: 40rpx; font-size: 28rpx; }
 /* 训练日：整格浅橙底 + 日期加粗 */
 .rich.train::before { content: ''; position: absolute; top: 2rpx; bottom: 0; left: 3rpx; right: 3rpx; border-radius: 16rpx; background: #FFE4D6; }
@@ -25,6 +32,7 @@
 .out.train::before { display: none; }
 .today .n { color: var(--c-accent); font-weight: 700; }
 .sel .n { background: var(--c-ink); color: var(--c-white); font-weight: 700; }
+.rich.sel .n { width: 60rpx; height: 60rpx; line-height: 60rpx; background: #FFE4D6; color: #C64B19; box-shadow: inset 0 0 0 1px #C64B19; }
 /* 格子标签：力量在上（黑字）、有氧在下（深橙字），白底，20rpx */
 .ctag { position: relative; max-width: 88rpx; margin-top: 2rpx; padding: 0 6rpx; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center; font-size: 20rpx; line-height: 24rpx; height: 24rpx; border-radius: 6rpx; font-weight: 600; background: var(--c-white); }
 .ctag-part { color: var(--c-ink); }
@@ -38,15 +46,14 @@
 .out .markline { visibility: hidden; }
 .ckcal { position: relative; max-width: 96rpx; height: 24rpx; line-height: 24rpx; font-size: 20rpx; font-weight: 600; color: #5F5F5F; text-align: center; }
 .rich.is-week .ckcal { height: 32rpx; line-height: 32rpx; font-size: 24rpx; }
-.lg-note { font-size: 22rpx; line-height: 32rpx; color: #5F5F5F; padding-bottom: 8rpx; }
-/* 底部一行：图例 + 展开/收起 */
-.foot { min-height: 72rpx; }
-.legend { font-size: 22rpx; color: var(--c-text-3); flex-wrap: wrap; min-width: 0; }
+.lg-note { font-size: 22rpx; line-height: 32rpx; color: #6B6560; padding: 4rpx 0 8rpx; }
+.foot { min-height: 56rpx; padding-top: 8rpx; }
+.legend { font-size: 22rpx; color: #6B6560; flex-wrap: wrap; min-width: 0; }
 .legend text { margin: 0 14rpx 0 6rpx; }
 .lg-box { padding: 3rpx 4rpx; border-radius: 8rpx; background: #FFE4D6; display: flex; }
 .lg-box .ctag { margin-top: 0; }
-.lg-sel { width: 20rpx; height: 20rpx; border-radius: 50%; background: var(--c-ink); }
+.lg-sel { width: 28rpx; height: 28rpx; border-radius: 50%; background: #FFE4D6; box-shadow: inset 0 0 0 1px #C64B19; }
 .lg-rest { width: 28rpx; height: 28rpx; line-height: 28rpx; border-radius: 50%; background: #EEF2F7; color: #6B7F99; font-size: 18rpx; text-align: center; font-weight: 600; }
-.toggle { flex-shrink: 0; padding-left: 16rpx; font-size: 24rpx; color: var(--c-text-2); font-weight: 600; }
-.chev { width: 10rpx; height: 10rpx; margin: -6rpx 0 0 10rpx; border-right: 3rpx solid var(--c-text-2); border-bottom: 3rpx solid var(--c-text-2); transform: rotate(45deg); }
+.toggle { flex-shrink: 0; padding-left: 16rpx; font-size: 24rpx; color: #5C5854; font-weight: 500; }
+.chev { width: 10rpx; height: 10rpx; margin: -6rpx 0 0 10rpx; border-right: 3rpx solid #5C5854; border-bottom: 3rpx solid #5C5854; transform: rotate(45deg); }
 .chev.up { margin-top: 6rpx; transform: rotate(-135deg); }

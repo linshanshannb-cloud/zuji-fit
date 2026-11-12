@@ -186,8 +186,45 @@ test('calendar home: train and diet summaries are peers, and the list keeps ever
   assert.ok(wxml.includes('当日记录'));
   assert.ok(wxml.includes('cal-pad'));
   const js = fs.readFileSync(path.join(__dirname, '../pages/calendar/calendar.js'), 'utf8');
-  assert.ok(js.includes("itemList: ['记训练', '记饮食']"));
+  assert.ok(!js.includes('showActionSheet'));
+  assert.ok(js.includes("label: '记训练'") && js.includes("label: '记饮食'"));
+  assert.ok(wxml.includes('cal-mask') && wxml.includes('点右下角 +，记训练或饮食'));
   assert.ok(wxml.includes('/images/tabbar/calendar.png') && wxml.includes('/images/tabbar/diet-active.png'));
+});
+
+test('calendar + uses one custom sheet for both layers, including a past empty day', () => {
+  const D = require('../utils/date');
+  const { repo } = fresh(); repo.init();
+  const nav = [];
+  const pg = loadCalendarPage();
+  global.wx.showActionSheet = () => { throw new Error('system sheet'); };
+  global.wx.navigateTo = o => nav.push(o.url);
+  global.wx.showToast = () => {};
+  pg.onLoad(); pg.onShow();
+  assert.strictEqual(pg.data.listCount, 0);
+  pg.pickAdd();
+  assert.strictEqual(pg.data.sheet.title, '记今天');
+  assert.deepStrictEqual(pg.data.sheet.rows.map(r => r.label), ['记训练', '记饮食']);
+  pg.onSheet({ currentTarget: { dataset: { key: 'train' } } });
+  assert.strictEqual(pg.data.sheet.title, '选择训练类型');
+  assert.deepStrictEqual(pg.data.sheet.rows.map(r => r.label), ['力量训练', '有氧训练', '训练模板']);
+  assert.strictEqual(pg.data.sheet.rows[2].trail, '›');
+  pg.closeSheet();
+  pg.pickAdd();
+  pg.onSheet({ currentTarget: { dataset: { key: 'diet' } } });
+  assert.ok(nav.some(u => u.includes('/pages/diet-ai/input/input')));
+  pg.onSelect({ detail: { date: '2026-10-10' } });
+  pg.pickAdd();
+  assert.strictEqual(pg.data.sheet.title, '记这一天');
+  pg.onSheet({ currentTarget: { dataset: { key: 'train' } } });
+  assert.deepStrictEqual(pg.data.sheet.rows.map(r => r.label), ['补录力量训练', '补录有氧训练', '从模板补录', '标记为休息日']);
+  pg.onSheet({ currentTarget: { dataset: { key: 'rest' } } });
+  assert.strictEqual(pg.data.sheet, null);
+  assert.strictEqual(pg.data.sel.isRest, true);
+  pg.onSelect({ detail: { date: D.addDays(D.today(), 3) } });
+  pg.pickAdd();
+  assert.strictEqual(pg.data.sheet, null);
+  pg.closeSheet();
 });
 
 test('calendar marks any cardio as 有氧, and the day list still names each activity', () => {

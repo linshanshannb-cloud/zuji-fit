@@ -6,7 +6,7 @@ const DM = require('../../utils/daymark');
 const ymOf = s => { const p = D.parse(s); return { year: p.getFullYear(), month: p.getMonth() + 1 }; };
 Page({
   // calView：'week'（默认，所选日所在周）| 'month'；仅存在页面内存，不写存储
-  data: { year: 0, month: 0, selected: '', today: '', calView: 'week', marks: {}, info: {}, cals: {}, cards: [], listCount: 0, day: {}, train: { status: '', min: 0, detail: '', note: '', oneId: '', oneKind: '', future: false }, draft: null, sel: {}, monthEmpty: false, readOnly: false, diet: { show: true, recorded: false, kcal: '', tail: '', count: 0 } },
+  data: { year: 0, month: 0, selected: '', today: '', calView: 'week', marks: {}, info: {}, cals: {}, cards: [], listCount: 0, day: {}, train: { status: '', min: 0, detail: '', note: '', oneId: '', oneKind: '', future: false }, draft: null, sel: {}, monthEmpty: false, readOnly: false, sheet: null, diet: { show: true, recorded: false, kcal: '', tail: '', count: 0 } },
   onLoad() { const t = D.today(); this.setData(Object.assign({ selected: t, today: t }, ymOf(t))); },
   onShow() { this.refresh(); },
   refresh() {
@@ -126,13 +126,40 @@ Page({
   pickAdd() {
     if (!ui.canWrite()) return;
     if (this.data.selected > D.today()) return wx.showToast({ title: '还没到这一天', icon: 'none' });
-    wx.showActionSheet({
-      itemList: ['记训练', '记饮食'],
-      success: r => {
-        if (r.tapIndex === 0) this.pickTrain();
-        else if (r.tapIndex === 1) this.openDietAdd();
-      },
-    });
+    this.openSheet('add');
+  },
+  openSheet(layer) {
+    const rows = {
+      add: [
+        { key: 'train', label: '记训练', icon: 'lift' },
+        { key: 'diet', label: '记饮食', icon: 'bowl' },
+      ],
+      train: [
+        { key: 'strength', label: '力量训练', icon: 'lift' },
+        { key: 'aerobic', label: '有氧训练', icon: 'pulse' },
+        { key: 'template', label: '训练模板', icon: 'doc', trail: '›' },
+      ],
+      past: [
+        { key: 'strength', label: '补录力量训练', icon: 'lift' },
+        { key: 'aerobic', label: '补录有氧训练', icon: 'pulse' },
+        { key: 'template', label: '从模板补录', icon: 'doc', trail: '›' },
+        { key: 'rest', label: '标记为休息日', icon: 'rest' },
+      ],
+    }[layer];
+    const title = layer === 'add' ? (this.data.selected === this.data.today ? '记今天' : '记这一天') : '选择训练类型';
+    this.setData({ sheet: { layer, title, rows } });
+  },
+  closeSheet() { this.setData({ sheet: null }); },
+  stop() {},
+  onSheet(e) {
+    const key = e.currentTarget.dataset.key;
+    this.setData({ sheet: null });
+    if (key === 'train') return this.pickTrain();
+    if (key === 'diet') return this.openDietAdd();
+    if (key === 'strength') return this.newWorkout();
+    if (key === 'aerobic') return this.newAerobic();
+    if (key === 'template') return this.openTemplates();
+    if (key === 'rest') return this.markRest();
   },
   pickTrain() {
     if (this.data.sel.kind === 'future') return wx.showToast({ title: '还没到这一天', icon: 'none' });
@@ -144,14 +171,7 @@ Page({
   pickNew() {
     if (!ui.canWrite()) return;
     if (this.data.selected > D.today()) return wx.showToast({ title: '不能为未来日期新建训练', icon: 'none' });
-    wx.showActionSheet({
-      itemList: ['力量训练', '有氧训练', '训练模板'],
-      success: r => {
-        if (r.tapIndex === 0) this.newWorkout();
-        else if (r.tapIndex === 1) this.newAerobic();
-        else if (r.tapIndex === 2) this.openTemplates();
-      },
-    });
+    this.openSheet('train');
   },
   newAerobic() {
     if (!ui.canWrite()) return;
@@ -161,15 +181,7 @@ Page({
   // 过去空日：补录力量 / 补录有氧 / 标记休息
   pickPast() {
     if (!ui.canWrite()) return;
-    wx.showActionSheet({
-      itemList: ['补录力量训练', '补录有氧训练', '从模板补录', '标记为休息日'],
-      success: r => {
-        if (r.tapIndex === 0) this.newWorkout();
-        else if (r.tapIndex === 1) this.newAerobic();
-        else if (r.tapIndex === 2) this.openTemplates();
-        else if (r.tapIndex === 3) this.markRest();
-      },
-    });
+    this.openSheet('past');
   },
   markRest() { if (!ui.canWrite()) return; if (ui.handle(repo.restDays.mark(this.data.selected))) { wx.showToast({ title: '已标记为休息日', icon: 'none' }); this.refresh(); } },
   unmarkRest() { if (!ui.canWrite()) return; if (ui.handle(repo.restDays.unmark(this.data.selected))) { wx.showToast({ title: '已取消休息日', icon: 'none' }); this.refresh(); } },

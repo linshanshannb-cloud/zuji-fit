@@ -64,3 +64,30 @@ test('month-calendar v0.5: week view = 7 cells of the selected week (cross-month
   c.onToggle(); assert.deepStrictEqual(c.events.slice(-1)[0], ['toggle', { view: 'week' }]);
   c.prev(); assert.deepStrictEqual(c.events.slice(-1)[0], ['shift', { delta: -1 }]);
 });
+
+test('month-calendar: empty rows stay shut, legend waits for a training mark, today chip is conditional', () => {
+  const fs = require('fs'), path = require('path');
+  const c = load('../components/month-calendar/month-calendar.js');
+  c.setData({ year: 2026, month: 10, selected: '2026-10-01', today: '2026-10-17', view: 'week', rich: true, legend: true });
+  assert.strictEqual(c.data.rows.length, 1);
+  assert.strictEqual(c.data.rows[0].open, false);
+  assert.strictEqual(c.data.hasMarks, false);
+  c.setData({ cals: { '2026-10-01': '200' } });
+  assert.strictEqual(c.data.rows[0].open, true);
+  assert.strictEqual(c.data.hasMarks, false);
+  c.setData({ cals: {}, info: { '2026-10-02': { rest: true } } });
+  assert.strictEqual(c.data.rows[0].open, true);
+  assert.strictEqual(c.data.hasMarks, true);
+  c.setData({ view: 'month', selected: '2026-10-15', info: { '2026-10-15': { tags: [{ text: '胸', kind: 'part' }], more: 0 } }, cals: {} });
+  assert.strictEqual(c.data.rows.length, 6);
+  assert.strictEqual(c.data.rows.find(r => r.cells.some(x => x.date === '2026-10-15')).open, true);
+  assert.ok(c.data.rows.some(r => !r.open));
+  assert.strictEqual(c.data.hasMarks, true);
+  const wxml = fs.readFileSync(path.join(__dirname, '../components/month-calendar/month-calendar.wxml'), 'utf8');
+  const css = fs.readFileSync(path.join(__dirname, '../components/month-calendar/month-calendar.wxss'), 'utf8');
+  assert.ok(wxml.includes('selected !== today'));
+  assert.ok(wxml.includes('legend && hasMarks'));
+  assert.ok(wxml.includes("row.open ? 'open' : 'shut'"));
+  assert.ok(css.includes('#6B6560') && css.includes('#FFE4D6') && css.includes('#C64B19'));
+  assert.ok(css.includes('height: 56rpx') && css.includes('height: 64rpx'));
+});

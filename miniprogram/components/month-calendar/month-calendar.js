@@ -17,7 +17,7 @@ Component({
   options: { styleIsolation: 'apply-shared' },
   properties: { year: Number, month: Number, selected: String, today: String, marks: { type: Object, value: {} }, variant: { type: String, value: 'dot' }, legend: Boolean, info: { type: Object, value: {} }, cals: { type: Object, value: {} }, rich: Boolean,
     view: { type: String, value: 'month' }, collapsible: Boolean },
-  data: { cells: [], hasKcal: false, weekdays: ['一', '二', '三', '四', '五', '六', '日'] },
+  data: { cells: [], rows: [], hasKcal: false, hasMarks: false, weekdays: ['一', '二', '三', '四', '五', '六', '日'] },
   observers: { 'year, month, selected, today, marks, info, view, cals': function () { this.build(); } },
   methods: {
     build() {
@@ -38,7 +38,18 @@ Component({
           kcal: cal ? String(cal) : '',
         };
       });
-      this.setData({ cells, hasKcal: cells.some(x => x.inMonth && x.kcal) });
+      // 当前行没有任何标签或热量时收起第二行；图例只在真有训练标记时出现。
+      const shown = c => (week || c.inMonth) && !!(c.brief || c.showDot || c.kcal);
+      const rows = [];
+      for (let i = 0; i < cells.length; i += 7) {
+        const slice = cells.slice(i, i + 7);
+        rows.push({ key: slice[0].date, open: slice.some(shown), cells: slice });
+      }
+      this.setData({
+        cells, rows,
+        hasKcal: cells.some(x => x.inMonth && x.kcal),
+        hasMarks: cells.some(c => (week || c.inMonth) && !!(c.brief || c.showDot)),
+      });
     },
     onPick(e) { this.triggerEvent('select', { date: e.currentTarget.dataset.date }); },
     prev() { this.triggerEvent('shift', { delta: -1 }); },

@@ -1,16 +1,32 @@
 page { background: #F6F3EE; }
 .cal-pad { padding-bottom: 320rpx; }
 .day-head { margin-top: 28rpx; min-height: 48rpx; }
-.peer { margin-top: 16rpx; background: #fff; border-radius: 24rpx; padding: 28rpx 32rpx; }
-.peer-top { display: flex; align-items: baseline; min-height: 56rpx; }
-.peer-k { width: 72rpx; flex-shrink: 0; font-size: 28rpx; font-weight: 600; color: #5F5F5F; }
-.peer-status { font-size: 28rpx; color: #3A3A3A; }
+.peer { margin-top: 24rpx; background: #fff; border-radius: 24rpx; padding: 16rpx 32rpx; min-height: 144rpx; box-sizing: border-box; }
+.peer-top { display: flex; align-items: center; min-height: 48rpx; }
+.peer-k { width: 72rpx; flex-shrink: 0; font-size: 30rpx; font-weight: 600; color: #121212; }
+.peer-status { font-size: 28rpx; color: #6B6560; }
 .peer-num { margin-left: 12rpx; font-size: 40rpx; font-weight: 700; line-height: 1; color: #111111; }
-.peer-note { margin-left: 12rpx; font-size: 22rpx; color: #5F5F5F; }
-.peer-go { margin-left: auto; font-size: 40rpx; line-height: 1; color: #6B6B6B; align-self: center; }
-.peer-sub { margin-top: 8rpx; padding-left: 72rpx; font-size: 28rpx; color: #111111; }
-.peer-links { margin-top: 12rpx; padding-left: 72rpx; display: flex; align-items: center; }
-.tpl { color: #C44714; font-size: 26rpx; font-weight: 600; padding: 8rpx 24rpx 8rpx 0; }
+.peer-note { margin-left: 12rpx; font-size: 22rpx; color: #6B6560; }
+.peer-go { margin-left: auto; font-size: 40rpx; line-height: 1; color: #2C241E; align-self: center; font-weight: 600; }
+.peer-sub { margin-top: 8rpx; font-size: 28rpx; color: #111111; }
+.peer-links { margin-top: 8rpx; display: flex; align-items: center; }
+.tpl { display: inline-flex; align-items: center; height: 56rpx; padding: 0 20rpx; border-radius: 16rpx; background: #FFE8DC; color: #C64B19; font-size: 26rpx; font-weight: 600; box-sizing: border-box; }
+.empty-hint { margin-top: 24rpx; font-size: 26rpx; line-height: 1.4; color: #6B6560; }
+.cal-mask { position: fixed; left: 0; right: 0; top: 0; bottom: 0; background: rgba(44, 36, 30, .4); z-index: 60; display: flex; align-items: flex-end; }
+.cal-panel { width: 100%; background: #fff; border-radius: 36rpx 36rpx 0 0; padding: 28rpx 32rpx calc(24rpx + env(safe-area-inset-bottom)); box-sizing: border-box; }
+.cal-sheet-title { font-size: 26rpx; line-height: 40rpx; color: #6B6560; padding: 4rpx 8rpx 8rpx; }
+.cal-row { height: 104rpx; display: flex; align-items: center; padding: 0 8rpx; font-size: 34rpx; color: #121212; }
+.cal-trail { margin-left: auto; color: #6B6560; font-size: 34rpx; }
+.cal-cancel { height: 96rpx; margin-top: 8rpx; display: flex; align-items: center; justify-content: center; border: 1px solid #D9D3CC; border-radius: 16rpx; color: #6B6560; font-size: 32rpx; }
+.ico { width: 48rpx; height: 48rpx; margin-right: 24rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.plate { width: 10rpx; height: 28rpx; border: 3rpx solid #121212; border-radius: 4rpx; box-sizing: border-box; }
+.bar { width: 16rpx; height: 4rpx; margin: 0 2rpx; background: #121212; }
+.bowl { width: 36rpx; height: 18rpx; margin-top: 8rpx; border: 3rpx solid #121212; border-top: none; border-radius: 0 0 20rpx 20rpx; box-sizing: border-box; }
+.pulse { width: 36rpx; height: 22rpx; border-bottom: 3rpx solid #121212; position: relative; box-sizing: border-box; }
+.pulse::before { content: ''; position: absolute; left: 10rpx; bottom: -3rpx; width: 14rpx; height: 22rpx; border-left: 3rpx solid #121212; border-right: 3rpx solid #121212; transform: skewX(-18deg); box-sizing: border-box; }
+.doc { width: 26rpx; height: 32rpx; border: 3rpx solid #121212; border-radius: 4rpx; box-sizing: border-box; position: relative; }
+.doc::before { content: ''; position: absolute; left: 4rpx; right: 4rpx; top: 8rpx; height: 3rpx; background: #121212; box-shadow: 0 8rpx 0 #121212; }
+.rest { width: 28rpx; height: 28rpx; border: 3rpx solid #121212; border-radius: 50%; border-right-color: transparent; transform: rotate(-40deg); box-sizing: border-box; }
 .link { margin-right: 24rpx; font-size: 26rpx; color: #3A3A3A; text-decoration: underline; padding: 8rpx 0; }
 .tag-rest { background: #EEF2F7; color: #6B7F99; }
 .tag-aero { background: #FFE4D6; color: #C94412; }

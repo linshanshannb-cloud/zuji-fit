@@ -33,6 +33,7 @@
       <text class="peer-go">›</text>
     </view>
   </view>
+  <view wx:if="{{!listCount && sel.kind !== 'future'}}" class="empty-hint">点右下角 +，记训练或饮食</view>
 
   <view wx:if="{{listCount}}" class="rec-title">当日记录 · {{listCount}}</view>
   <view wx:for="{{cards}}" wx:key="id" class="rec">
@@ -61,6 +62,23 @@
   </view>
 </view>
 <view class="fab cal-fab {{sel.kind==='future'||readOnly?'disabled':''}}" bindtap="pickAdd">+</view>
+<view wx:if="{{sheet}}" class="cal-mask" bindtap="closeSheet">
+  <view class="cal-panel" catchtap="stop">
+    <view class="cal-sheet-title">{{sheet.title}}</view>
+    <view wx:for="{{sheet.rows}}" wx:key="key" class="cal-row" data-key="{{item.key}}" bindtap="onSheet">
+      <view class="ico">
+        <block wx:if="{{item.icon==='lift'}}"><view class="plate"></view><view class="bar"></view><view class="plate"></view></block>
+        <view wx:elif="{{item.icon==='bowl'}}" class="bowl"></view>
+        <view wx:elif="{{item.icon==='pulse'}}" class="pulse"></view>
+        <view wx:elif="{{item.icon==='doc'}}" class="doc"></view>
+        <view wx:elif="{{item.icon==='rest'}}" class="rest"></view>
+      </view>
+      <text class="cal-label">{{item.label}}</text>
+      <text wx:if="{{item.trail}}" class="cal-trail">{{item.trail}}</text>
+    </view>
+    <view class="cal-cancel" bindtap="closeSheet">取消</view>
+  </view>
+</view>
 <!-- 底部 tab 图标。过滤无依赖文件不把 app.json 的 iconPath 当依赖，这里显式引用，避免编译时被丢掉。 -->
 <view class="tabbar-keep">
   <image src="/images/tabbar/calendar.png" />
