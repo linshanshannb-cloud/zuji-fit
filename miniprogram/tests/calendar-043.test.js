@@ -155,3 +155,35 @@ test('calendar page: default week view; ‹ › move selected ±7 days across mo
   pg.onToggle(); assert.deepStrictEqual([pg.data.calView, pg.data.year, pg.data.month], ['week', 2025, 12]);
   pg.onToday(); assert.strictEqual(pg.data.selected, pg.data.today);
 });
+
+test('calendar home: train and diet summaries are peers, and the list keeps every record', () => {
+  const fs = require('fs'), path = require('path');
+  const { repo } = fresh(); repo.init();
+  finishedWorkout(repo, '2026-10-15', ['0025']);
+  assert.ok(repo.aerobic.create({ date: '2026-10-15', activityType: 'stair_climber', durationMin: 30, estimatedKcal: 250 }).ok);
+  assert.ok(repo.diet.addNutrient('2026-10-15', { name: '石锅拌饭', carbsG: 80, proteinG: 20, fatG: 16, meal: 'lunch' }).ok);
+  const pg = loadCalendarPage(); pg.onLoad();
+  pg.onSelect({ detail: { date: '2026-10-15' } });
+  assert.strictEqual(pg.data.cards.length, 2);
+  assert.strictEqual(pg.data.listCount, 3);
+  assert.ok(pg.data.train.detail.includes('胸'));
+  assert.ok(pg.data.train.min > 0);
+  assert.strictEqual(pg.data.train.oneId, '');
+  assert.ok(pg.data.cards.some(c => c.kind === 'aerobic' && c.meta.startsWith('消耗 ')));
+  assert.ok(pg.data.diet.recorded);
+  assert.ok(pg.data.diet.kcal);
+  assert.ok(pg.data.diet.tail.includes('条'));
+  pg.onSelect({ detail: { date: '2026-10-16' } });
+  assert.strictEqual(pg.data.listCount, 0);
+  assert.strictEqual(pg.data.diet.recorded, false);
+  assert.strictEqual(pg.data.diet.kcal, '');
+  assert.strictEqual(pg.data.cals['2026-10-16'], undefined);
+  const wxml = fs.readFileSync(path.join(__dirname, '../pages/calendar/calendar.wxml'), 'utf8');
+  assert.ok(wxml.includes('title="日历"'));
+  assert.ok(!wxml.includes('sum-big'));
+  assert.ok(wxml.includes('当日记录'));
+  assert.ok(wxml.includes('cal-pad'));
+  const js = fs.readFileSync(path.join(__dirname, '../pages/calendar/calendar.js'), 'utf8');
+  assert.ok(js.includes("itemList: ['记训练', '记饮食']"));
+  assert.ok(wxml.includes('/images/tabbar/calendar.png') && wxml.includes('/images/tabbar/diet-active.png'));
+});

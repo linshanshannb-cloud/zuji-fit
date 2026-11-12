@@ -19,7 +19,7 @@ Component({
   options: { styleIsolation: 'apply-shared' },
   properties: { year: Number, month: Number, selected: String, today: String, marks: { type: Object, value: {} }, variant: { type: String, value: 'dot' }, legend: Boolean, info: { type: Object, value: {} }, cals: { type: Object, value: {} }, rich: Boolean,
     view: { type: String, value: 'month' }, collapsible: Boolean },
-  data: { cells: [], weekdays: ['一', '二', '三', '四', '五', '六', '日'] },
+  data: { cells: [], hasKcal: false, weekdays: ['一', '二', '三', '四', '五', '六', '日'] },
   observers: { 'year, month, selected, today, marks, info, view, cals': function () { this.build(); } },
   methods: {
     build() {
@@ -40,7 +40,7 @@ Component({
           kcal: cal ? String(cal) : '',
         };
       });
-      this.setData({ cells });
+      this.setData({ cells, hasKcal: cells.some(x => x.inMonth && x.kcal) });
     },
     onPick(e) { this.triggerEvent('select', { date: e.currentTarget.dataset.date }); },
     prev() { this.triggerEvent('shift', { delta: -1 }); },

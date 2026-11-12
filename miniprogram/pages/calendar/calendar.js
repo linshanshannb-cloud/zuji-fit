@@ -6,7 +6,7 @@ const DM = require('../../utils/daymark');
 const ymOf = s => { const p = D.parse(s); return { year: p.getFullYear(), month: p.getMonth() + 1 }; };
 Page({
   // calView：'week'（默认，所选日所在周）| 'month'；仅存在页面内存，不写存储
-  data: { year: 0, month: 0, selected: '', today: '', calView: 'week', marks: {}, info: {}, cals: {}, cards: [], day: {}, draft: null, sel: {}, monthEmpty: false, readOnly: false, diet: { show: false, recorded: false, kcal: '', unit: '', sub: '' } },
+  data: { year: 0, month: 0, selected: '', today: '', calView: 'week', marks: {}, info: {}, cals: {}, cards: [], listCount: 0, day: {}, train: { status: '', min: 0, detail: '', note: '', oneId: '', oneKind: '', future: false }, draft: null, sel: {}, monthEmpty: false, readOnly: false, diet: { show: true, recorded: false, kcal: '', tail: '', count: 0 } },
   onLoad() { const t = D.today(); this.setData(Object.assign({ selected: t, today: t }, ymOf(t))); },
   onShow() { this.refresh(); },
   refresh() {
@@ -30,22 +30,23 @@ Page({
         { v: a.durationMin, k: '分钟' },
         { v: a.estimatedKcal, k: a.kcalSource === 'user_override' ? 'kcal（已手改）' : 'kcal（估算）' },
       ],
-      meta: `${a.estimatedKcal} kcal · ${a.kcalSource === 'user_override' ? '已手改' : '估算'}`,
+      meta: `消耗 ${a.estimatedKcal} kcal · ${a.kcalSource === 'user_override' ? '已手改' : '估算'}`,
       top: [], more: 0 }));
     const cards = strength.concat(aerobic).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
     const info = DM.buildInfo(repo, grid[0].date, grid[grid.length - 1].date);
-    let diet = { show: false, recorded: false, kcal: '', unit: '', sub: '' };
     const cals = {};
-    if (!repo.diet.problem()) {
+    let diet = { show: true, recorded: false, kcal: '', tail: '还没记饮食', count: 0 };
+    if (repo.diet.problem()) diet = { show: true, recorded: false, kcal: '', tail: '读取异常', count: 0 };
+    else {
       const board = repo.diet.dayBoard(selected);
-      const future = selected > today;
       const n = (board.entries || []).length;
+      const futureDay = selected > today;
       diet = {
         show: true,
         recorded: !!board.recorded,
-        kcal: board.recorded ? String(board.totals.kcal) : '未记录',
-        unit: board.recorded ? 'kcal' : '',
-        sub: future ? '还没到这一天' : (board.recorded ? (n + ' 条') : '点开可以补记'),
+        kcal: board.recorded ? String(board.totals.kcal) : '',
+        count: n,
+        tail: board.recorded ? ('kcal · ' + n + ' 条') : (futureDay ? '还没到这一天' : '还没记饮食'),
       };
       const raw = repo.diet.intakeMarks(grid[0].date, grid[grid.length - 1].date);
       Object.keys(raw).forEach(d => { cals[d] = String(Math.round(Number(raw[d]))); });
@@ -55,8 +56,20 @@ Page({
     const kind = selected > today ? 'future' : selected === today ? 'today' : 'past';
     const hasStrength = strength.length > 0, hasAerobic = aerobic.length > 0;
     const totalMin = cards.reduce((t, c) => t + (c.duration || 0), 0);
-    this.setData({ today, marks, info, cals, diet, cards, readOnly: repo.isReadOnly(),
-      day: cards.length ? this.daySummary(ws, as, totalMin, cards.some(c => !c.duration)) : {},
+    const partial = cards.some(c => !c.duration);
+    const dp = cards.length ? DM.dayParts(repo, selected) : { parts: [], aeros: [] };
+    const train = {
+      future: kind === 'future',
+      status: kind === 'future' ? '还没到这一天' : (cards.length ? '已完成' : (isRest ? '休息日' : (kind === 'today' ? '还没有训练' : '这天没有训练'))),
+      min: totalMin || 0,
+      note: totalMin && partial ? '部分记录无时长' : '',
+      detail: dp.parts.concat(dp.aeros).join(' · '),
+      oneId: cards.length === 1 ? cards[0].id : '',
+      oneKind: cards.length === 1 ? cards[0].kind : '',
+    };
+    this.setData({ today, marks, info, cals, diet, train, cards, readOnly: repo.isReadOnly(),
+      listCount: cards.length + (diet.recorded ? 1 : 0),
+      day: cards.length ? this.daySummary(ws, as, totalMin, partial) : {},
       monthEmpty: !Object.keys(marks).some(d => d >= from && d <= to),
       draft: draft ? { id: draft.id, text: (draft.date === today ? '今天' : F.md(draft.date)) + '有一个未完成的训练' } : null,
       sel: { label: F.dateLabel(selected, today), kind, isTraining: cards.length > 0, isRest, hasStrength, hasAerobic, totalMin } });
@@ -98,8 +111,33 @@ Page({
   },
   openTemplates() { wx.navigateTo({ url: '/pages/templates/templates?date=' + this.data.selected }); },
   openDietDay() {
-    if (!this.data.diet || !this.data.diet.show) return;
     wx.navigateTo({ url: '/pages/diet-extra/diet-day/diet-day?date=' + this.data.selected });
+  },
+  openDietAdd() {
+    if (!ui.canWrite()) return;
+    if (this.data.selected > D.today()) return wx.showToast({ title: '还没到这一天', icon: 'none' });
+    wx.navigateTo({ url: '/pages/diet-ai/input/input?date=' + this.data.selected });
+  },
+  openTrain() {
+    const t = this.data.train;
+    if (!t || !t.oneId) return;
+    this.openCard({ currentTarget: { dataset: { id: t.oneId, kind: t.oneKind } } });
+  },
+  pickAdd() {
+    if (!ui.canWrite()) return;
+    if (this.data.selected > D.today()) return wx.showToast({ title: '还没到这一天', icon: 'none' });
+    wx.showActionSheet({
+      itemList: ['记训练', '记饮食'],
+      success: r => {
+        if (r.tapIndex === 0) this.pickTrain();
+        else if (r.tapIndex === 1) this.openDietAdd();
+      },
+    });
+  },
+  pickTrain() {
+    if (this.data.sel.kind === 'future') return wx.showToast({ title: '还没到这一天', icon: 'none' });
+    if (this.data.sel.kind === 'past' && !this.data.cards.length) return this.pickPast();
+    return this.pickNew();
   },
   continueDraft() { wx.navigateTo({ url: '/pages/workout-edit/workout-edit?id=' + this.data.draft.id }); },
   // FAB / 空态：力量或有氧

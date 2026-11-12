@@ -9,7 +9,7 @@
 .n { width: 68rpx; height: 68rpx; line-height: 68rpx; border-radius: 50%; text-align: center; font-size: 30rpx; position: relative; }
 .v-value .n { width: 60rpx; height: 60rpx; line-height: 60rpx; }
 .out .n { color: var(--c-placeholder); }
-.future .n { color: var(--c-placeholder); }
+.future .n { color: #8A8A8A; }
 .dot { position: relative; width: 10rpx; height: 10rpx; border-radius: 50%; margin-top: 2rpx; }
 .dot.on { background: var(--c-accent); }
 .val { font-size: 18rpx; color: var(--c-text-3); height: 24rpx; line-height: 24rpx; }
@@ -17,6 +17,7 @@
 .today-hit { height: 88rpx; display: flex; align-items: center; padding: 0 16rpx; }
 /* 日期、一行训练（胸·跑）、底部固定热量。浅底代替整块标签。 */
 .rich { height: 132rpx; justify-content: flex-start; padding-top: 4rpx; box-sizing: border-box; }
+.rich.is-week { height: 156rpx; }
 .rich .n { width: 40rpx; height: 40rpx; line-height: 40rpx; font-size: 28rpx; }
 /* 训练日：整格浅橙底 + 日期加粗 */
 .rich.train::before { content: ''; position: absolute; top: 2rpx; bottom: 0; left: 3rpx; right: 3rpx; border-radius: 16rpx; background: #FFE4D6; }
@@ -36,6 +37,7 @@
 .markline.is-rest { color: #6B7F99; }
 .out .markline { visibility: hidden; }
 .ckcal { position: relative; max-width: 96rpx; height: 24rpx; line-height: 24rpx; font-size: 20rpx; font-weight: 600; color: #5F5F5F; text-align: center; }
+.rich.is-week .ckcal { height: 32rpx; line-height: 32rpx; font-size: 24rpx; }
 .lg-note { font-size: 22rpx; line-height: 32rpx; color: #5F5F5F; padding-bottom: 8rpx; }
 /* 底部一行：图例 + 展开/收起 */
 .foot { min-height: 72rpx; }
