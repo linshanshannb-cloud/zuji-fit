@@ -1,18 +1,20 @@
 page { background: #F6F3EE; }
 .tab-title { font-size: 64rpx; font-weight: 700; color: #121212; }
-.cal-pad { padding-bottom: 320rpx; }
+.cal-pad { padding-bottom: 32rpx; }
 .ruled {
+  padding-bottom: 280rpx;
   background-image: linear-gradient(rgba(44, 36, 30, 0.07) 1px, transparent 1px);
   background-size: 100% 56rpx;
-  margin-top: 8rpx;
+  background-repeat: repeat-y;
+  background-position: 0 56rpx;
 }
 .day-in { animation: day-in 160ms ease both; }
 @keyframes day-in { from { opacity: 0; transform: translateY(12rpx); } to { opacity: 1; transform: none; } }
 .day-head { margin-top: 20rpx; min-height: 48rpx; }
 .day-title { font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 40rpx; font-weight: 600; color: #2C241E; }
 .peer { margin-top: 16rpx; background: #FFFEFB; border-radius: 32rpx; padding: 28rpx 32rpx; border: 1px solid rgba(44, 36, 30, 0.04); box-shadow: 0 4rpx 20rpx rgba(44, 36, 30, 0.07), 0 2rpx 4rpx rgba(44, 36, 30, 0.05); box-sizing: border-box; }
-.tilt-train { transform: rotate(-0.4deg); }
-.tilt-diet { transform: rotate(0.35deg); margin-top: 24rpx; }
+.tilt-train { transform: rotate(-0.4deg); transform-origin: center center; }
+.tilt-diet { transform: rotate(0.35deg); transform-origin: center center; margin-top: 24rpx; }
 .peer-top { display: flex; align-items: baseline; min-height: 44rpx; }
 .peer-k { font-size: 32rpx; font-weight: 700; color: #121212; }
 .peer-meta { margin-left: 16rpx; flex: 1; font-size: 26rpx; font-weight: 500; color: #6B6560; }
@@ -42,11 +44,11 @@ page { background: #F6F3EE; }
 .entry-kcal { font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 28rpx; font-weight: 600; color: #2C241E; margin-left: 12rpx; }
 .empty-hint { margin-top: 32rpx; text-align: center; font-size: 26rpx; line-height: 1.4; color: #6B6560; }
 .cal-mask { position: fixed; left: 0; right: 0; top: 0; bottom: 0; background: rgba(44, 36, 30, .4); z-index: 60; display: flex; align-items: flex-end; }
-.cal-panel { width: 100%; background: #FFFEFB; border-radius: 40rpx 40rpx 0 0; padding: 28rpx 32rpx calc(24rpx + env(safe-area-inset-bottom)); box-sizing: border-box; }
+.cal-panel { width: 100%; background: #FFFEFB; border-radius: 40rpx 40rpx 0 0; padding: 16rpx 8rpx 0; box-sizing: border-box; }
 .cal-sheet-title { font-size: 26rpx; line-height: 40rpx; color: #6B6560; padding: 4rpx 8rpx 8rpx; }
 .cal-row { height: 104rpx; display: flex; align-items: center; padding: 0 8rpx; font-size: 34rpx; color: #121212; }
 .cal-trail { margin-left: auto; color: #6B6560; font-size: 34rpx; }
-.cal-cancel { height: 96rpx; margin-top: 8rpx; display: flex; align-items: center; justify-content: center; border: 1px solid #D9D3CC; border-radius: 16rpx; color: #6B6560; font-size: 32rpx; }
+.cal-cancel { height: 104rpx; margin-top: 8rpx; display: flex; align-items: center; justify-content: center; color: #6B6560; font-size: 32rpx; border-top: 1px solid rgba(44, 36, 30, 0.08); padding-bottom: env(safe-area-inset-bottom); }
 .ico { width: 48rpx; height: 48rpx; margin-right: 24rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .plate { width: 10rpx; height: 28rpx; border: 3rpx solid #121212; border-radius: 4rpx; box-sizing: border-box; }
 .bar { width: 16rpx; height: 4rpx; margin: 0 2rpx; background: #121212; }
@@ -68,6 +70,6 @@ page { background: #F6F3EE; }
 .rec-name { font-size: 30rpx; font-weight: 600; }
 .rec-meta { padding-top: 12rpx; }
 .ex-line { padding-top: 12rpx; font-size: 28rpx; }
-.tabbar-keep { position: absolute; width: 0; height: 0; overflow: hidden; opacity: 0; pointer-events: none; }
-.tabbar-keep image { width: 0; height: 0; }
+.tabbar-keep { position: fixed; left: -480rpx; top: -480rpx; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; z-index: -1; }
+.tabbar-keep image { width: 1px; height: 1px; }
 .fab.cal-fab { background: #FC5B21; right: 40rpx; bottom: 28rpx; box-shadow: 0 12rpx 32rpx rgba(252, 91, 33, 0.35); }

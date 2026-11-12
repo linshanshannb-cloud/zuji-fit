@@ -64,8 +64,9 @@
     <view class="cal-cancel" bindtap="closeSheet">取消</view>
   </view>
 </view>
-<!-- 底部 tab 图标。过滤无依赖文件不把 app.json 的 iconPath 当依赖，这里显式引用，避免编译时被丢掉。 -->
-<view class="tabbar-keep">
+<!-- 底部 tab 图标。过滤无依赖文件不把 app.json 的 iconPath 当依赖，这里显式引用。
+     image 是原生组件，会画在普通遮罩上面；打开面板时卸掉，避免左下角冒出黑块。 -->
+<view wx:if="{{!sheet}}" class="tabbar-keep">
   <image src="/images/tabbar/calendar.png" />
   <image src="/images/tabbar/calendar-active.png" />
   <image src="/images/tabbar/library.png" />
