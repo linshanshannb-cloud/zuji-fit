@@ -3,10 +3,11 @@ const F = require('../../utils/format');
 const repo = require('../../utils/repo/index');
 const ui = require('../../utils/ui');
 const DM = require('../../utils/daymark');
+const P = require('../../utils/diet-present');
 const ymOf = s => { const p = D.parse(s); return { year: p.getFullYear(), month: p.getMonth() + 1 }; };
 Page({
   // calView：'week'（默认，所选日所在周）| 'month'；仅存在页面内存，不写存储
-  data: { year: 0, month: 0, selected: '', today: '', calView: 'week', marks: {}, info: {}, cards: [], day: {}, draft: null, sel: {}, monthEmpty: false, readOnly: false },
+  data: { year: 0, month: 0, selected: '', today: '', calView: 'week', marks: {}, info: {}, cals: {}, cards: [], day: {}, draft: null, sel: {}, monthEmpty: false, readOnly: false, diet: { show: false, recorded: false, kcal: '', unit: '', sub: '' } },
   onLoad() { const t = D.today(); this.setData(Object.assign({ selected: t, today: t }, ymOf(t))); },
   onShow() { this.refresh(); },
   refresh() {
@@ -34,12 +35,28 @@ Page({
       top: [], more: 0 }));
     const cards = strength.concat(aerobic).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
     const info = DM.buildInfo(repo, grid[0].date, grid[grid.length - 1].date);
+    let diet = { show: false, recorded: false, kcal: '', unit: '', sub: '' };
+    const cals = {};
+    if (!repo.diet.problem()) {
+      const board = repo.diet.dayBoard(selected);
+      const future = selected > today;
+      const n = (board.entries || []).length;
+      diet = {
+        show: true,
+        recorded: !!board.recorded,
+        kcal: board.recorded ? String(board.totals.kcal) : '未记录',
+        unit: board.recorded ? 'kcal' : '',
+        sub: future ? '还没到这一天' : (board.recorded ? (n + ' 条') : '点开可以补记'),
+      };
+      const raw = repo.diet.intakeMarks(grid[0].date, grid[grid.length - 1].date);
+      Object.keys(raw).forEach(d => { cals[d] = P.compactKcal(raw[d]); });
+    }
     const isRest = cards.length === 0 && repo.restDays.isRest(selected);
     const draft = repo.workouts.getDraft();
     const kind = selected > today ? 'future' : selected === today ? 'today' : 'past';
     const hasStrength = strength.length > 0, hasAerobic = aerobic.length > 0;
     const totalMin = cards.reduce((t, c) => t + (c.duration || 0), 0);
-    this.setData({ today, marks, info, cards, readOnly: repo.isReadOnly(),
+    this.setData({ today, marks, info, cals, diet, cards, readOnly: repo.isReadOnly(),
       day: cards.length ? this.daySummary(ws, as, totalMin, cards.some(c => !c.duration)) : {},
       monthEmpty: !Object.keys(marks).some(d => d >= from && d <= to),
       draft: draft ? { id: draft.id, text: (draft.date === today ? '今天' : F.md(draft.date)) + '有一个未完成的训练' } : null,
@@ -81,6 +98,10 @@ Page({
     else wx.navigateTo({ url: '/pages/workout-detail/workout-detail?id=' + id });
   },
   openTemplates() { wx.navigateTo({ url: '/pages/templates/templates?date=' + this.data.selected }); },
+  openDietDay() {
+    if (!this.data.diet || !this.data.diet.show) return;
+    wx.navigateTo({ url: '/pages/diet-extra/diet-day/diet-day?date=' + this.data.selected });
+  },
   continueDraft() { wx.navigateTo({ url: '/pages/workout-edit/workout-edit?id=' + this.data.draft.id }); },
   // FAB / 空态：力量或有氧
   pickNew() {

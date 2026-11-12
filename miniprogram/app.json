@@ -7,7 +7,8 @@
   ],
   "subpackages": [
     { "root": "pages/diet-formula", "pages": ["diet-formula"] },
-    { "root": "pages/diet-extra", "pages": ["diet-goal/diet-goal", "diet-review/diet-review", "diet-log/diet-log", "diet-meal/diet-meal"] },
+    { "root": "pages/diet-extra", "pages": ["diet-goal/diet-goal", "diet-review/diet-review", "diet-log/diet-log", "diet-meal/diet-meal", "diet-day/diet-day"] },
+    { "root": "pages/diet-ai", "pages": ["input/input", "result/result"] },
     { "root": "pages/workout-detail", "pages": ["workout-detail"] },
     { "root": "pages/workout-edit", "pages": ["workout-edit"] },
     { "root": "pages/templates", "pages": ["templates"] },

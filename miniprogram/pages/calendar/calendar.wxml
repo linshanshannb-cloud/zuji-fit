@@ -1,6 +1,6 @@
 <nav-bar mode="tab" title="训练"></nav-bar>
 <view class="page page-pad-tab">
-  <month-calendar year="{{year}}" month="{{month}}" selected="{{selected}}" today="{{today}}" marks="{{marks}}" info="{{info}}" view="{{calView}}" rich legend collapsible bind:select="onSelect" bind:shift="onShift" bind:today="onToday" bind:toggle="onToggle"></month-calendar>
+  <month-calendar year="{{year}}" month="{{month}}" selected="{{selected}}" today="{{today}}" marks="{{marks}}" info="{{info}}" cals="{{cals}}" view="{{calView}}" rich legend collapsible bind:select="onSelect" bind:shift="onShift" bind:today="onToday" bind:toggle="onToggle"></month-calendar>
   <view class="hairline-b"></view>
 
   <view wx:if="{{draft}}" class="banner"><text class="sub" style="color:var(--c-ink)">{{draft.text}}</text><text class="accent hit" style="font-weight:600;padding-left:24rpx" bindtap="continueDraft">继续</text></view>
@@ -10,6 +10,13 @@
     <text wx:if="{{sel.isTraining}}" class="tag tag-gray" style="margin-left:16rpx">已完成</text>
     <text wx:elif="{{sel.isRest}}" class="tag tag-rest" style="margin-left:16rpx">休息日</text>
     <text class="tpl-entry accent" bindtap="openTemplates">模板 ›</text>
+  </view>
+  <view wx:if="{{diet.show}}" class="diet-line" bindtap="openDietDay">
+    <text class="diet-k">饮食</text>
+    <text class="{{diet.recorded ? 'num diet-n' : 'sub'}}">{{diet.kcal}}</text>
+    <text wx:if="{{diet.unit}}" class="sub diet-unit">{{diet.unit}}</text>
+    <text class="sub diet-meta">{{diet.sub}}</text>
+    <text class="chev">›</text>
   </view>
 
   <!-- 所选日汇总卡：大号关键数 -->

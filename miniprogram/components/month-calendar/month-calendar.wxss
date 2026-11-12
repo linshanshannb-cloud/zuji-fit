@@ -30,7 +30,8 @@
 .ctag-aero { color: #C94412; }
 .ci { position: relative; max-width: 100%; padding: 0 2rpx; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center; font-size: 19rpx; line-height: 24rpx; height: 24rpx; }
 .ci-r { color: #6B7F99; font-weight: 600; margin-top: 4rpx; width: 32rpx; height: 32rpx; line-height: 32rpx; border-radius: 50%; background: #EEF2F7; font-size: 20rpx; padding: 0; }
-.out .ctag, .out .ci { visibility: hidden; }
+.out .ctag, .out .ci, .out .ckcal { visibility: hidden; }
+.ckcal { position: relative; max-width: 88rpx; margin-top: 2rpx; font-size: 18rpx; line-height: 22rpx; height: 22rpx; color: var(--c-text-3); text-align: center; }
 /* 底部一行：图例 + 展开/收起 */
 .foot { min-height: 72rpx; }
 .legend { font-size: 22rpx; color: var(--c-text-3); flex-wrap: wrap; min-width: 0; }

@@ -62,6 +62,10 @@ Page({
   openGoal() { wx.navigateTo({ url: '/pages/diet-extra/diet-goal/diet-goal' }); },
   openReview() { wx.navigateTo({ url: '/pages/diet-extra/diet-review/diet-review' }); },
   openLog() { wx.navigateTo({ url: '/pages/diet-extra/diet-log/diet-log?date=' + this.data.date }); },
+  openAi() {
+    if (!ui.canWrite()) return;
+    wx.navigateTo({ url: '/pages/diet-ai/input/input?date=' + this.data.date });
+  },
   openMeal(e) {
     wx.navigateTo({ url: '/pages/diet-extra/diet-meal/diet-meal?date=' + this.data.date + '&meal=' + e.currentTarget.dataset.meal });
   },

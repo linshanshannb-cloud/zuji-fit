@@ -52,6 +52,11 @@ test('month-calendar v0.5: week view = 7 cells of the selected week (cross-month
   const by = d => c.data.cells.find(x => x.date === d);
   assert.deepStrictEqual([by('2026-09-29').train, by('2026-09-29').part, by('2026-09-29').aero, by('2026-09-29').showDot], [true, '胸', '跑步', false]);
   assert.deepStrictEqual([by('2026-10-02').rest, by('2026-10-02').train], [true, false]);
+  c.setData({ cals: { '2026-10-03': '320', '2026-09-29': '900', '2026-10-02': '100' } });
+  c.build();
+  assert.strictEqual(by('2026-10-03').kcal, '320');
+  assert.strictEqual(by('2026-09-29').kcal, '', '训练日格子留给部位标签');
+  assert.strictEqual(by('2026-10-02').kcal, '', '休息日格子不叠热量');
   c.onToggle(); assert.deepStrictEqual(c.events.slice(-1)[0], ['toggle', { view: 'month' }]);
   c.setData({ view: 'month' }); assert.strictEqual(c.data.cells.length, 42);
   c.onToggle(); assert.deepStrictEqual(c.events.slice(-1)[0], ['toggle', { view: 'week' }]);

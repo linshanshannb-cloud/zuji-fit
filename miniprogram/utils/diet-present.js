@@ -54,7 +54,9 @@ function basisPhrase(name, basis) {
 function summaryBit(e) {
   if (!isFoodEntry(e)) {
     const n = e && e.name && e.name !== '快速记录' ? String(e.name).trim() : '';
-    return n || '营养素记录';
+    const base = n || '营养素记录';
+    const portion = e && e.portion ? String(e.portion).trim() : '';
+    return portion ? base + ' ' + portion : base;
   }
   const unit = e.basis === 'perServing' ? '份' : 'g';
   const qty = e.qty == null || e.qty === '' ? '' : String(e.qty);
@@ -80,6 +82,41 @@ function deriveSnap(entry) {
     proteinG: (Number(entry.proteinG) || 0) / k,
     fatG: (Number(entry.fatG) || 0) / k,
   };
+}
+function storedKcal(e) {
+  if (!e || e.kcal == null || e.kcal === '') return null;
+  const n = Number(e.kcal);
+  if (!isFinite(n) || n < 0) return null;
+  return Math.round(n);
+}
+// 没有手写热量的旧记录仍按整日碳蛋脂一次换算，避免逐条四舍五入改掉原来的今日热量。
+function sumIntake(entries) {
+  let carbsG = 0, proteinG = 0, fatG = 0;
+  let explicit = 0, plainC = 0, plainP = 0, plainF = 0, any = false;
+  (entries || []).forEach(e => {
+    if (!e) return;
+    const c = Number(e.carbsG) || 0, p = Number(e.proteinG) || 0, f = Number(e.fatG) || 0;
+    carbsG += c; proteinG += p; fatG += f;
+    const k = storedKcal(e);
+    if (k == null) { plainC += c; plainP += p; plainF += f; }
+    else { any = true; explicit += k; }
+  });
+  const kcal = any
+    ? explicit + Math.round(Fml.kcalOf(plainC, plainP, plainF))
+    : Math.round(Fml.kcalOf(carbsG, proteinG, fatG));
+  return { carbsG, proteinG, fatG, kcal };
+}
+function compactKcal(n) {
+  const k = Math.round(Number(n));
+  if (!isFinite(k) || k < 0) return '';
+  if (k < 1000) return String(k);
+  if (k >= 10000) return Math.round(k / 1000) + 'k';
+  return String(Math.round(k / 100) / 10).replace(/\.0$/, '') + 'k';
+}
+function mealAt(hhmm) {
+  const m = /^(\d{2}):(\d{2})$/.exec(hhmm || '');
+  if (!m) return 'snack';
+  return inferMeal(new Date(2000, 0, 1, Number(m[1]), Number(m[2]), 0));
 }
 function scaleSnap(snap, basis, qty) {
   const q = Number(qty);
@@ -154,6 +191,15 @@ function presentEntry(e) {
     fatG: e.fatG,
     line: fmtG(e.carbsG) + ' / ' + fmtG(e.proteinG) + ' / ' + fmtG(e.fatG) + ' g',
     example: !!e.example,
+    kcal: storedKcal(e) == null ? Math.round(Fml.kcalOf(Number(e.carbsG) || 0, Number(e.proteinG) || 0, Number(e.fatG) || 0)) : storedKcal(e),
+    portion: e.portion ? String(e.portion) : '',
+    fiberG: e.fiberG == null || e.fiberG === '' ? '' : e.fiberG,
+    sugarG: e.sugarG == null || e.sugarG === '' ? '' : e.sugarG,
+    saltMg: e.saltMg == null || e.saltMg === '' ? '' : e.saltMg,
+    tips: e.tips ? String(e.tips) : '',
+    note: e.note ? String(e.note) : '',
+    eatenAt: e.eatenAt ? String(e.eatenAt) : '',
+    source: e.source ? String(e.source) : '',
   };
 }
 function groupMeals(entries) {
@@ -162,14 +208,13 @@ function groupMeals(entries) {
   (entries || []).forEach(e => { if (e) buckets[normalizeMeal(e.meal)].push(e); });
   return MEALS.filter(m => buckets[m.id].length).map(m => {
     const list = buckets[m.id];
-    let c = 0, p = 0, f = 0;
-    list.forEach(e => { c += Number(e.carbsG) || 0; p += Number(e.proteinG) || 0; f += Number(e.fatG) || 0; });
+    const sum = sumIntake(list);
     return {
       id: m.id,
       label: m.label,
       count: list.length,
       summary: mealSummary(list),
-      kcal: Math.round(Fml.kcalOf(c, p, f)),
+      kcal: sum.kcal,
       entries: list.map(presentEntry),
     };
   });
@@ -193,7 +238,7 @@ function migrateEntry(entry) {
 }
 
 module.exports = {
-  MEALS, WEEK, round1, fmtG, mealLabel, normalizeMeal, inferMeal, dayTitle, isFoodEntry, basisPhrase,
+  MEALS, WEEK, round1, fmtG, mealLabel, normalizeMeal, inferMeal, mealAt, dayTitle, isFoodEntry, basisPhrase,
   summaryBit, mealSummary, deriveSnap, scaleSnap, macroRemain, kcalRemain, dayBadge, intakeView,
-  presentEntry, groupMeals, migrateEntry,
+  presentEntry, groupMeals, migrateEntry, storedKcal, sumIntake, compactKcal,
 };

@@ -5,10 +5,10 @@ const D = require('../../utils/date');
 const DM = require('../../utils/daymark');
 Component({
   options: { styleIsolation: 'apply-shared' },
-  properties: { year: Number, month: Number, selected: String, today: String, marks: { type: Object, value: {} }, variant: { type: String, value: 'dot' }, legend: Boolean, info: { type: Object, value: {} }, rich: Boolean,
+  properties: { year: Number, month: Number, selected: String, today: String, marks: { type: Object, value: {} }, variant: { type: String, value: 'dot' }, legend: Boolean, info: { type: Object, value: {} }, cals: { type: Object, value: {} }, rich: Boolean,
     view: { type: String, value: 'month' }, collapsible: Boolean },
   data: { cells: [], weekdays: ['一', '二', '三', '四', '五', '六', '日'] },
-  observers: { 'year, month, selected, today, marks, info, view': function () { this.build(); } },
+  observers: { 'year, month, selected, today, marks, info, view, cals': function () { this.build(); } },
   methods: {
     build() {
       if (!this.data.year) return;
@@ -18,11 +18,13 @@ Component({
       const cells = grid.map(c => {
         // 格子最多两行：力量部位合并「胸·背」+ 有氧「跑步」/「跑步+1」；有标签时禁止再画圆点
         const ln = DM.cellLines(info[c.date]);
+        const cal = (this.data.cals || {})[c.date];
         return {
           date: c.date, day: c.day, inMonth: c.inMonth, sel: c.date === selected, isToday: c.date === today, future: c.date > today,
           mark: marks[c.date] === undefined ? '' : marks[c.date] === true ? '•' : String(marks[c.date]),
           part: ln.part, aero: ln.aero, train: ln.train, rest: ln.rest,
           showDot: !ln.train && !ln.rest && !!(marks[c.date]),
+          kcal: !ln.train && !ln.rest && cal ? String(cal) : '',
         };
       });
       this.setData({ cells });

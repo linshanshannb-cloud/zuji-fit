@@ -1,4 +1,6 @@
 .nav { position: fixed; top: 0; left: 0; right: 0; background: var(--c-white); z-index: 40; }
+.nav.warm { background: #F6F3EE; }
+.side { margin-left: auto; position: relative; z-index: 1; display: flex; align-items: center; }
 .bar-in { position: relative; display: flex; align-items: center; padding-left: 32rpx; box-sizing: border-box; }
 .tab-title { font-size: var(--fs-h1); font-weight: 700; }
 .back { width: 88rpx; height: 88rpx; display: flex; align-items: center; margin-left: -16rpx; font-size: 48rpx; flex-shrink: 0; position: relative; z-index: 1; }

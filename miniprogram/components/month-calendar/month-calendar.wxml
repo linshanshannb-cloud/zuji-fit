@@ -11,6 +11,7 @@
       <view wx:if="{{item.aero}}" class="ctag ctag-aero">{{item.aero}}</view>
       <view wx:if="{{item.rest}}" class="ci ci-r">休</view>
       <view wx:elif="{{item.showDot}}" class="dot on"></view>
+      <view wx:if="{{item.kcal}}" class="ckcal num">{{item.kcal}}</view>
     </block>
     <view wx:else class="val num">{{item.mark}}</view>
   </view>
