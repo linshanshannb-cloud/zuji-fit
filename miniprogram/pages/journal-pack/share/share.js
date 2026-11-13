@@ -1,7 +1,8 @@
 const D = require('../../../utils/date');
 const repo = require('../../../utils/repo/index');
 const SD = require('../../../utils/share-day');
-const { drawShareCard } = require('./draw');
+const { drawShareCard, W } = require('./draw');
+const { cardHeight } = require('../../../utils/share-day');
 
 function loadImage(canvas, src) {
   return new Promise(resolve => {
@@ -37,8 +38,9 @@ Page({
       const node = res && res[0] && res[0].node;
       if (!node) { this.setData({ busy: false, fail: '画布没有准备好' }); return; }
       const ctx = node.getContext('2d');
-      node.width = 1080;
-      node.height = 1440;
+      const h = cardHeight(this.model);
+      node.width = W;
+      node.height = h;
       const srcs = [];
       this.model.train.rows.concat(this.model.diet.rows).forEach(row => { if (srcs.indexOf(row.sticker) < 0) srcs.push(row.sticker); });
       Promise.all(srcs.map(src => loadImage(node, src).then(img => [src, img]))).then(pairs => {
@@ -46,7 +48,7 @@ Page({
         pairs.forEach(pair => { images[pair[0]] = pair[1]; });
         drawShareCard(ctx, this.model, images);
         wx.canvasToTempFilePath({
-          canvas: node, destWidth: 1080, destHeight: 1440, fileType: 'png',
+          canvas: node, destWidth: W, destHeight: h, fileType: 'png',
           success: r => this.setData({ path: r.tempFilePath, busy: false, fail: '' }),
           fail: () => this.setData({ busy: false, fail: '图片没有生成' }),
         });
