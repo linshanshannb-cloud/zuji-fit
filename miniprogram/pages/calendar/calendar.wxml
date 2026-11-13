@@ -55,7 +55,7 @@
     <view class="cal-sheet-title">{{sheet.title}}</view>
     <view wx:for="{{sheet.rows}}" wx:key="key" class="cal-row" data-key="{{item.key}}" bindtap="onSheet">
       <view class="ico">
-        <block wx:if="{{item.icon==='lift'}}"><view class="plate"></view><view class="bar"></view><view class="plate"></view></block>
+        <block wx:if="{{item.icon==='lift'}}"><view class="plate"></view><view class="lift-bar"></view><view class="plate"></view></block>
         <view wx:elif="{{item.icon==='bowl'}}" class="bowl"></view>
         <view wx:elif="{{item.icon==='pulse'}}" class="pulse"></view>
         <view wx:elif="{{item.icon==='doc'}}" class="doc"></view>

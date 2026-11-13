@@ -65,5 +65,5 @@
 .lg-sel { width: 28rpx; height: 28rpx; border-radius: 50%; background: #FFE4D6; box-shadow: inset 0 0 0 1px #C64B19; }
 .lg-rest { width: 28rpx; height: 28rpx; line-height: 28rpx; border-radius: 50%; background: #EEF2F7; color: #6B7F99; font-size: 18rpx; text-align: center; font-weight: 600; }
 .toggle { flex-shrink: 0; padding-left: 16rpx; font-size: 24rpx; color: #5C5854; font-weight: 500; }
-.chev { width: 10rpx; height: 10rpx; margin: -6rpx 0 0 10rpx; border-right: 3rpx solid #5C5854; border-bottom: 3rpx solid #5C5854; transform: rotate(45deg); }
-.chev.up { margin-top: 6rpx; transform: rotate(-135deg); }
+.fold-chev { width: 10rpx; height: 10rpx; margin: -6rpx 0 0 10rpx; border-right: 3rpx solid #5C5854; border-bottom: 3rpx solid #5C5854; transform: rotate(45deg); }
+.fold-chev.up { margin-top: 6rpx; transform: rotate(-135deg); }

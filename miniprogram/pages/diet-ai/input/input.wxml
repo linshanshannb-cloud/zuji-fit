@@ -17,7 +17,7 @@
       class="box"
       maxlength="200"
       placeholder="如：中午吃了一份石锅拌饭"
-      placeholder-class="ph"
+      placeholder-class="input-ph"
       value="{{text}}"
       bindinput="onText"
       bindkeyboardheightchange="onKeyboard"
