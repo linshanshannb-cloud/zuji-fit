@@ -80,7 +80,7 @@ Page({
         return {
           id: c.id, kind: c.kind, name: c.title + ' · 有氧',
           sub: [c.duration ? c.duration + ' 分钟' : '', src ? '消耗 ' + src.estimatedKcal + ' kcal' : ''].filter(Boolean).join(' · '),
-          sticker: JS.trainSticker('aerobic', src && src.activityType), lg: false,
+          sticker: JS.trainSticker('aerobic', src && src.activityType, c.title), lg: false,
         };
       }
       const detail = repo.workouts.getWorkout(c.id);
@@ -95,7 +95,7 @@ Page({
       id: e.id, kind: 'diet', name: e.displayName || e.name || '饮食',
       sub: [e.mealLabel, e.qtyText || (e.portion ? e.portion + ' 份' : '')].filter(Boolean).join(' · '),
       kcal: (e.kcal == null ? '' : e.kcal) + ' kcal',
-      sticker: JS.foodSticker(e.displayName || e.name), lg: i === 0,
+      sticker: JS.foodSticker(e.displayName || e.name), lg: JS.foodLarge(e.displayName || e.name),
     })), same, seen);
     this._primedDate = selected;
     const dayAnim = !!(this._seenDate && this._seenDate !== selected);
@@ -156,6 +156,7 @@ Page({
     else wx.navigateTo({ url: '/pages/workout-detail/workout-detail?id=' + id });
   },
   openTemplates() { wx.navigateTo({ url: '/pages/templates/templates?date=' + this.data.selected }); },
+  openShare() { wx.navigateTo({ url: '/pages/journal-pack/share/share?date=' + this.data.selected }); },
   openDietDay() {
     wx.navigateTo({ url: '/pages/diet-extra/diet-day/diet-day?date=' + this.data.selected });
   },

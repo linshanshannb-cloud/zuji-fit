@@ -5,7 +5,10 @@
   <view wx:if="{{draft}}" class="banner"><text class="sub" style="color:var(--c-ink)">{{draft.text}}</text><text class="accent hit" style="font-weight:600;padding-left:24rpx" bindtap="continueDraft">继续</text></view>
 
   <view class="ruled {{dayAnim ? 'day-in' : ''}}">
-  <view class="day-head"><text class="day-title">{{sel.label}}</text></view>
+  <view class="day-head">
+    <text class="day-title">{{sel.label}}</text>
+    <view class="share-hit" catchtap="openShare" aria-label="分享当天"><view class="share-box"></view></view>
+  </view>
 
   <view class="peer tilt-train">
     <view class="peer-top">

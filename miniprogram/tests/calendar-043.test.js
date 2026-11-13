@@ -170,7 +170,7 @@ test('calendar home: train and diet summaries are peers, and the list keeps ever
   assert.ok(!pg.data.train.detail.includes('爬楼'));
   assert.ok(pg.data.cards.some(c => c.kind === 'aerobic' && c.title === '爬楼机'));
   assert.ok(pg.data.trainRows.some(r => r.kind === 'strength' && r.name === '胸 · 力量' && r.sticker.endsWith('/dumbbell.png')));
-  assert.ok(pg.data.trainRows.some(r => r.name === '爬楼机 · 有氧' && r.sticker.endsWith('/shoe.png') && !r.fresh));
+  assert.ok(pg.data.trainRows.some(r => r.name === '爬楼机 · 有氧' && r.sticker.endsWith('/stair.png') && !r.fresh));
   assert.ok(pg.data.dietRows.some(r => r.name === '石锅拌饭' && r.sticker.endsWith('/bibimbap.png') && r.kcal.endsWith(' kcal')));
   assert.ok(pg.data.train.min > 0);
   assert.strictEqual(pg.data.train.oneId, '');

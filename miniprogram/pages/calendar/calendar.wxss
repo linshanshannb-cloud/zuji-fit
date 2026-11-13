@@ -10,7 +10,11 @@ page { background: #F6F3EE; }
 }
 .day-in { animation: day-in 160ms ease both; }
 @keyframes day-in { from { opacity: 0; transform: translateY(12rpx); } to { opacity: 1; transform: none; } }
-.day-head { margin-top: 20rpx; min-height: 48rpx; }
+.day-head { margin-top: 20rpx; min-height: 88rpx; display: flex; align-items: center; justify-content: space-between; }
+.share-hit { width: 88rpx; height: 88rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.share-box { width: 36rpx; height: 30rpx; border: 3rpx solid #5C5854; border-radius: 6rpx; position: relative; }
+.share-box::before { content: ''; position: absolute; left: 16rpx; top: -16rpx; width: 3rpx; height: 20rpx; background: #5C5854; }
+.share-box::after { content: ''; position: absolute; left: 10rpx; top: -14rpx; width: 14rpx; height: 14rpx; border-left: 3rpx solid #5C5854; border-top: 3rpx solid #5C5854; transform: rotate(45deg); box-sizing: border-box; }
 .day-title { font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 40rpx; font-weight: 600; color: #2C241E; }
 .peer { margin-top: 16rpx; background: #FFFEFB; border-radius: 32rpx; padding: 28rpx 32rpx; border: 1px solid rgba(44, 36, 30, 0.04); box-shadow: 0 4rpx 20rpx rgba(44, 36, 30, 0.07), 0 2rpx 4rpx rgba(44, 36, 30, 0.05); box-sizing: border-box; }
 .tilt-train { transform: rotate(-0.4deg); transform-origin: center center; }
