@@ -84,7 +84,7 @@ Page({
         this.sync({ loading: false, failTitle: assessed.title, failText: assessed.message });
         return;
       }
-      session.set({ date: this.date, time: this.data.time, meal: this._meal, draft: assessed.data });
+      session.set({ date: this.date, time: this.data.time, meal: this._meal, draft: assessed.data, items: assessed.items });
       wx.navigateTo({ url: '/pages/diet-ai/result/result' });
     }).catch(err => {
       if (this._dead) return;

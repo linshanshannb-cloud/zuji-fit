@@ -1,7 +1,47 @@
 <nav-bar mode="back" title="" tone="warm" custom-back bind:back="cancel">
-  <view slot="right" class="pen" bindtap="toggleEdit">✎</view>
+  <view wx:if="{{!multi}}" slot="right" class="pen" bindtap="toggleEdit">✎</view>
 </nav-bar>
 <view class="result-page">
+  <block wx:if="{{multi}}">
+    <view class="when multi-when">
+      <text class="when-bit" bindtap="cycleMeal">{{mealLabel}}</text>
+      <text class="when-dot"> · </text>
+      <picker mode="time" value="{{time}}" bindchange="onTime">
+        <text class="when-bit">{{whenText}}</text>
+      </picker>
+    </view>
+    <view wx:for="{{items}}" wx:key="id" class="food">
+      <view class="food-top">
+        <input class="food-name" maxlength="30" value="{{item.name}}" data-id="{{item.id}}" data-k="name" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/>
+        <text class="food-del" data-id="{{item.id}}" catchtap="removeItem">删除</text>
+      </view>
+      <view class="portion-row">
+        <view class="step" data-id="{{item.id}}" data-d="-1" catchtap="stepItem">−</view>
+        <input class="portion-in" maxlength="20" value="{{item.portion}}" data-id="{{item.id}}" data-k="portion" bindinput="onItem"/>
+        <view class="step" data-id="{{item.id}}" data-d="1" catchtap="stepItem">+</view>
+      </view>
+      <view class="food-kcal">
+        <input class="food-kcal-n num" type="digit" value="{{item.kcal}}" data-id="{{item.id}}" data-k="kcal" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/>
+        <text class="kcal-u">kcal</text>
+      </view>
+      <view class="food-macros">
+        <view class="macro"><text class="lab">碳水</text><input class="macro-in num" type="digit" value="{{item.carbsG}}" data-id="{{item.id}}" data-k="carbsG" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+        <view class="macro"><text class="lab">蛋白质</text><input class="macro-in num" type="digit" value="{{item.proteinG}}" data-id="{{item.id}}" data-k="proteinG" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+        <view class="macro"><text class="lab">脂肪</text><input class="macro-in num" type="digit" value="{{item.fatG}}" data-id="{{item.id}}" data-k="fatG" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+      </view>
+      <view class="more" data-id="{{item.id}}" bindtap="toggleItem">{{item.open ? '收起' : '纤维、糖、盐、备注'}}</view>
+      <view wx:if="{{item.open}}" class="more-box">
+        <view class="food-macros">
+          <view class="macro"><text class="lab">纤维</text><input class="macro-in num" type="digit" value="{{item.fiberG}}" data-id="{{item.id}}" data-k="fiberG" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+          <view class="macro"><text class="lab">糖</text><input class="macro-in num" type="digit" value="{{item.sugarG}}" data-id="{{item.id}}" data-k="sugarG" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+          <view class="macro"><text class="lab">盐</text><input class="macro-in num" type="digit" value="{{item.saltShown}}" data-id="{{item.id}}" data-k="saltMg" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">mg</text></view>
+        </view>
+        <input class="food-note" maxlength="40" value="{{item.note}}" placeholder="备注" data-id="{{item.id}}" data-k="note" bindinput="onItem"/>
+      </view>
+    </view>
+    <view class="sum">合计 {{totalKcal}} kcal</view>
+  </block>
+  <block wx:else>
   <view class="hero">
     <view class="sticker" bindtap="editName">
       <input wx:if="{{editName || editing}}" class="name-in" maxlength="30" value="{{name}}" focus="{{editName}}" bindinput="onName"/>
@@ -62,6 +102,7 @@
     <textarea wx:if="{{editing}}" class="tips-in" maxlength="160" value="{{tips}}" bindinput="onTips"/>
     <text wx:else class="tips-body">{{tips}}</text>
   </view>
+  </block>
 </view>
 
 <view class="savebar {{keyboardHeight ? 'up' : ''}}" style="{{dockStyle}}">

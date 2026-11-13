@@ -484,31 +484,38 @@ function addNutrient(date, input) {
     return C.ok(log);
   });
 }
-function addAiEntry(date, input) {
+function aiEntryFrom(input, t) {
+  input = input || {};
+  const checked = Ai.acceptEntry(input);
+  if (!checked.ok) C.raise(checked.code || 'VALIDATION', checked.message);
+  const row = checked.data;
+  return {
+    id: newId('de_', t), kind: 'nutrient', meal: P.normalizeMeal(input.meal || 'other'), name: row.name,
+    basis: null, qty: null, snap: { carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG },
+    carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
+    fiberG: row.fiberG, sugarG: row.sugarG, saltMg: row.saltMg, kcal: row.kcal,
+    portion: row.portion || '', tips: row.tips || '', note: row.note || '', eatenAt: row.eatenAt,
+    source: 'ai-text', example: false, foodId: null, v: 2,
+  };
+}
+function addAiEntries(date, list) {
   return C.guard(() => {
     C.writable();
     const d = C.check(V.validateDate(date, { today: C.today() }));
-    input = input || {};
-    const checked = Ai.acceptEntry(input);
-    if (!checked.ok) C.raise(checked.code || 'VALIDATION', checked.message);
-    const row = checked.data;
+    if (!Array.isArray(list) || !list.length) C.raise('VALIDATION', '没有可记入的食物');
     const t = C.now();
-    const entry = {
-      id: newId('de_', t), kind: 'nutrient', meal: P.normalizeMeal(input.meal || 'other'), name: row.name,
-      basis: null, qty: null, snap: { carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG },
-      carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
-      fiberG: row.fiberG, sugarG: row.sugarG, saltMg: row.saltMg, kcal: row.kcal,
-      portion: row.portion || '', tips: row.tips || '', note: row.note || '', eatenAt: row.eatenAt,
-      source: 'ai-text', example: false, foodId: null, v: 2,
-    };
+    const built = list.map(input => aiEntryFrom(input, t));
     const logs = readLogs();
     const prev = logs.find(l => l.date === d);
     const log = prev ? JSON.parse(JSON.stringify(prev)) : { id: newId('dl_', t), date: d, entries: [], createdAt: t };
-    log.entries = (log.entries || []).concat([entry]);
+    log.entries = (log.entries || []).concat(built);
     log.updatedAt = t;
     writeLogs(sortLogs(logs.filter(l => l.date !== d).concat([log])));
     return C.ok(log);
   });
+}
+function addAiEntry(date, input) {
+  return addAiEntries(date, [input || {}]);
 }
 function intakeMarks(from, to) {
   const out = {};
@@ -668,6 +675,6 @@ module.exports = {
   observeWindow: today => observeWindow(activeStage(readPlan()), today || C.today()),
   declineTip: today => declineTip(readPlan(), today || C.today()),
   preview, commit, updatePrefs, suggestion,
-  getLog, presentIntake, totals, saveQuick, addFood, addNutrient, addAiEntry, updateEntry, dayBoard, migrateLogs, removeEntry, clearLog, intakeSummary, intakeMarks, noLogStreak,
+  getLog, presentIntake, totals, saveQuick, addFood, addNutrient, addAiEntry, addAiEntries, updateEntry, dayBoard, migrateLogs, removeEntry, clearLog, intakeSummary, intakeMarks, noLogStreak,
   listFoods, saveCustomFood, deleteCustomFood,
 };

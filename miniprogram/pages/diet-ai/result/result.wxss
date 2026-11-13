@@ -40,6 +40,21 @@ page { background: #F6F3EE; }
 .val { width: 120rpx; height: 56rpx; font-size: 40rpx; font-weight: 600; color: #3F3530; text-align: center; border-bottom: 2rpx solid #C8B8AA; }
 .unit { margin-left: 4rpx; font-size: 22rpx; color: #6B6560; }
 
+.multi-when { margin: 8rpx 40rpx 0; }
+.food { margin: 20rpx 32rpx 0; background: #FFFEFB; border-radius: 28rpx; padding: 24rpx 28rpx 20rpx; border: 1px solid rgba(44, 36, 30, 0.06); }
+.food-top { display: flex; align-items: center; }
+.food-name { flex: 1; min-width: 0; height: 64rpx; font-size: 36rpx; font-weight: 700; color: #3F3530; border-bottom: 2rpx solid #C8B8AA; }
+.food-del { margin-left: 16rpx; padding: 8rpx 4rpx; font-size: 26rpx; color: #8A8078; }
+.food-kcal { margin-top: 16rpx; display: flex; align-items: baseline; justify-content: center; }
+.food-kcal-n { width: 180rpx; height: 64rpx; font-size: 48rpx; font-weight: 700; color: #3F3530; text-align: right; border-bottom: 2rpx solid #C8B8AA; }
+.food-macros { display: flex; margin-top: 12rpx; }
+.macro { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.macro-in { width: 100rpx; height: 48rpx; font-size: 32rpx; font-weight: 600; color: #3F3530; text-align: center; border-bottom: 2rpx solid #C8B8AA; }
+.more { margin-top: 12rpx; font-size: 24rpx; color: #8A8078; text-align: center; }
+.more-box { margin-top: 8rpx; }
+.food-note { margin-top: 12rpx; height: 56rpx; font-size: 26rpx; color: #5D4E44; border-bottom: 2rpx solid #C8B8AA; }
+.sum { margin: 28rpx 32rpx 0; text-align: center; font-size: 30rpx; font-weight: 600; color: #3F3530; }
+
 .tips { margin: 24rpx 32rpx 0; background: #fff; border-radius: 28rpx; padding: 32rpx; }
 .tips-k { font-family: Georgia, "Songti SC", serif; font-style: italic; font-size: 36rpx; color: #5D4E44; }
 .tips-body { display: block; margin-top: 12rpx; font-size: 30rpx; line-height: 1.4; color: #5D4E44; }

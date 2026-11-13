@@ -30,50 +30,91 @@ function whenText(date, time) {
   return day + ' ' + (time || '');
 }
 
+function rowFrom(d, i) {
+  const salt = d.saltMg == null || d.saltMg === '' ? '' : String(d.saltMg);
+  const field = (key, empty) => (d[key] == null || d[key] === '' ? (empty ? '' : '') : String(d[key]));
+  return {
+    id: 'f' + i,
+    name: d.name || '',
+    portion: d.portion || '1份',
+    note: d.note || '',
+    tips: d.tips || '',
+    servings: 1,
+    open: false,
+    kcal: field('kcal'),
+    carbsG: field('carbsG'),
+    proteinG: field('proteinG'),
+    fatG: field('fatG'),
+    fiberG: d.fiberG == null || d.fiberG === '' ? '' : String(d.fiberG),
+    sugarG: d.sugarG == null || d.sugarG === '' ? '' : String(d.sugarG),
+    saltMg: salt,
+    saltShown: comma(salt),
+    base: {
+      kcal: num(d.kcal),
+      carbsG: num(d.carbsG),
+      proteinG: num(d.proteinG),
+      fatG: num(d.fatG),
+      fiberG: d.fiberG == null || d.fiberG === '' ? null : num(d.fiberG),
+      sugarG: d.sugarG == null || d.sugarG === '' ? null : num(d.sugarG),
+      saltMg: d.saltMg == null || d.saltMg === '' ? null : num(d.saltMg),
+    },
+  };
+}
+function viewRow(row) {
+  return {
+    id: row.id, name: row.name, portion: row.portion, note: row.note, open: !!row.open,
+    kcal: row.kcal, carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
+    fiberG: row.fiberG, sugarG: row.sugarG, saltMg: row.saltMg, saltShown: row.saltShown,
+  };
+}
+
 Page({
   data: {
     name: '', portion: '1份', note: '', tips: '',
     kcal: '', carbsG: '', proteinG: '', fatG: '', fiberG: '', sugarG: '', saltMg: '', saltShown: '',
     mealLabel: '', whenText: '', time: '',
     editName: false, editing: false, saving: false, keyboardHeight: 0, dockStyle: '',
+    multi: false, items: [], totalKcal: 0,
   },
   onLoad() {
     const s = session.get();
-    if (!s || !s.draft) {
+    const list = s && Array.isArray(s.items) && s.items.length ? s.items : (s && s.draft ? [s.draft] : []);
+    if (!s || !list.length) {
       wx.showToast({ title: '请先描述吃了什么', icon: 'none' });
       wx.navigateBack();
       return;
     }
-    const d = s.draft;
     this.date = s.date;
     this.meal = s.meal || 'snack';
-    this.servings = 1;
-    this.base = {
-      kcal: num(d.kcal),
-      carbsG: num(d.carbsG),
-      proteinG: num(d.proteinG),
-      fatG: num(d.fatG),
-      fiberG: d.fiberG == null ? null : num(d.fiberG),
-      sugarG: d.sugarG == null ? null : num(d.sugarG),
-      saltMg: d.saltMg == null ? null : num(d.saltMg),
-    };
-    const salt = d.saltMg == null ? '' : String(d.saltMg);
-    this.setData({
-      name: d.name,
-      portion: d.portion || '1份',
-      tips: d.tips || '',
-      kcal: String(d.kcal),
-      carbsG: String(d.carbsG),
-      proteinG: String(d.proteinG),
-      fatG: String(d.fatG),
-      fiberG: d.fiberG == null ? '' : String(d.fiberG),
-      sugarG: d.sugarG == null ? '' : String(d.sugarG),
-      saltMg: salt,
-      saltShown: comma(salt),
+    this.rows = list.map(rowFrom);
+    const shared = {
       time: s.time || '',
       mealLabel: P.mealLabel(this.meal),
       whenText: whenText(s.date, s.time),
-    });
+    };
+    if (this.rows.length > 1) {
+      this.servings = 1;
+      this.base = {};
+      this.setData(Object.assign({ multi: true }, shared, this.itemPatch()));
+      return;
+    }
+    this.adopt(this.rows[0], shared);
+  },
+  itemPatch() {
+    const items = (this.rows || []).map(viewRow);
+    const total = items.reduce((t, row) => t + (num(row.kcal) || 0), 0);
+    return { items, totalKcal: Math.round(total) };
+  },
+  adopt(row, shared) {
+    this.servings = row.servings || 1;
+    this.base = Object.assign({}, row.base);
+    const salt = row.saltMg || '';
+    this.setData(Object.assign({
+      multi: false, items: [], totalKcal: Math.round(num(row.kcal) || 0),
+      name: row.name, portion: row.portion, note: row.note, tips: row.tips,
+      kcal: row.kcal, carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
+      fiberG: row.fiberG, sugarG: row.sugarG, saltMg: salt, saltShown: comma(salt),
+    }, shared || {}));
   },
   toggleEdit() { this.setData({ editing: !this.data.editing, editName: !this.data.editing }); },
   editName() { this.setData({ editName: true }); },
@@ -119,6 +160,54 @@ Page({
     const h = (e.detail && e.detail.height) || 0;
     this.setData({ keyboardHeight: h, dockStyle: h ? ('bottom:' + (h + 12) + 'px') : '' });
   },
+  onItem(e) {
+    const row = (this.rows || []).find(r => r.id === e.currentTarget.dataset.id);
+    if (!row) return;
+    const k = e.currentTarget.dataset.k;
+    const value = e.detail.value;
+    if (k === 'name' || k === 'portion' || k === 'note') row[k] = value;
+    else {
+      const raw = String(value || '').replace(/,/g, '');
+      row[k] = raw;
+      if (k === 'saltMg') row.saltShown = comma(raw);
+      const n = num(raw);
+      if (n != null && row.servings) row.base[k] = n / row.servings;
+      else if (raw === '') row.base[k] = null;
+    }
+    this.setData(this.itemPatch());
+  },
+  stepItem(e) {
+    const row = (this.rows || []).find(r => r.id === e.currentTarget.dataset.id);
+    if (!row) return;
+    const next = Math.max(1, (row.servings || 1) + Number(e.currentTarget.dataset.d));
+    if (next === row.servings) return;
+    row.servings = next;
+    row.portion = next + '份';
+    NUM_KEYS.forEach(k => {
+      row[k] = scaled(row.base, k, next);
+      if (k === 'saltMg') row.saltShown = comma(row.saltMg);
+    });
+    this.setData(this.itemPatch());
+  },
+  toggleItem(e) {
+    const row = (this.rows || []).find(r => r.id === e.currentTarget.dataset.id);
+    if (!row) return;
+    row.open = !row.open;
+    this.setData(this.itemPatch());
+  },
+  removeItem(e) {
+    const id = e.currentTarget.dataset.id;
+    this.rows = (this.rows || []).filter(r => r.id !== id);
+    if (!this.rows.length) {
+      this.setData({ multi: true, items: [], totalKcal: 0 });
+      return;
+    }
+    if (this.rows.length === 1) {
+      this.adopt(this.rows[0]);
+      return;
+    }
+    this.setData(this.itemPatch());
+  },
   cancel() {
     session.clear();
     wx.navigateBack();
@@ -126,16 +215,31 @@ Page({
   confirm() {
     if (this._busy || this.data.saving) return;
     if (!ui.canWrite()) return;
-    const d = this.data;
-    const checked = Ai.acceptEntry({
-      name: d.name, portion: d.portion, note: d.note, tips: d.tips, eatenAt: d.time,
-      kcal: d.kcal, carbsG: d.carbsG, proteinG: d.proteinG, fatG: d.fatG,
-      fiberG: d.fiberG, sugarG: d.sugarG, saltMg: d.saltMg,
-    });
-    if (!checked.ok) { wx.showToast({ title: checked.message, icon: 'none' }); return; }
+    const inputs = this.data.multi
+      ? (this.rows || []).map(row => ({
+        name: row.name, portion: row.portion, note: row.note, tips: row.tips, eatenAt: this.data.time,
+        kcal: row.kcal, carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
+        fiberG: row.fiberG, sugarG: row.sugarG, saltMg: row.saltMg,
+      }))
+      : [{
+        name: this.data.name, portion: this.data.portion, note: this.data.note, tips: this.data.tips, eatenAt: this.data.time,
+        kcal: this.data.kcal, carbsG: this.data.carbsG, proteinG: this.data.proteinG, fatG: this.data.fatG,
+        fiberG: this.data.fiberG, sugarG: this.data.sugarG, saltMg: this.data.saltMg,
+      }];
+    if (!inputs.length) { wx.showToast({ title: '至少留一条食物', icon: 'none' }); return; }
+    const ready = [];
+    for (let i = 0; i < inputs.length; i++) {
+      const checked = Ai.acceptEntry(inputs[i]);
+      if (!checked.ok) {
+        const who = inputs.length > 1 ? ((inputs[i].name || '这一条') + '：') : '';
+        wx.showToast({ title: who + checked.message, icon: 'none' });
+        return;
+      }
+      ready.push(Object.assign({ meal: this.meal }, checked.data));
+    }
     this._busy = true;
     this.setData({ saving: true });
-    const r = repo.diet.addAiEntry(this.date, Object.assign({ meal: this.meal }, checked.data));
+    const r = repo.diet.addAiEntries(this.date, ready);
     this._busy = false;
     this.setData({ saving: false });
     if (!ui.handle(r)) return;

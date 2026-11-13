@@ -66,38 +66,17 @@ function clip(s, max) {
   const t = String(s || '').trim();
   return t.length > max ? t.slice(0, max) : t;
 }
-function mergeList(list) {
-  const rows = (list || []).filter(x => x && typeof x === 'object');
-  if (!rows.length) return null;
-  if (rows.length === 1) return rows[0];
-  const foods = rows.filter(r => r.food !== false && r.food !== 'false');
-  const use = foods.length ? foods : rows;
-  const sumKey = (key, alt) => use.reduce((t, r) => t + (numOrNull(r[key] != null ? r[key] : r[alt]) || 0), 0);
-  const names = use.map(r => String(r.name || '').trim()).filter(Boolean);
-  return {
-    food: foods.length > 0,
-    name: names.slice(0, 2).join('、'),
-    portion: use.map(r => String(r.portion || '').trim()).filter(Boolean).slice(0, 2).join('、'),
-    kcal: sumKey('kcal', 'calories'),
-    carbsG: sumKey('carbsG'),
-    proteinG: sumKey('proteinG'),
-    fatG: sumKey('fatG'),
-    fiberG: sumKey('fiberG'),
-    sugarG: sumKey('sugarG'),
-    saltMg: sumKey('saltMg', 'saltG'),
-    tips: clip(use.map(r => r.tips).filter(Boolean)[0] || '', LIMITS.tips),
-  };
-}
-function unwrap(raw) {
-  if (Array.isArray(raw)) return mergeList(raw);
-  if (!raw || typeof raw !== 'object') return null;
-  if (raw.name == null && raw.food == null) {
-    if (Array.isArray(raw.foods)) return mergeList(raw.foods);
-    if (Array.isArray(raw.items)) return mergeList(raw.items);
-    if (raw.data && typeof raw.data === 'object') return unwrap(raw.data);
-    if (raw.result && typeof raw.result === 'object') return unwrap(raw.result);
-  }
+function peel(raw, depth) {
+  if (!raw || (depth || 0) > 3) return raw;
+  if (Array.isArray(raw) || typeof raw !== 'object') return raw;
+  const hasPayload = raw.name != null || raw.food != null || raw.ok != null || Array.isArray(raw.items) || Array.isArray(raw.foods);
+  if (hasPayload) return raw;
+  if (raw.data && typeof raw.data === 'object') return peel(raw.data, (depth || 0) + 1);
+  if (raw.result && typeof raw.result === 'object') return peel(raw.result, (depth || 0) + 1);
   return raw;
+}
+function notFood(row) {
+  return !!(row && (row.food === false || row.food === 'false' || row.ok === false));
 }
 function looksLikeRefusal(name) {
   return /^(无法识别|不知道|不是食物|无法判断|不能识别)/.test(name);
@@ -123,15 +102,14 @@ function coreFrom(raw) {
 function inRange(n, max) {
   return n != null && n >= 0 && n <= max;
 }
-// 模型原文。热量和碳蛋脂差太多时，改用 4/4/9 重算，避免把离谱热量写进今日。
-function assess(raw) {
-  const row = unwrap(raw);
+const DEFAULT_TIPS = '这是估算，保存前可以对一下数字。';
+// 一条食物。热量和碳蛋脂差太多时，改用 4/4/9 重算，避免把离谱热量写进今日。
+function assessOne(row) {
   if (!row || typeof row !== 'object' || Array.isArray(row)) {
     return fail('PARSE', '没读懂这次结果', '可以再试一次，或改成手动录入。');
   }
-  const food = !(row.food === false || row.food === 'false' || row.ok === false);
   const core = coreFrom(row);
-  if (!food || !core.name || looksLikeRefusal(core.name)) {
+  if (notFood(row) || !core.name || looksLikeRefusal(core.name)) {
     return fail('NOT_FOOD', '这句不太像吃的', '换种说法试试，或改成手动录入。');
   }
   if (!inRange(core.carbsG, LIMITS.carbsG) || !inRange(core.proteinG, LIMITS.proteinG) || !inRange(core.fatG, LIMITS.fatG)) {
@@ -144,7 +122,7 @@ function assess(raw) {
   let kcal = core.kcal == null ? computed : Math.round(core.kcal);
   if (!inRange(kcal, LIMITS.kcal) || Math.abs(kcal - computed) > Math.max(300, computed * 0.4)) kcal = computed;
   let tips = clip(row.tips, LIMITS.tips);
-  if (!tips) tips = '这是估算，保存前可以对一下数字。';
+  if (!tips) tips = DEFAULT_TIPS;
   return {
     ok: true,
     data: {
@@ -160,6 +138,55 @@ function assess(raw) {
       tips,
     },
   };
+}
+function collectItems(rows, parentTips) {
+  const items = [];
+  let error = null;
+  (rows || []).forEach(row => {
+    if (!row || typeof row !== 'object' || Array.isArray(row)) {
+      error = error || fail('PARSE', '没读懂这次结果', '可以再试一次，或改成手动录入。');
+      return;
+    }
+    const one = assessOne(row);
+    if (!one.ok) { error = error || one; return; }
+    if (parentTips && one.data.tips === DEFAULT_TIPS) one.data.tips = clip(parentTips, LIMITS.tips) || one.data.tips;
+    items.push(one.data);
+  });
+  return { items, error };
+}
+function pack(items) {
+  return { ok: true, data: items[0], items };
+}
+function parentLooksSingle(node) {
+  return !!(node && typeof node === 'object' && !Array.isArray(node) && (node.name || node.kcal != null || node.calories != null));
+}
+function unreadable() {
+  return fail('PARSE', '没读懂这次结果', '可以再试一次，或改成手动录入。');
+}
+// 新结构是 items 数组。旧的单条对象、以及 items 坏掉时，仍按一条处理。
+function assess(raw) {
+  const node = peel(raw);
+  if (Array.isArray(node)) {
+    const got = collectItems(node, '');
+    if (got.items.length) return pack(got.items);
+    return got.error || unreadable();
+  }
+  if (!node || typeof node !== 'object') return unreadable();
+  if (notFood(node)) return assessOne(node);
+  const list = Array.isArray(node.items) ? node.items : (Array.isArray(node.foods) ? node.foods : null);
+  if (list) {
+    const got = collectItems(list, node.tips);
+    if (got.items.length) return pack(got.items);
+    if (parentLooksSingle(node)) {
+      const one = assessOne(node);
+      if (one.ok) return pack([one.data]);
+      return one;
+    }
+    return got.error || unreadable();
+  }
+  const one = assessOne(node);
+  if (!one.ok) return one;
+  return pack([one.data]);
 }
 function must(v, label, max, asInt) {
   const n = numOrNull(v == null ? '' : String(v));
