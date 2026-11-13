@@ -2,9 +2,16 @@
   <view class="row">
     <text class="ym">{{year}}年{{month}}月</text>
     <view wx:if="{{selected !== today}}" class="today-hit" bindtap="goToday"><text class="today-pill">今天</text></view>
-    <view wx:if="{{collapsible}}" class="toggle hit" bindtap="onToggle"><text>{{view==='week'?'展开月历':'收起'}}</text><view class="chev {{view==='week'?'':'up'}}"></view></view>
+    <view wx:if="{{collapsible}}" class="toggle hit" bindtap="onToggle"><text>{{view==='week'?'展开月历':'收起'}}</text><view class="fold-chev {{view==='week'?'':'up'}}"></view></view>
   </view>
-  <view class="row"><view class="arrow" aria-label="{{view==='week'?'上一周':'上一月'}}" bindtap="prev"><view class="nav-chev prev"></view></view><view class="arrow" aria-label="{{view==='week'?'下一周':'下一月'}}" bindtap="next"><view class="nav-chev next"></view></view></view>
+  <view class="row navs">
+    <view class="arrow" hover-class="is-press" hover-stay-time="80" aria-role="button" aria-label="{{view==='week'?'上一周':'上一月'}}" bindtap="prev">
+      <view class="nav-chip"><image class="nav-ico" src="/images/icons/chevron-left@3x.png" /></view>
+    </view>
+    <view class="arrow" hover-class="is-press" hover-stay-time="80" aria-role="button" aria-label="{{view==='week'?'下一周':'下一月'}}" bindtap="next">
+      <view class="nav-chip"><image class="nav-ico" src="/images/icons/chevron-right@3x.png" /></view>
+    </view>
+  </view>
 </view>
 <view class="week"><view wx:for="{{weekdays}}" wx:key="*this" class="wd">{{item}}</view></view>
 <view class="grid" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">

@@ -11,10 +11,13 @@ page { background: #F6F3EE; }
 .day-in { animation: day-in 160ms ease both; }
 @keyframes day-in { from { opacity: 0; transform: translateY(12rpx); } to { opacity: 1; transform: none; } }
 .day-head { margin-top: 20rpx; min-height: 88rpx; display: flex; align-items: center; justify-content: space-between; }
-.share-hit { width: 88rpx; height: 88rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.share-box { width: 36rpx; height: 30rpx; border: 3rpx solid #5C5854; border-radius: 6rpx; position: relative; }
-.share-box::before { content: ''; position: absolute; left: 16rpx; top: -16rpx; width: 3rpx; height: 20rpx; background: #5C5854; }
-.share-box::after { content: ''; position: absolute; left: 10rpx; top: -14rpx; width: 14rpx; height: 14rpx; border-left: 3rpx solid #5C5854; border-top: 3rpx solid #5C5854; transform: rotate(45deg); box-sizing: border-box; }
+.share-hit { height: 88rpx; padding-left: 16rpx; display: flex; align-items: center; flex-shrink: 0; }
+.share-pill { height: 56rpx; padding: 0 20rpx 0 18rpx; border-radius: 28rpx; box-sizing: border-box;
+  background: #FBF9F5; border: 1px solid #E3DBD0;
+  display: flex; align-items: center;
+  font-size: 26rpx; font-weight: 500; color: #2C241E; line-height: 1; }
+.share-ico { width: 32rpx; height: 32rpx; margin-right: 8rpx; display: block; }
+.share-hit.is-press .share-pill { background: #EFE9E1; border-color: #D9D1C6; }
 .day-title { font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 40rpx; font-weight: 600; color: #2C241E; }
 .peer { margin-top: 16rpx; background: #FFFEFB; border-radius: 32rpx; padding: 28rpx 32rpx; border: 1px solid rgba(44, 36, 30, 0.04); box-shadow: 0 4rpx 20rpx rgba(44, 36, 30, 0.07), 0 2rpx 4rpx rgba(44, 36, 30, 0.05); box-sizing: border-box; }
 .tilt-train { transform: rotate(-0.4deg); transform-origin: center center; }
@@ -55,7 +58,7 @@ page { background: #F6F3EE; }
 .cal-cancel { height: 104rpx; margin-top: 8rpx; display: flex; align-items: center; justify-content: center; color: #6B6560; font-size: 32rpx; border-top: 1px solid rgba(44, 36, 30, 0.08); padding-bottom: env(safe-area-inset-bottom); }
 .ico { width: 48rpx; height: 48rpx; margin-right: 24rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .plate { width: 10rpx; height: 28rpx; border: 3rpx solid #121212; border-radius: 4rpx; box-sizing: border-box; }
-.bar { width: 16rpx; height: 4rpx; margin: 0 2rpx; background: #121212; }
+.lift-bar { width: 16rpx; height: 4rpx; margin: 0 2rpx; background: #121212; }
 .bowl { width: 36rpx; height: 18rpx; margin-top: 8rpx; border: 3rpx solid #121212; border-top: none; border-radius: 0 0 20rpx 20rpx; box-sizing: border-box; }
 .pulse { width: 36rpx; height: 22rpx; border-bottom: 3rpx solid #121212; position: relative; box-sizing: border-box; }
 .pulse::before { content: ''; position: absolute; left: 10rpx; bottom: -3rpx; width: 14rpx; height: 22rpx; border-left: 3rpx solid #121212; border-right: 3rpx solid #121212; transform: skewX(-18deg); box-sizing: border-box; }
