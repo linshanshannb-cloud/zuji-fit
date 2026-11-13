@@ -4,8 +4,13 @@
   <view wx:elif="{{fail}}" class="wait">{{fail}}</view>
   <image wx:else class="preview" src="{{path}}" mode="widthFix" />
   <view class="actions">
-    <button class="go" open-type="share" disabled="{{!path}}">发给好友</button>
-    <view class="save" bindtap="save">保存图片</view>
+    <view class="btn btn-sec {{!path ? 'is-off' : ''}} {{saving ? 'is-busy' : ''}}"
+          hover-class="{{path && !saving ? 'is-press' : 'none'}}" hover-stay-time="80" bindtap="save">
+      <view wx:if="{{saving}}" class="spin"></view>
+      <view wx:elif="{{saved}}" class="tick"></view>
+      <text>{{saving ? '保存中…' : (saved ? '已保存' : '保存图片')}}</text>
+    </view>
+    <button class="btn btn-pri" hover-class="is-press" hover-stay-time="80" open-type="share" disabled="{{!path}}">发给好友</button>
   </view>
 </view>
 <canvas type="2d" id="card" class="card-canvas"></canvas>

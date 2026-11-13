@@ -7,7 +7,12 @@
   <view class="ruled {{dayAnim ? 'day-in' : ''}}">
   <view class="day-head">
     <text class="day-title">{{sel.label}}</text>
-    <view class="share-hit" catchtap="openShare" aria-label="分享当天"><view class="share-box"></view></view>
+    <view class="share-hit" hover-class="is-press" hover-stay-time="80" catchtap="openShare" aria-role="button" aria-label="分享当天">
+      <view class="share-pill">
+        <image class="share-ico" src="/images/icons/share-ink@3x.png" />
+        <text>分享</text>
+      </view>
+    </view>
   </view>
 
   <view class="peer tilt-train">

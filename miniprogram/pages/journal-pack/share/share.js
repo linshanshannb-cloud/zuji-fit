@@ -13,7 +13,7 @@ function loadImage(canvas, src) {
 }
 
 Page({
-  data: { path: '', busy: true, fail: '' },
+  data: { path: '', busy: true, fail: '', saving: false, saved: false },
   onLoad(q) {
     const date = (q && q.date) || D.today();
     const ws = repo.workouts.daySummaries(date);
@@ -30,6 +30,7 @@ Page({
     this.model = SD.buildShareModel({ date, train, diet });
   },
   onReady() { this.render(); },
+  onUnload() { if (this._savedTimer) clearTimeout(this._savedTimer); },
   render() {
     const query = wx.createSelectorQuery();
     query.select('#card').fields({ node: true, size: true }).exec(res => {
@@ -62,17 +63,28 @@ Page({
   },
   save() {
     const path = this.data.path;
-    if (!path) return wx.showToast({ title: '图片还没好', icon: 'none' });
-    const denied = () => wx.showModal({
-      title: '需要相册权限',
-      content: '保存图片只写入这一张手账，不会读取相册里的其他照片。',
-      confirmText: '去设置', cancelText: '取消',
-      success: r => { if (r.confirm) wx.openSetting({}); },
-    });
+    if (!path || this.data.saving) return;
+    this.setData({ saving: true, saved: false });
+    const stop = () => this.setData({ saving: false });
+    const done = () => {
+      this.setData({ saving: false, saved: true });
+      if (this._savedTimer) clearTimeout(this._savedTimer);
+      this._savedTimer = setTimeout(() => this.setData({ saved: false }), 2000);
+    };
+    const denied = () => {
+      stop();
+      wx.showModal({
+        title: '需要相册权限',
+        content: '保存图片只写入这一张手账，不会读取相册里的其他照片。',
+        confirmText: '去设置', cancelText: '取消',
+        success: r => { if (r.confirm) wx.openSetting({}); },
+      });
+    };
     const go = () => wx.saveImageToPhotosAlbum({
       filePath: path,
-      success: () => wx.showToast({ title: '已保存到相册', icon: 'none' }),
+      success: done,
       fail: err => {
+        stop();
         const msg = (err && err.errMsg) || '';
         if (/auth|deny|denied|authorize/i.test(msg)) denied();
         else wx.showToast({ title: '没有保存', icon: 'none' });

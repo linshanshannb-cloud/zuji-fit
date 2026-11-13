@@ -1,11 +1,14 @@
 .head { height: 88rpx; }
 .ym { font-size: 32rpx; font-weight: 500; color: #2C241E; }
 .today-pill { display: inline-flex; align-items: center; height: 56rpx; padding: 0 22rpx; border: 1px solid #D9D3CC; border-radius: var(--r-pill); color: #121212; font-size: 26rpx; background: #fff; box-sizing: border-box; }
-.arrow { width: 88rpx; height: 88rpx; margin-left: -32rpx; display: flex; align-items: center; justify-content: center; }
-.arrow:first-child { margin-left: 0; }
-.nav-chev { width: 36rpx; height: 36rpx; border-top: 3rpx solid #5C5854; border-right: 3rpx solid #5C5854; box-sizing: border-box; }
-.nav-chev.prev { transform: rotate(-135deg); }
-.nav-chev.next { transform: rotate(45deg); }
+.navs { margin-right: -12rpx; }
+.arrow { width: 88rpx; height: 88rpx; display: flex; align-items: center; justify-content: center; }
+.arrow + .arrow { margin-left: -8rpx; }
+.nav-chip { width: 64rpx; height: 64rpx; border-radius: 32rpx; box-sizing: border-box;
+  background: #FBF9F5; border: 1px solid #E3DBD0;
+  display: flex; align-items: center; justify-content: center; }
+.nav-ico { width: 28rpx; height: 28rpx; display: block; }
+.arrow.is-press .nav-chip { background: #EFE9E1; border-color: #D9D1C6; }
 .week { display: flex; flex-wrap: wrap; }
 .grid { display: block; }
 .cal-row { display: flex; width: 100%; }
