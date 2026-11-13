@@ -9,6 +9,7 @@ const D = require('../date');
 const { newId } = require('./ids');
 const Fml = require('../diet-formula');
 const P = require('../diet-present');
+const Ai = require('../diet-ai');
 
 const num = v => {
   if (typeof v === 'number') return isFinite(v) ? v : NaN;
@@ -56,14 +57,7 @@ function planStart(plan) {
   return dates.length ? dates[0] : null;
 }
 function totals(log) {
-  const t = { carbsG: 0, proteinG: 0, fatG: 0 };
-  (log && log.entries || []).forEach(e => {
-    t.carbsG += Number(e.carbsG) || 0;
-    t.proteinG += Number(e.proteinG) || 0;
-    t.fatG += Number(e.fatG) || 0;
-  });
-  t.kcal = Math.round(Fml.kcalOf(t.carbsG, t.proteinG, t.fatG));
-  return t;
+  return P.sumIntake(log && log.entries);
 }
 function dayTarget(date, plan) {
   const p = plan || readPlan();
@@ -439,6 +433,9 @@ function applyPatch(entry, patch) {
       next.carbsG = Fml.round1(needNum('carbsG' in patch ? patch.carbsG : next.carbsG, '碳水', 0, 2000));
       next.proteinG = Fml.round1(needNum('proteinG' in patch ? patch.proteinG : next.proteinG, '蛋白', 0, 2000));
       next.fatG = Fml.round1(needNum('fatG' in patch ? patch.fatG : next.fatG, '脂肪', 0, 1000));
+      if (P.storedKcal(entry) != null || entry.source === 'ai-text') {
+        next.kcal = Math.round(Fml.kcalOf(next.carbsG, next.proteinG, next.fatG));
+      }
     }
     next.snap = { carbsG: next.carbsG, proteinG: next.proteinG, fatG: next.fatG };
     next.basis = null;
@@ -486,6 +483,44 @@ function addNutrient(date, input) {
     writeLogs(sortLogs(logs.filter(l => l.date !== d).concat([log])));
     return C.ok(log);
   });
+}
+function addAiEntry(date, input) {
+  return C.guard(() => {
+    C.writable();
+    const d = C.check(V.validateDate(date, { today: C.today() }));
+    input = input || {};
+    const checked = Ai.acceptEntry(input);
+    if (!checked.ok) C.raise(checked.code || 'VALIDATION', checked.message);
+    const row = checked.data;
+    const t = C.now();
+    const entry = {
+      id: newId('de_', t), kind: 'nutrient', meal: P.normalizeMeal(input.meal || 'other'), name: row.name,
+      basis: null, qty: null, snap: { carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG },
+      carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
+      fiberG: row.fiberG, sugarG: row.sugarG, saltMg: row.saltMg, kcal: row.kcal,
+      portion: row.portion || '', tips: row.tips || '', note: row.note || '', eatenAt: row.eatenAt,
+      source: 'ai-text', example: false, foodId: null, v: 2,
+    };
+    const logs = readLogs();
+    const prev = logs.find(l => l.date === d);
+    const log = prev ? JSON.parse(JSON.stringify(prev)) : { id: newId('dl_', t), date: d, entries: [], createdAt: t };
+    log.entries = (log.entries || []).concat([entry]);
+    log.updatedAt = t;
+    writeLogs(sortLogs(logs.filter(l => l.date !== d).concat([log])));
+    return C.ok(log);
+  });
+}
+function intakeMarks(from, to) {
+  const out = {};
+  if (!from || !to || from > to) return out;
+  let d = from, n = 0;
+  while (d <= to && n < 42) {
+    const log = getLog(d);
+    if (log) out[d] = totals(log).kcal;
+    d = D.addDays(d, 1);
+    n++;
+  }
+  return out;
 }
 function updateEntry(date, entryId, patch) {
   return C.guard(() => {
@@ -633,6 +668,6 @@ module.exports = {
   observeWindow: today => observeWindow(activeStage(readPlan()), today || C.today()),
   declineTip: today => declineTip(readPlan(), today || C.today()),
   preview, commit, updatePrefs, suggestion,
-  getLog, presentIntake, totals, saveQuick, addFood, addNutrient, updateEntry, dayBoard, migrateLogs, removeEntry, clearLog, intakeSummary, noLogStreak,
+  getLog, presentIntake, totals, saveQuick, addFood, addNutrient, addAiEntry, updateEntry, dayBoard, migrateLogs, removeEntry, clearLog, intakeSummary, intakeMarks, noLogStreak,
   listFoods, saveCustomFood, deleteCustomFood,
 };

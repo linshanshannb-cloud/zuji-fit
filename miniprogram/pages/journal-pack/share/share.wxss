@@ -1,0 +1,10 @@
+page { background: #F6F3EE; }
+.share-page { padding: 24rpx 40rpx 48rpx; }
+.wait { text-align: center; color: #6B6560; font-size: 28rpx; padding: 80rpx 0; }
+.preview { width: 100%; border-radius: 20rpx; box-shadow: 0 16rpx 56rpx rgba(44, 36, 30, 0.14); background: #F6F3EE; }
+.actions { margin-top: 40rpx; }
+.go { height: 96rpx; line-height: 96rpx; border-radius: 48rpx; background: #FC5B21; color: #fff; font-size: 32rpx; font-weight: 700; box-shadow: 0 12rpx 32rpx rgba(252, 91, 33, 0.28); }
+.go::after { border: none; }
+.go[disabled] { opacity: 0.45; }
+.save { margin-top: 20rpx; height: 96rpx; line-height: 96rpx; text-align: center; border-radius: 48rpx; border: 3rpx solid rgba(44, 36, 30, 0.18); color: #2C241E; font-size: 32rpx; font-weight: 700; background: transparent; }
+.card-canvas { position: fixed; left: -4000rpx; top: 0; width: 10rpx; height: 10rpx; }

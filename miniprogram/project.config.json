@@ -2,7 +2,8 @@
   "appid": "wxd000e3fb6e804ce0",
   "projectname": "fitness-miniapp",
   "compileType": "miniprogram",
-  "libVersion": "3.0.0",
+  "libVersion": "3.15.1",
+  "cloudfunctionRoot": "cloudfunctions/",
   "packOptions": {
     "include": [
       { "type": "folder", "value": "images/tabbar" }
@@ -10,12 +11,15 @@
     "ignore": [
       { "type": "folder", "value": "tests" },
       { "type": "folder", "value": "scripts" },
+      { "type": "folder", "value": "cloudfunctions" },
       { "type": "folder", "value": "docs" },
       { "type": "suffix", "value": ".md" },
       { "type": "file", "value": "data/exercises.json" },
-      { "type": "file", "value": "LICENSE-openGym.txt" }
+      { "type": "file", "value": "LICENSE-openGym.txt" },
+      { "type": "folder", "value": "assets/video-posters" },
+      { "type": "folder", "value": "assets/exercises" }
     ]
   },
-  "setting": { "es6": true, "enhance": true, "postcss": true, "minified": true, "urlCheck": false },
+  "setting": { "es6": true, "enhance": true, "postcss": true, "minified": true, "urlCheck": false, "ignoreDevUnusedFiles": false },
   "condition": {}
 }

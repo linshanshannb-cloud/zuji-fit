@@ -70,7 +70,8 @@ function reset(seed = {}) {
   require(path.join(ROOT, 'app.js'));
 }
 const results = [];
-function flow(name, fn) { try { fn(); results.push(['ok', name]); } catch (e) { results.push(['FAIL', name, e.stack.split('\n').filter(l => l.includes('smoke-pages')||l.includes('Error')).slice(0, 3).join(' | ')]); } }
+const queue = [];
+function flow(name, fn) { queue.push([name, fn]); }
 const draftHeader = () => (store('fit_workouts') || []).find(w => w.status === 'draft');
 
 // ---------- static check: handlers referenced in wxml exist
@@ -172,14 +173,14 @@ flow('F1.2 draft exists: continue / discard-and-new with confirm; banner on cale
   assert.strictEqual(cur().data.w.persisted, false);
 });
 
-flow('F2 backfill past day: sets default done; future day blocked', () => {
+flow('F2 backfill past day: added set stays unchecked; future day blocked', () => {
   reset(); const cal = open('pages/calendar/calendar');
   const d = new Date(); d.setDate(d.getDate() - 3); const p = n => (n < 10 ? '0' : '') + n; const past = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
   cal.onSelect({ detail: { date: past } }); assert.strictEqual(cal.data.sel.kind, 'past');
   cal.newWorkout(); const ed = cur(); assert.strictEqual(ed.data.w.date, past);
   ed.onPicked(['0025'], 'add'); const s0 = ed.data.cards[0].sets[0];
   ed.onSetChange(Object.assign(ev({ s: s0.id }), { detail: { field: 'reps', value: 5 } }));
-  ed.addSet(ev({ we: ed.data.cards[0].id })); assert.strictEqual(ed.data.cards[0].sets[1].done, true);
+  ed.addSet(ev({ we: ed.data.cards[0].id })); assert.strictEqual(ed.data.cards[0].sets[1].done, false);
   assert.strictEqual(draftHeader().startedAt, null);
   wx.navigateBack(); const f = new Date(); f.setDate(f.getDate() + 2);
   cal.onSelect({ detail: { date: f.getFullYear() + '-' + p(f.getMonth() + 1) + '-' + p(f.getDate()) } });
@@ -615,8 +616,85 @@ flow('repeat: 另一天有未完成训练时先问，同意继续就不会复制
   assert.deepStrictEqual(cur().data.cards.map(c => c.exerciseId), ['0294']);
 });
 
+flow('diet ai: 识别失败不写入；改完数字再确认才计入今日剩余', async () => {
+  reset();
+  assert.strictEqual(repo().diet.commit({ mode: 'taper', refWeightKg: 80, energyMode: 'absolute_target', absoluteTarget: 2400, macroMode: 's4b' }).ok, true);
+  let mode = 'chat';
+  let calls = 0;
+  wx.cloud = {
+    init() {},
+    extend: { AI: { createModel: () => ({ generateText() {
+      calls += 1;
+      if (mode === 'chat') return Promise.resolve({ choices: [{ message: { content: '{"food":false,"name":""}' } }] });
+      return Promise.resolve({ choices: [{ message: { content: JSON.stringify({
+        food: true, name: '石锅拌饭', portion: '一份', kcal: 614, carbsG: 86, proteinG: 20, fatG: 20,
+        fiberG: 5, sugarG: 8, saltMg: 1082, tips: '酱少放一勺会轻一点。',
+      }) } }] });
+    } }) } },
+    callFunction(o) { if (o && o.fail) o.fail({ errMsg: 'cloud.callFunction:fail' }); return Promise.reject(new Error('no function')); },
+  };
+  try {
+    const diet = open('pages/diet/diet');
+    diet.openAi();
+    const input = cur();
+    assert.strictEqual(input.route, 'pages/diet-ai/input/input');
+    const before = calls;
+    input.onCamera();
+    assert.strictEqual(input.data.tab, 'text');
+    assert.ok(input.data.cameraHint.indexOf('拍照') >= 0);
+    input.confirm();
+    assert.strictEqual(calls, before, '空内容和相机预告都不能发起识别');
+    input.onText(ev({}, { value: '   ' }));
+    await input.confirm();
+    assert.strictEqual(calls, before);
+    assert.strictEqual(store('fit_diet_logs'), undefined);
+    input.onText(ev({}, { value: '今天心情不错' }));
+    await input.confirm();
+    assert.strictEqual(input.data.failTitle, '这句不太像吃的');
+    assert.strictEqual(store('fit_diet_logs'), undefined);
+    input.manual();
+    assert.strictEqual(cur().route, 'pages/diet-extra/diet-log/diet-log');
+    wx.navigateBack();
+    mode = 'ok';
+    input.onTime(ev({}, { value: '19:00' }));
+    input.onText(ev({}, { value: '晚饭吃了一份石锅拌饭' }));
+    await input.confirm();
+    const result = cur();
+    assert.strictEqual(result.route, 'pages/diet-ai/result/result');
+    assert.strictEqual(result.data.name, '石锅拌饭');
+    assert.strictEqual(store('fit_diet_logs'), undefined, '结果页出现时还不能写入');
+    result.cancel();
+    assert.strictEqual(cur().route, 'pages/diet-ai/input/input');
+    assert.strictEqual(store('fit_diet_logs'), undefined);
+    await input.confirm();
+    cur().onNum(ev({ k: 'kcal' }, { value: '500' }));
+    cur().onNum(ev({ k: 'carbsG' }, { value: '80' }));
+    cur().confirm();
+    assert.strictEqual(cur().route, 'pages/diet/diet');
+    const entry = store('fit_diet_logs')[0].entries[0];
+    assert.strictEqual(entry.name, '石锅拌饭');
+    assert.strictEqual(entry.source, 'ai-text');
+    assert.strictEqual(entry.kcal, 500);
+    assert.strictEqual(entry.carbsG, 80);
+    assert.strictEqual(entry.meal, 'dinner');
+    assert.ok(!JSON.stringify(entry).includes('晚饭吃了'), '原文不落库');
+    assert.strictEqual(cur().data.board.kcalLine, '500 / 2400 kcal');
+    assert.strictEqual(cur().data.board.remain, '剩余 1900 kcal');
+    assert.strictEqual(cur().data.board.rows[0].gap, '还差 265g');
+    assert.ok(!cur().data.board.rows[0].gap.includes('-'));
+  } finally {
+    delete wx.cloud;
+  }
+});
+
 // ---------- report
-results.forEach(r => console.log(r[0].padEnd(4), r[1], r[2] ? '\n     ' + r[2] : ''));
-const failed = results.filter(r => r[0] !== 'ok').length;
-console.log(`\n${results.length - failed}/${results.length} flows passed`);
-process.exit(failed ? 1 : 0);
+(async () => {
+  for (const [name, fn] of queue) {
+    try { await fn(); results.push(['ok', name]); }
+    catch (e) { results.push(['FAIL', name, (e.stack || String(e)).split('\n').filter(l => l.includes('smoke-pages') || l.includes('Error')).slice(0, 3).join(' | ')]); }
+  }
+  results.forEach(r => console.log(r[0].padEnd(4), r[1], r[2] ? '\n     ' + r[2] : ''));
+  const failed = results.filter(r => r[0] !== 'ok').length;
+  console.log(`\n${results.length - failed}/${results.length} flows passed`);
+  process.exit(failed ? 1 : 0);
+})();

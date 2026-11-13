@@ -1,0 +1,70 @@
+<nav-bar mode="back" title="" tone="warm" custom-back bind:back="cancel">
+  <view slot="right" class="pen" bindtap="toggleEdit">✎</view>
+</nav-bar>
+<view class="result-page">
+  <view class="hero">
+    <view class="sticker" bindtap="editName">
+      <input wx:if="{{editName || editing}}" class="name-in" maxlength="30" value="{{name}}" focus="{{editName}}" bindinput="onName"/>
+      <text wx:else class="name">{{name}}</text>
+    </view>
+    <view class="portion-row">
+      <view class="step" data-d="-1" bindtap="stepPortion">−</view>
+      <input class="portion-in" maxlength="20" value="{{portion}}" bindinput="onPortion"/>
+      <view class="step" data-d="1" bindtap="stepPortion">+</view>
+    </view>
+    <view class="when">
+      <text class="when-bit" bindtap="cycleMeal">{{mealLabel}}</text>
+      <text class="when-dot"> · </text>
+      <picker mode="time" value="{{time}}" bindchange="onTime">
+        <text class="when-bit">{{whenText}}</text>
+      </picker>
+    </view>
+    <view class="note" bindtap="editNote">
+      <textarea wx:if="{{editing}}" class="note-in" maxlength="40" auto-height value="{{note}}" placeholder="添加备注" placeholder-class="note-ph" bindinput="onNote"/>
+      <text wx:else class="note-tx">{{note || '添加备注'}}</text>
+    </view>
+  </view>
+
+  <view class="kcal">
+    <input class="kcal-n num" type="digit" data-k="kcal" value="{{kcal}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/>
+    <text class="kcal-u">kcal</text>
+  </view>
+
+  <view class="grid">
+    <view class="cell">
+      <text class="lab">碳水</text>
+      <view class="val-line"><input class="val num" type="digit" data-k="carbsG" value="{{carbsG}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+    </view>
+    <view class="cell">
+      <text class="lab">蛋白质</text>
+      <view class="val-line"><input class="val num" type="digit" data-k="proteinG" value="{{proteinG}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+    </view>
+    <view class="cell">
+      <text class="lab">脂肪</text>
+      <view class="val-line"><input class="val num" type="digit" data-k="fatG" value="{{fatG}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+    </view>
+    <view class="cell">
+      <text class="lab">纤维</text>
+      <view class="val-line"><input class="val num" type="digit" data-k="fiberG" value="{{fiberG}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+    </view>
+    <view class="cell">
+      <text class="lab">糖</text>
+      <view class="val-line"><input class="val num" type="digit" data-k="sugarG" value="{{sugarG}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+    </view>
+    <view class="cell">
+      <text class="lab">盐</text>
+      <view class="val-line"><input class="val num" type="digit" data-k="saltMg" value="{{saltShown}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/><text class="unit">mg</text></view>
+    </view>
+  </view>
+
+  <view wx:if="{{tips || editing}}" class="tips">
+    <text class="tips-k">tips</text>
+    <textarea wx:if="{{editing}}" class="tips-in" maxlength="160" value="{{tips}}" bindinput="onTips"/>
+    <text wx:else class="tips-body">{{tips}}</text>
+  </view>
+</view>
+
+<view class="savebar {{keyboardHeight ? 'up' : ''}}" style="{{dockStyle}}">
+  <text class="skip" bindtap="cancel">不保存</text>
+  <view class="save" bindtap="confirm">{{saving ? '正在记入…' : '记入今天'}}</view>
+</view>

@@ -2,7 +2,7 @@
 const fs = require('fs'), path = require('path');
 const ROOT = path.resolve(__dirname, '../miniprogram'); const bad = []; let n = 0;
 (function walk(d) { for (const f of fs.readdirSync(d)) { const p = path.join(d, f);
-  if (fs.statSync(p).isDirectory()) { if (!['tests', 'scripts', 'node_modules'].includes(f) || d !== ROOT) walk(p); continue; }
+  if (fs.statSync(p).isDirectory()) { if (!['tests', 'scripts', 'node_modules', 'cloudfunctions'].includes(f) || d !== ROOT) walk(p); continue; }
   if (!p.endsWith('.js')) continue;
   const src = fs.readFileSync(p, 'utf8'); const re = /require\(\s*(['"])([^'"]+)\1\s*\)/g; let m;
   while ((m = re.exec(src))) { n++; const spec = m[2];

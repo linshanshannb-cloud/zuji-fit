@@ -74,13 +74,14 @@ test('E5 删组 / 撤销：恢复到原位置，index 连续；复制组插在�
   assert.deepStrictEqual(H.checkWorkout(r.data.id), []);
 });
 
-test('E6 addSet 只复制重量/次数，类型固定 normal（上一组是热身）；补录训练新组默认已完成', () => {
+test('E6 addSet 只复制重量/次数，类型固定 normal（上一组是热身）；补录加组也不自动打勾', () => {
   const { repo } = H.fresh();
   const r = repo.workouts.createDraft({ date: '2026-10-01' }); repo.workouts.addExercises(r.data.id, ['0025']);
   const we = repo.workouts.getWorkout(r.data.id).exercises[0];
   repo.workouts.updateSet(r.data.id, we.sets[0].id, { weightKg: 20, reps: 10, type: 'warmup' });
+  repo.workouts.setSetDone(r.data.id, we.sets[0].id, true);
   const s = repo.workouts.addSet(r.data.id, we.id, {}).data;
-  assert.deepStrictEqual([s.type, s.weightKg, s.reps, s.done], ['normal', 20, 10, true]);
+  assert.deepStrictEqual([s.type, s.weightKg, s.reps, s.done], ['normal', 20, 10, false]);
   assert.strictEqual(repo.workouts.getHeader(r.data.id).startedAt, null);
 });
 

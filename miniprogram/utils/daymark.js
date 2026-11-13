@@ -86,7 +86,8 @@ function buildInfo(repo, from, to) {
   Object.keys(byDate).forEach(d => {
     const day = byDate[d];
     const parts = partsList(dayExercises(day));
-    const aeros = uniqueAeroNames(day.aerobics);
+    // 格子只标「有氧」。多种项目、多次记录仍是一个标签，具体名称留给当日记录。
+    const aeros = day.aerobics && day.aerobics.length ? ['有氧'] : [];
     if (!parts.length && !aeros.length) return;
     const built = buildTags(parts, aeros);
     info[d] = built;
@@ -94,16 +95,15 @@ function buildInfo(repo, from, to) {
   Object.keys(repo.restDays.list(from, to)).forEach(d => { if (!info[d]) info[d] = { rest: true }; });
   return info;
 }
-// v0.5 紧凑格子（行高 96rpx）：最多两行——力量部位合并一行「胸·背」，有氧一行「跑步」/「跑步+1」。
+// 力量部位仍合并成「胸·背」。只要当天有有氧，格子只写「有氧」，不写跑步机/爬楼机，也不写「有氧+1」。
 // inf: buildInfo 的单日值（或旧 {parts}）。返回 { part, aero, train, rest }
 function cellLines(inf) {
   inf = inf || {};
   const tags = Array.isArray(inf.tags) ? inf.tags : [];
   let parts = tags.filter(t => t.kind === 'part').map(t => t.text);
-  const aeros = tags.filter(t => t.kind === 'aero').map(t => t.text);
+  const hasAero = tags.some(t => t.kind === 'aero');
   if (!tags.length && inf.parts) parts = String(inf.parts).split('·').filter(Boolean); // 兼容旧 {parts, vol}
-  const extra = Math.max(0, aeros.length - 1) + (tags.length ? inf.more || 0 : 0);
-  const aero = !aeros.length ? '' : extra ? aeros[0].replace(/…$/, '').slice(0, 2) + '+' + extra : aeros[0];
+  const aero = hasAero ? '有氧' : '';
   const part = parts.join('·');
   const train = !!(part || aero);
   return { part, aero, train, rest: !train && !!inf.rest };

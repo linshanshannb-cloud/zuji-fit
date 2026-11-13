@@ -381,7 +381,7 @@ function canComplete(mode, s) {
   return mode === 'time' ? (typeof s.durationSec === 'number' && s.durationSec >= 1) : s.reps >= 1;
 }
 function addSet(workoutId, weId, init = {}) {
-  return mutate(workoutId, (detail, header) => {
+  return mutate(workoutId, detail => {
     const we = findWE(detail, weId);
     const mode = M.modeOf(we);
     const mine = detail.sets.filter(s => s.workoutExerciseId === weId).sort(M.byIndex);
@@ -391,11 +391,9 @@ function addSet(workoutId, weId, init = {}) {
       reps: 'reps' in init ? C.check(V.validateReps(init.reps)) : last ? last.reps : null,
       durationSec: 'durationSec' in init ? C.check(V.validateDuration(init.durationSec)) : (last && last.durationSec != null ? last.durationSec : null),
       type: init.type === 'warmup' ? 'warmup' : 'normal', done: false, doneAt: null };
-    // §F2: backfilled workouts (no startedAt) default new reps sets to done when reps are known.
-    // Timed sets are not auto-completed on backfill; an explicit done:true still requires a valid duration.
-    const explicit = 'done' in init;
-    if (explicit && init.done && canComplete(mode, s)) { s.done = true; s.doneAt = C.now(); }
-    else if (!explicit && header.startedAt == null && mode !== 'time' && s.reps >= 1) { s.done = true; s.doneAt = C.now(); }
+    // 加一组不继承上一组的完成勾选，补录同样从空勾开始。调用方显式 done:true 仍可勾上。
+    // 时长倒计时结束只勾选正在计的那一组，不走这里。
+    if (init.done && canComplete(mode, s)) { s.done = true; s.doneAt = C.now(); }
     return { detail: Object.assign({}, detail, { sets: M.renumberSets(detail.sets, weId).concat([s]) }), data: s };
   });
 }

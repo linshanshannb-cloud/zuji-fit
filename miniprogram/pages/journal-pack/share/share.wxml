@@ -1,0 +1,11 @@
+<nav-bar mode="back" title="分享当天"></nav-bar>
+<view class="page share-page">
+  <view wx:if="{{busy}}" class="wait">正在生成手账…</view>
+  <view wx:elif="{{fail}}" class="wait">{{fail}}</view>
+  <image wx:else class="preview" src="{{path}}" mode="widthFix" />
+  <view class="actions">
+    <button class="go" open-type="share" disabled="{{!path}}">发给好友</button>
+    <view class="save" bindtap="save">保存图片</view>
+  </view>
+</view>
+<canvas type="2d" id="card" class="card-canvas"></canvas>

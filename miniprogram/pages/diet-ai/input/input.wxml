@@ -1,0 +1,42 @@
+<nav-bar mode="back" title="" tone="warm" custom-back bind:back="cancel"></nav-bar>
+<view class="screen">
+  <view class="mode-switch">
+    <view class="mode-item" bindtap="onCamera">相机</view>
+    <view class="mode-item on">输入</view>
+  </view>
+  <view wx:if="{{cameraHint}}" class="camera-hint">{{cameraHint}}</view>
+
+  <picker mode="time" value="{{time}}" bindchange="onTime">
+    <view class="time">
+      <text class="time-t">{{timeLabel}}</text>
+      <text class="time-pen">✎</text>
+    </view>
+  </picker>
+  <view class="box-wrap">
+    <textarea
+      class="box"
+      maxlength="200"
+      placeholder="如：中午吃了一份石锅拌饭"
+      placeholder-class="ph"
+      value="{{text}}"
+      bindinput="onText"
+      bindkeyboardheightchange="onKeyboard"
+      adjust-position="{{false}}"
+      show-confirm-bar="{{false}}"
+      cursor-spacing="24"
+    />
+  </view>
+  <view class="priv">仅用于本次估算，不保存原文</view>
+  <view wx:if="{{failText}}" class="fail">
+    <view class="fail-t">{{failTitle}}</view>
+    <view class="fail-p">{{failText}}</view>
+    <view class="fail-acts">
+      <view class="fail-btn" bindtap="clearFail">再试一次</view>
+      <view class="fail-btn solid" bindtap="manual">手动录入</view>
+    </view>
+  </view>
+  <view class="dock {{keyboardHeight ? 'up' : ''}}" style="{{dockStyle}}">
+    <view class="round" bindtap="cancel">×</view>
+    <view class="check {{canSend || loading ? 'on' : ''}} {{loading ? 'busy' : ''}}" bindtap="confirm">{{loading ? '正在估算…' : '✓'}}</view>
+  </view>
+</view>

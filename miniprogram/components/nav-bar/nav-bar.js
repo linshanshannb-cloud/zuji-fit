@@ -10,7 +10,7 @@ function bannerState() {
 }
 Component({
   options: { styleIsolation: 'apply-shared', multipleSlots: true },
-  properties: { title: String, mode: { type: String, value: 'back' }, customBack: Boolean },
+  properties: { title: String, mode: { type: String, value: 'back' }, customBack: Boolean, tone: { type: String, value: '' } },
   data: { statusH: 20, navH: 44, rightGap: 100, banner: '', bannerAct: false },
   lifetimes: {
     attached() {
