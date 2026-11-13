@@ -1,8 +1,23 @@
-.page { padding-bottom: 48rpx; }
-.empty-copy { margin-top: 24rpx; color: var(--c-text-2); font-size: 30rpx; }
-.item { margin-top: 16rpx; background: var(--c-bg-2); border-radius: var(--r-card); padding: 28rpx 32rpx; }
-.meal-name { font-size: 32rpx; font-weight: 600; }
-.acts { margin-top: 8rpx; }
-.acts .hit { margin-right: 32rpx; }
+page { background: #F6F3EE; }
+.meal-page { padding-bottom: 48rpx; }
+.head { margin-top: 8rpx; }
+.date { font-size: 26rpx; color: #6B6560; }
+.meal-title { margin-top: 8rpx; font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 44rpx; font-weight: 600; color: #2C241E; }
+.total { margin-top: 8rpx; font-size: 32rpx; font-weight: 600; color: #2C241E; }
+.empty-copy { margin-top: 32rpx; color: #6B6560; font-size: 30rpx; }
+.card {
+  margin-top: 20rpx; background: #FFFEFB; border-radius: 28rpx; padding: 24rpx;
+  border: 1px solid rgba(44, 36, 30, 0.06);
+  box-shadow: 0 4rpx 16rpx rgba(44, 36, 30, 0.06);
+}
+.stk { width: 112rpx; height: 112rpx; margin-right: 16rpx; flex-shrink: 0; }
+.stk.lg { width: 140rpx; height: 140rpx; }
+.name { font-size: 32rpx; font-weight: 600; color: #2C241E; }
+.kcal { font-size: 28rpx; font-weight: 600; color: #2C241E; margin-left: 12rpx; white-space: nowrap; }
+.portion { margin-top: 6rpx; font-size: 26rpx; color: #6B6560; }
+.macros { margin-top: 8rpx; font-size: 24rpx; color: #5C5854; line-height: 1.4; }
+.acts { margin-top: 12rpx; }
+.act { margin-right: 32rpx; min-height: 64rpx; display: inline-flex; align-items: center; font-size: 26rpx; color: #5C5854; }
+.act.danger { color: #C94412; }
 .stack { margin-top: 20rpx; }
 .lab { width: 180rpx; }

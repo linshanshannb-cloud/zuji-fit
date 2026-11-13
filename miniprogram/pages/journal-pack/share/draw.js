@@ -1,5 +1,6 @@
-// 1080×1440 手账合成图。不是页面截图。消耗和摄入分列。
-const W = 1080, H = 1440;
+// 手账合成图。宽 1080，高度随内容变长，避免多条记录被裁掉。消耗和摄入分列。
+const SD = require('../../../utils/share-day');
+const W = 1080;
 const BG = '#F6F3EE';
 const INK = '#2C241E';
 const MUTED = '#6B6560';
@@ -18,11 +19,11 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-function drawLines(ctx) {
+function drawLines(ctx, height) {
   ctx.save();
   ctx.strokeStyle = 'rgba(44,36,30,0.07)';
   ctx.lineWidth = 2;
-  for (let y = 280; y < H - 80; y += 56) {
+  for (let y = 280; y < height - 80; y += 56) {
     ctx.beginPath();
     ctx.moveTo(80, y);
     ctx.lineTo(W - 80, y);
@@ -92,9 +93,10 @@ function drawRows(ctx, y, rows, images, opts) {
 }
 
 function drawShareCard(ctx, model, images) {
+  const height = SD.cardHeight(model);
   ctx.fillStyle = BG;
-  ctx.fillRect(0, 0, W, H);
-  drawLines(ctx);
+  ctx.fillRect(0, 0, W, height);
+  drawLines(ctx, height);
   text(ctx, '组迹', 80, 110, '700 22px sans-serif', MUTED, 'left');
   text(ctx, model.dateLabel, 80, 190, '700 64px serif', INK, 'left');
   const dateWidth = ctx.measureText ? ctx.measureText(model.dateLabel).width : 280;
@@ -113,19 +115,18 @@ function drawShareCard(ctx, model, images) {
     if (model.train.empty) y = emptySlot(ctx, y + 12, '还没有记训练');
     else {
       y = drawRows(ctx, y + 8, model.train.rows, images, { large: false });
-      if (model.train.more) text(ctx, '还有 ' + model.train.more + ' 条', 80, y + 8, '400 22px sans-serif', MUTED, 'left');
+      if (model.train.more) text(ctx, '等' + model.train.more + '项', 80, y + 28, '400 22px sans-serif', MUTED, 'left');
     }
     y += 48;
     y = sectionHead(ctx, y, '饮食', INK, model.diet.summary);
     if (model.diet.empty) y = emptySlot(ctx, y + 12, '还没有记饮食');
     else {
-      const dietRows = model.diet.rows.map(row => Object.assign({ large: !/coffee|soda|milktea|blueberries|eggs/.test(row.sticker) }, row));
-      y = drawRows(ctx, y + 8, dietRows, images, { large: true });
-      if (model.diet.more) text(ctx, '还有 ' + model.diet.more + ' 条', 80, y + 8, '400 22px sans-serif', MUTED, 'left');
+      y = drawRows(ctx, y + 8, model.diet.rows, images, { large: true });
+      if (model.diet.more) text(ctx, '等' + model.diet.more + '项', 80, y + 28, '400 22px sans-serif', MUTED, 'left');
     }
   }
-  text(ctx, '组迹', 80, H - 48, '700 20px sans-serif', FAINT, 'left');
-  text(ctx, '来自组迹日历', W - 80, H - 48, '400 20px sans-serif', FAINT, 'right');
+  text(ctx, '组迹', 80, height - 48, '700 20px sans-serif', FAINT, 'left');
+  text(ctx, '来自组迹日历', W - 80, height - 48, '400 20px sans-serif', FAINT, 'right');
 }
 
-module.exports = { drawShareCard, W, H };
+module.exports = { drawShareCard, W };

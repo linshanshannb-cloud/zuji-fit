@@ -40,8 +40,7 @@
       </view>
     </view>
 
-    <view class="stack"><btn disabled="{{readOnly}}" bind:press="openLog">+ 记录饮食</btn></view>
-    <view class="ai-entry"><btn type="secondary" disabled="{{readOnly}}" bind:press="openAi">文字识别</btn></view>
+    <view class="record {{readOnly?'off':''}}" bindtap="openAi">马上记录</view>
 
     <view class="row between stack">
       <text class="h2">今日记录</text>

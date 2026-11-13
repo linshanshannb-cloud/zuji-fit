@@ -353,7 +353,7 @@ flow('diet: 今日为首页，目标锁定，建议确认后才改', () => {
   reset();
   const page = open('pages/diet/diet');
   const home = fs.readFileSync(path.join(ROOT, 'pages/diet/diet.wxml'), 'utf8');
-  assert.ok(home.includes('今日摄入') && home.includes('+ 记录饮食') && home.includes('这一天还没有饮食记录。'));
+  assert.ok(home.includes('今日摄入') && home.includes('马上记录') && !home.includes('+ 记录饮食') && home.includes('这一天还没有饮食记录。'));
   assert.ok(!home.includes('实际摄入') && !home.includes('快速记录') && !home.includes('subtabs'));
   assert.strictEqual(page.data.hasPlan, false);
   assert.strictEqual(page.data.board.emptyText, '这一天还没有饮食记录。');

@@ -24,7 +24,8 @@
     { "root": "pages/journal-pack", "pages": ["hold", "share/share"] }
   ],
   "preloadRule": {
-    "pages/calendar/calendar": { "network": "all", "packages": ["pages/journal-pack"] }
+    "pages/calendar/calendar": { "network": "all", "packages": ["pages/journal-pack"] },
+    "pages/diet/diet": { "network": "all", "packages": ["pages/journal-pack"] }
   },
   "permission": {
     "scope.writePhotosAlbum": { "desc": "用于把当天的手账图片保存到相册，不会读取相册里的其他照片" }

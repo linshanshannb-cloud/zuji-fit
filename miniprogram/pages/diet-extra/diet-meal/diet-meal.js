@@ -3,12 +3,13 @@ const D = require('../../../utils/date');
 const repo = require('../../../utils/repo/index');
 const ui = require('../../../utils/ui');
 const P = require('../../../utils/diet-present');
+const JS = require('../../../utils/journal-stickers');
 const T = require('../../../utils/tokens');
 
 Page({
   data: {
     readOnly: false, saving: false, date: '', todayStr: '', meal: 'other', title: '', dateTitle: '',
-    entries: [], editing: '', meals: P.MEALS,
+    entries: [], editing: '', meals: P.MEALS, totalKcal: 0,
     edit: { qty: '', name: '', carbsG: '', proteinG: '', fatG: '', meal: 'other', date: '', kind: 'food', basis: '' },
   },
   onLoad(q) {
@@ -25,7 +26,17 @@ Page({
   reload() {
     const board = repo.diet.dayBoard(this.date);
     const group = (board.meals || []).find(m => m.id === this.meal);
-    const entries = group ? group.entries : [];
+    const entries = (group ? group.entries : []).map(e => {
+      const name = e.displayName || e.name || '';
+      const portion = e.portion || e.qtyText || '';
+      return Object.assign({}, e, {
+        sticker: JS.foodSticker(name),
+        lg: JS.foodLarge(name),
+        portionText: portion,
+        kcalText: (e.kcal == null ? '' : e.kcal + ' kcal'),
+        macroText: '碳水 ' + P.fmtG(e.carbsG) + 'g · 蛋白 ' + P.fmtG(e.proteinG) + 'g · 脂肪 ' + P.fmtG(e.fatG) + 'g',
+      });
+    });
     const editing = entries.some(e => e.id === this.data.editing) ? this.data.editing : '';
     this.setData({
       date: this.date,
@@ -33,6 +44,7 @@ Page({
       title: P.mealLabel(this.meal),
       dateTitle: P.dayTitle(this.date, D.today()),
       entries,
+      totalKcal: group ? group.kcal : 0,
       editing,
     });
   },

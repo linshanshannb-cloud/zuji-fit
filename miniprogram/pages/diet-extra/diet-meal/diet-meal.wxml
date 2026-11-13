@@ -1,18 +1,28 @@
-<nav-bar title="{{title}}"></nav-bar>
-<view class="page">
-  <view class="cap">{{dateTitle}} · {{title}}</view>
-  <view wx:if="{{!entries.length}}" class="empty-copy">这一餐还没有记录。</view>
-  <view wx:for="{{entries}}" wx:key="id" class="item">
+<nav-bar title="{{title}}" tone="warm"></nav-bar>
+<view class="page meal-page">
+  <view class="head">
+    <text class="date">{{dateTitle}}</text>
     <view class="row between">
+      <text class="meal-title">{{title}}</text>
+      <text class="total num">{{totalKcal}} kcal</text>
+    </view>
+  </view>
+  <view wx:if="{{!entries.length}}" class="empty-copy">这一餐还没有记录。</view>
+  <view wx:for="{{entries}}" wx:key="id" class="card">
+    <view class="row">
+      <image class="stk {{item.lg ? 'lg' : ''}}" src="{{item.sticker}}" mode="aspectFit" />
       <view class="flex1">
-        <view class="meal-name">{{item.displayName}}</view>
-        <view wx:if="{{item.basisText}}" class="cap">{{item.basisText}}<text wx:if="{{item.qtyText}}"> · {{item.qtyText}}</text></view>
-        <view class="cap">{{item.line}}</view>
+        <view class="row between">
+          <text class="name">{{item.displayName}}</text>
+          <text class="kcal num">{{item.kcalText}}</text>
+        </view>
+        <view wx:if="{{item.portionText}}" class="portion">{{item.portionText}}</view>
+        <view class="macros">{{item.macroText}}</view>
       </view>
     </view>
     <view class="row acts">
-      <text class="sub hit" data-id="{{item.id}}" bindtap="startEdit">编辑</text>
-      <text class="sub hit danger" data-id="{{item.id}}" bindtap="removeEntry">删除</text>
+      <text class="act" data-id="{{item.id}}" bindtap="startEdit">编辑</text>
+      <text class="act danger" data-id="{{item.id}}" bindtap="removeEntry">删除</text>
     </view>
     <block wx:if="{{editing===item.id}}">
       <view wx:if="{{edit.kind==='food'}}" class="field hairline-b"><text class="field-label lab">{{edit.basis==='perServing'?'份数':'重量'}}</text><input class="field-input num" type="digit" data-k="qty" value="{{edit.qty}}" bindinput="onEdit"/><text class="field-unit">{{edit.basis==='perServing'?'份':'g'}}</text></view>
