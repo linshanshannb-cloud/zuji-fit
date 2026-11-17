@@ -14,7 +14,7 @@ function hit(text, words) {
   for (let i = 0; i < sorted.length; i++) {
     const word = norm(sorted[i]);
     if (!word || raw.indexOf(word) < 0) continue;
-    if (word === '面' && raw.indexOf('面包') >= 0 && !/面条|拉面|炒面|刀削|面片|米线|螺蛳粉/.test(raw)) continue;
+    if (word === '面' && (raw.indexOf('面包') >= 0 || raw.indexOf('面粉') >= 0) && !/面条|拉面|炒面|刀削|面片|米线|螺蛳粉|凉面|拌面|汤面/.test(raw)) continue;
     if (word === '汤' && raw.indexOf('汤圆') >= 0) continue;
     if (word === '跑' && raw.indexOf('跑步机') >= 0) continue;
     return true;
@@ -40,7 +40,7 @@ const FOOD = [
   { key: 'soda', words: ['气泡水', '碳酸', '雪碧', '可乐', '汽水', '饮料', '饮品', '果茶'] },
   { key: 'milk', words: ['纯牛奶', '牛奶', '鲜奶', '酸奶', '优格', '纯奶'] },
   { key: 'dumplings', words: ['虾仁饺', '虾饺', '水饺', '煎饺', '蒸饺', '饺子', '馄饨', '云吞'] },
-  { key: 'noodles', words: ['日式拉面', '螺蛳粉', '面条', '拉面', '米线', '炒面', '刀削', '面片', '面'] },
+  { key: 'noodles', words: ['日式拉面', '螺蛳粉', '酸辣粉', '桂林米粉', '炒米粉', '沙河粉', '河粉', '肠粉', '凉粉', '米粉', '粉丝', '粉条', '面条', '拉面', '米线', '炒面', '刀削', '面片', '面'] },
   { key: 'rice', words: ['蛋炒饭', '米饭', '盖饭', '炒饭', '盒饭', '白饭', '饭'] },
   { key: 'chips', words: ['薯片', '虾条'] },
   { key: 'fried', words: ['天妇罗', '炸物', '油炸', '炸串', '薯条', '炸虾', '炸排'] },

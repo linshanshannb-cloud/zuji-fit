@@ -100,3 +100,15 @@ test('new food stickers stay specific and do not steal older categories', () => 
   const share = fs.readFileSync(path.join(root, 'utils/share-day.js'), 'utf8');
   assert.ok(share.includes('foodLarge'));
 });
+
+test('rice noodles and glass noodles use the noodles sticker, powders do not', () => {
+  const food = name => JS.foodKey(name);
+  ['米粉', '桂林米粉', '炒米粉', '河粉', '沙河粉', '螺蛳粉', '粉丝', '粉条', '酸辣粉', '凉粉', '肠粉', '米线'].forEach(name => {
+    assert.strictEqual(food(name), 'noodles', name);
+    assert.ok(JS.foodSticker(name).endsWith('/noodles.png'), name);
+  });
+  ['奶粉', '蛋白粉', '淀粉', '面粉'].forEach(name => assert.strictEqual(food(name), 'bowl', name));
+  assert.strictEqual(food('牛肉面'), 'noodles');
+  assert.strictEqual(food('面包'), 'bread');
+  assert.strictEqual(food('意面'), 'western');
+});
