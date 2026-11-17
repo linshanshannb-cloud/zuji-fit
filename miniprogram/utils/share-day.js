@@ -41,9 +41,6 @@ function trainSub(row) {
   return bits.join(' · ');
 }
 
-function dietLarge(sticker) {
-  return !/coffee|soda|milktea|blueberries|eggs/.test(sticker || '');
-}
 function rowSpan(row) {
   const size = row.large ? 172 : 140;
   return Math.max(148, size + 8);
@@ -98,7 +95,7 @@ function dietRow(row, i) {
     sub: meal,
     kcalText: pos(row.kcal) ? row.kcal + ' kcal' : '',
     rot: i % 2 ? 6 : -7,
-    large: dietLarge(sticker),
+    large: JS.foodLarge(row.name),
   };
 }
 function fitRows(trainRows, dietRows) {
