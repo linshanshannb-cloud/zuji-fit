@@ -16,6 +16,7 @@ function hit(text, words) {
     if (!word || raw.indexOf(word) < 0) continue;
     if (word === '面' && (raw.indexOf('面包') >= 0 || raw.indexOf('面粉') >= 0) && !/面条|拉面|炒面|刀削|面片|米线|螺蛳粉|凉面|拌面|汤面/.test(raw)) continue;
     if (word === '汤' && raw.indexOf('汤圆') >= 0) continue;
+    if ((word === '葡萄' || word === '提子') && raw.indexOf('酒') >= 0) continue;
     if (word === '跑' && raw.indexOf('跑步机') >= 0) continue;
     return true;
   }
@@ -59,7 +60,12 @@ const FOOD = [
   { key: 'tea', words: ['绿茶', '红茶', '乌龙', '花茶', '清茶', '茶'] },
   { key: 'congee', words: ['皮蛋瘦肉粥', '小米粥', '南瓜粥', '八宝粥', '白粥', '粥'] },
   { key: 'soup', words: ['番茄蛋花汤', '西红柿汤', '蛋花汤', '紫菜汤', '胡辣汤', '酸辣汤', '番茄汤', '味噌汤', '例汤', '汤'] },
-  { key: 'blueberries', words: ['蓝莓', '浆果', '草莓', '水果', '莓'] },
+  { key: 'blueberries', words: ['蓝莓', '浆果', '草莓', '莓'] },
+  { key: 'banana', words: ['香蕉', '芭蕉'] },
+  { key: 'apple', words: ['苹果'] },
+  { key: 'citrus', words: ['葡萄柚', '橙子', '橘子', '桔子', '柑橘', '柚子', '柠檬', '柳橙', '金桔', '青柠'] },
+  { key: 'grapes', words: ['葡萄', '提子'] },
+  { key: 'fruit', words: ['水果拼盘', '水果', '果盘', '猕猴桃', '奇异果', '火龙果', '水蜜桃', '哈密瓜', '西瓜', '樱桃', '芒果', '菠萝', '凤梨', '牛油果', '榴莲', '黄桃', '蜜桃', '蟠桃', '桃子', '雪梨', '鸭梨', '梨子', '梨'] },
 ];
 
 const CARDIO = [

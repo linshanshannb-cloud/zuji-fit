@@ -24,8 +24,8 @@ test('sticker keywords: designer order, with coffee burger soda overrides', () =
   assert.strictEqual(food('美式'), 'coffee');
   assert.strictEqual(food('Latte'), 'coffee');
   assert.strictEqual(food('卡布奇诺'), 'coffee');
-  assert.strictEqual(food('水果'), 'blueberries');
-  assert.strictEqual(food('苹果'), 'bowl');
+  assert.strictEqual(food('水果'), 'fruit');
+  assert.strictEqual(food('苹果'), 'apple');
   assert.strictEqual(food('包子'), 'bao');
   assert.strictEqual(food(''), 'bowl');
   assert.ok(JS.foodSticker('炸鸡').endsWith('/fried-chicken.png'));
@@ -78,9 +78,8 @@ test('new food stickers stay specific and do not steal older categories', () => 
   assert.strictEqual(food('番茄炒蛋'), 'eggs');
   assert.strictEqual(food('鸡腿'), 'chicken');
   assert.strictEqual(food('可乐'), 'soda');
-  assert.strictEqual(food('水果'), 'blueberries');
   assert.strictEqual(food('草莓'), 'blueberries');
-  assert.strictEqual(food('苹果'), 'bowl');
+  assert.strictEqual(food('蓝莓'), 'blueberries');
   assert.strictEqual(food('水果沙拉'), 'salad');
   assert.strictEqual(food('牛肉面'), 'noodles');
   assert.strictEqual(food('石锅拌饭'), 'bibimbap');
@@ -111,4 +110,37 @@ test('rice noodles and glass noodles use the noodles sticker, powders do not', (
   assert.strictEqual(food('牛肉面'), 'noodles');
   assert.strictEqual(food('面包'), 'bread');
   assert.strictEqual(food('意面'), 'western');
+});
+
+test('fresh fruit stickers stay behind drinks, dairy, cake, and berries', () => {
+  const food = name => JS.foodKey(name);
+  const expect = {
+    香蕉: 'banana', 芭蕉: 'banana',
+    苹果: 'apple',
+    橙子: 'citrus', 橘子: 'citrus', 桔子: 'citrus', 柑橘: 'citrus', 柚子: 'citrus', 柠檬: 'citrus', 葡萄柚: 'citrus',
+    葡萄: 'grapes', 提子: 'grapes',
+    水果: 'fruit', 果盘: 'fruit', 西瓜: 'fruit', 猕猴桃: 'fruit', 梨: 'fruit', 芒果: 'fruit', 桃子: 'fruit',
+    草莓: 'blueberries', 蓝莓: 'blueberries', 浆果: 'blueberries',
+  };
+  Object.keys(expect).forEach(name => assert.strictEqual(food(name), expect[name], name));
+  assert.strictEqual(food('果茶'), 'soda');
+  assert.strictEqual(food('果汁'), 'bowl');
+  assert.strictEqual(food('水果酸奶'), 'milk');
+  assert.strictEqual(food('水果蛋糕'), 'dessert');
+  assert.strictEqual(food('葡萄酒'), 'bowl');
+  assert.notStrictEqual(food('葡萄酒'), 'beer');
+  assert.notStrictEqual(food('葡萄酒'), 'grapes');
+  assert.strictEqual(food('米粉'), 'noodles');
+  assert.strictEqual(food('香蕉'), 'banana');
+  assert.strictEqual(food('香蕉米粉'), 'noodles');
+  assert.strictEqual(food('奶粉'), 'bowl');
+  ['banana', 'apple', 'citrus', 'grapes', 'fruit'].forEach(key => {
+    const file = path.join(__dirname, '../pages/journal-pack/stickers', key + '.png');
+    assert.ok(fs.existsSync(file), key);
+    assert.ok(JS.foodSticker(Object.keys(expect).find(name => expect[name] === key)).endsWith('/' + key + '.png'));
+  });
+  const root = path.join(__dirname, '..');
+  ['pages/calendar/calendar.js', 'pages/diet-extra/diet-meal/diet-meal.js', 'utils/share-day.js'].forEach(rel => {
+    assert.ok(fs.readFileSync(path.join(root, rel), 'utf8').includes('foodSticker'), rel);
+  });
 });
