@@ -1,5 +1,5 @@
-// 日历手账贴纸。图片在分包 pages/journal-pack。主包只做关键词匹配。
-// 咖啡 / 汉堡 / 汽水 按用户指定单独成类。对应 PNG 未到之前，文件是碗的占位，名字已定好，到图后按文件名替换。
+// 日历、餐次详情、分享共用这一套匹配。图片在分包 pages/journal-pack/stickers。
+// 先命中先得，所以具体菜名放在泛类前面。贴纸按食物名现算，不写进营养记录。
 const ROOT = '/pages/journal-pack/stickers/';
 const src = name => ROOT + name + '.png';
 
@@ -15,6 +15,7 @@ function hit(text, words) {
     const word = norm(sorted[i]);
     if (!word || raw.indexOf(word) < 0) continue;
     if (word === '面' && raw.indexOf('面包') >= 0 && !/面条|拉面|炒面|刀削|面片|米线|螺蛳粉/.test(raw)) continue;
+    if (word === '汤' && raw.indexOf('汤圆') >= 0) continue;
     if (word === '跑' && raw.indexOf('跑步机') >= 0) continue;
     return true;
   }
@@ -29,19 +30,35 @@ const FOOD = [
   { key: 'japanese', words: ['三文鱼', '刺身', '寿司', '日料'] },
   { key: 'burger', words: ['芝士堡', '牛肉堡', '鸡腿堡', '汉堡', 'burger'] },
   { key: 'western', words: ['意大利面', '意面', '披萨', '西餐'] },
+  { key: 'pancake', words: ['鸡蛋灌饼', '煎饼果子', '手抓饼', '葱油饼', '鸡蛋饼', '烙饼', '锅盔', '馅饼', '煎饼'] },
+  { key: 'bread', words: ['牛角包', '可颂', '法棍', '贝果', '吐司', '餐包', '面包'] },
+  { key: 'bao', words: ['灌汤包', '小笼包', '汤包', '菜包', '肉包', '生煎', '烧麦', '花卷', '馒头', '包子', '小笼'] },
+  { key: 'chicken-feet', words: ['泡椒凤爪', '柠檬凤爪', '虎皮凤爪', '柠檬鸡爪', '鸡爪', '凤爪'] },
   { key: 'milktea', words: ['珍珠奶茶', '奶茶', '奶绿', '波霸'] },
   { key: 'coffee', words: ['卡布奇诺', 'cappuccino', '手冲', '浓缩', '拿铁', '美式', '摩卡', 'coffee', 'latte', '咖啡'] },
+  { key: 'beer', words: ['啤酒', '生啤', '扎啤', '黑啤', '白啤', '精酿', '听啤', '罐啤', 'beer'] },
   { key: 'soda', words: ['气泡水', '碳酸', '雪碧', '可乐', '汽水', '饮料', '饮品', '果茶'] },
+  { key: 'milk', words: ['纯牛奶', '牛奶', '鲜奶', '酸奶', '优格', '纯奶'] },
+  { key: 'dumplings', words: ['虾仁饺', '虾饺', '水饺', '煎饺', '蒸饺', '饺子', '馄饨', '云吞'] },
   { key: 'noodles', words: ['日式拉面', '螺蛳粉', '面条', '拉面', '米线', '炒面', '刀削', '面片', '面'] },
   { key: 'rice', words: ['蛋炒饭', '米饭', '盖饭', '炒饭', '盒饭', '白饭', '饭'] },
-  { key: 'dumplings', words: ['水饺', '煎饺', '蒸饺', '饺子', '馄饨', '云吞'] },
+  { key: 'chips', words: ['薯片', '虾条'] },
   { key: 'fried', words: ['天妇罗', '炸物', '油炸', '炸串', '薯条', '炸虾', '炸排'] },
+  { key: 'shrimp', words: ['基围虾', '油焖虾', '白灼虾', '大虾', '虾仁', '虾'] },
+  { key: 'bbq', words: ['烤羊肉串', '烧烤', '烤肉', '烤串', '烤翅', '撸串', '烤五花'] },
   { key: 'beef', words: ['牛腩', '肥牛', '牛排', '牛肉'] },
   { key: 'chicken', words: ['白斩鸡', '宫保鸡', '鸡胸', '鸡柳', '鸡腿', '鸡肉'] },
   { key: 'pork', words: ['红烧肉', '五花', '猪排', '排骨', '猪肉'] },
   { key: 'lamb', words: ['羊蝎子', '羊肉串', '烤羊', '羊排', '羊肉'] },
-  { key: 'eggs', words: ['水煮蛋', '蛋羹', '煎蛋', '蒸蛋', '鸡蛋'] },
+  { key: 'tofu', words: ['麻婆豆腐', '臭豆腐', '豆腐', '豆干', '豆皮', '千张'] },
+  { key: 'dessert', words: ['冰淇淋', '甜品', '蛋糕', '布丁', '雪糕', '蛋挞', '泡芙', '月饼'] },
+  { key: 'eggs', words: ['番茄炒蛋', '水煮蛋', '蛋羹', '煎蛋', '蒸蛋', '炒蛋', '鸡蛋'] },
   { key: 'fish', words: ['清蒸鱼', '鲈鱼', '鳕鱼', '鱼片', '鱼排', '鱼'] },
+  { key: 'salad', words: ['蔬菜沙拉', '沙拉', '色拉'] },
+  { key: 'veg', words: ['西兰花', '青菜', '生菜', '菠菜', '白菜', '菜心'] },
+  { key: 'tea', words: ['绿茶', '红茶', '乌龙', '花茶', '清茶', '茶'] },
+  { key: 'congee', words: ['皮蛋瘦肉粥', '小米粥', '南瓜粥', '八宝粥', '白粥', '粥'] },
+  { key: 'soup', words: ['番茄蛋花汤', '西红柿汤', '蛋花汤', '紫菜汤', '胡辣汤', '酸辣汤', '番茄汤', '味噌汤', '例汤', '汤'] },
   { key: 'blueberries', words: ['蓝莓', '浆果', '草莓', '水果', '莓'] },
 ];
 
@@ -74,7 +91,7 @@ function cardioKey(activityType, name) {
   return 'shoe';
 }
 
-const SMALL = { coffee: 1, soda: 1, milktea: 1, blueberries: 1, eggs: 1 };
+const SMALL = { coffee: 1, soda: 1, milktea: 1, blueberries: 1, eggs: 1, beer: 1, tea: 1, milk: 1, chips: 1 };
 function foodLarge(name) { return !SMALL[foodKey(name)]; }
 function foodSticker(name) { return src(foodKey(name)); }
 
