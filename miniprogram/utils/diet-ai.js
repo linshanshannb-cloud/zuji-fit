@@ -1,9 +1,10 @@
 // 文字识别结果的解析与校验。不读存储、不调模型、不保留用户原文。
 const Fml = require('./diet-formula');
+const Portion = require('./diet-portion');
 
 const LIMITS = {
   name: 30,
-  portion: 20,
+  portion: 40,
   tips: 160,
   note: 40,
   kcal: 8000,
@@ -120,24 +121,34 @@ function assessOne(row) {
   const fatG = Fml.round1(core.fatG);
   const computed = Math.round(Fml.kcalOf(carbsG, proteinG, fatG));
   let kcal = core.kcal == null ? computed : Math.round(core.kcal);
-  if (!inRange(kcal, LIMITS.kcal) || Math.abs(kcal - computed) > Math.max(300, computed * 0.4)) kcal = computed;
+  if (!inRange(kcal, LIMITS.kcal)) kcal = computed;
+  else {
+    const gap = kcal - computed;
+    const limit = Math.max(300, computed * 0.4);
+    const plausibleExtra = gap > 0 && kcal <= Math.max(800, computed * 2);
+    if (Math.abs(gap) > limit && !plausibleExtra) kcal = computed;
+  }
   let tips = clip(row.tips, LIMITS.tips);
   if (!tips) tips = DEFAULT_TIPS;
-  return {
-    ok: true,
-    data: {
-      name: core.name,
-      portion: clip(row.portion, LIMITS.portion),
-      kcal,
-      carbsG,
-      proteinG,
-      fatG,
-      fiberG: optField(row, 'fiberG', null, LIMITS.fiberG, false),
-      sugarG: optField(row, 'sugarG', null, LIMITS.sugarG, false),
-      saltMg: optField(row, 'saltMg', 'saltG', LIMITS.saltMg, true),
-      tips,
-    },
+  const data = {
+    name: core.name,
+    portion: clip(row.portion, LIMITS.portion),
+    kcal,
+    carbsG,
+    proteinG,
+    fatG,
+    fiberG: optField(row, 'fiberG', null, LIMITS.fiberG, false),
+    sugarG: optField(row, 'sugarG', null, LIMITS.sugarG, false),
+    saltMg: optField(row, 'saltMg', 'saltG', LIMITS.saltMg, true),
+    tips,
   };
+  try {
+    const extra = Portion.attach(row, data);
+    if (extra.portion) data.portion = extra.portion;
+    data.portionMeta = extra.portionMeta;
+    data.nutri = extra.nutri;
+  } catch (e) { /* 份量结构坏了也留下营养数字，确认页仍可改 */ }
+  return { ok: true, data };
 }
 function collectItems(rows, parentTips) {
   const items = [];
@@ -224,23 +235,36 @@ function acceptEntry(input) {
   if (note.length > LIMITS.note) return fail('VALIDATION', '备注有点长', '备注最多 40 字');
   const eatenAt = input.eatenAt == null || input.eatenAt === '' ? null : String(input.eatenAt);
   if (eatenAt && !/^([01]\d|2[0-3]):[0-5]\d$/.test(eatenAt)) return fail('VALIDATION', '时间不对', '时间要像 17:47 这样');
-  return {
-    ok: true,
-    data: {
-      name,
-      portion: clip(input.portion, LIMITS.portion),
-      kcal: kcal.value,
-      carbsG: carbs.value,
-      proteinG: protein.value,
-      fatG: fat.value,
-      fiberG: fiber.value,
-      sugarG: sugar.value,
-      saltMg: salt.value,
-      tips: clip(input.tips, LIMITS.tips),
-      note,
-      eatenAt,
-    },
+  const numbers = {
+    kcal: kcal.value, carbsG: carbs.value, proteinG: protein.value, fatG: fat.value,
+    fiberG: fiber.value, sugarG: sugar.value, saltMg: salt.value,
   };
+  let portion = clip(input.portion, LIMITS.portion);
+  let portionMeta = null;
+  let nutri = null;
+  try {
+    const extra = Portion.packMeta(Object.assign({}, input, { name }), numbers);
+    if (extra.portion) portion = clip(extra.portion, LIMITS.portion) || portion;
+    portionMeta = extra.portionMeta || null;
+    nutri = extra.nutri || null;
+  } catch (e) { /* 没有结构时只存原来的份量文字 */ }
+  const data = {
+    name,
+    portion,
+    kcal: numbers.kcal,
+    carbsG: numbers.carbsG,
+    proteinG: numbers.proteinG,
+    fatG: numbers.fatG,
+    fiberG: numbers.fiberG,
+    sugarG: numbers.sugarG,
+    saltMg: numbers.saltMg,
+    tips: clip(input.tips, LIMITS.tips),
+    note,
+    eatenAt,
+  };
+  if (portionMeta) data.portionMeta = portionMeta;
+  if (nutri) data.nutri = nutri;
+  return { ok: true, data };
 }
 
 module.exports = { LIMITS, numOrNull, parseModelText, extractContent, assess, acceptEntry };

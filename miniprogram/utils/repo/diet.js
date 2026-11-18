@@ -10,6 +10,7 @@ const { newId } = require('./ids');
 const Fml = require('../diet-formula');
 const P = require('../diet-present');
 const Ai = require('../diet-ai');
+const Portion = require('../diet-portion');
 
 const num = v => {
   if (typeof v === 'number') return isFinite(v) ? v : NaN;
@@ -428,6 +429,28 @@ function applyPatch(entry, patch) {
       if (blankish(patch.name) || patch.name === '快速记录') next.name = '';
       else next.name = C.check(V.validateText(patch.name, 30));
     } else if (next.name === '快速记录') next.name = '';
+    if (next.source === 'ai-text' && next.nutri) {
+      const portionTouched = patch.portionMeta && typeof patch.portionMeta === 'object';
+      const nutriTouched = ['kcal', 'carbsG', 'proteinG', 'fatG', 'fiberG', 'sugarG', 'saltMg'].some(k => k in patch && !blankish(patch[k]));
+      const basisTouched = patch.nutri && typeof patch.nutri === 'object';
+      if (portionTouched || nutriTouched || basisTouched) {
+        const applied = Portion.applySavedPatch(next, patch);
+        if (!applied.ok) C.raise('VALIDATION', applied.message);
+        return applied.entry;
+      }
+      return next;
+    }
+    if (next.source === 'ai-text' && !next.nutri && patch.portionMeta && typeof patch.portionMeta === 'object') {
+      const meta = Portion.sanitizeMeta(patch.portionMeta);
+      if (meta) {
+        meta.legacy = true;
+        next.portionMeta = meta;
+        const text = Portion.display(Portion.readDetail(meta, ''));
+        if (text) next.portion = text;
+      }
+      const touchLegacy = ['carbsG', 'proteinG', 'fatG'].some(k => k in patch && !blankish(patch[k]));
+      if (!touchLegacy) return next;
+    }
     const touch = ['carbsG', 'proteinG', 'fatG'].some(k => k in patch && !blankish(patch[k]));
     if (touch) {
       next.carbsG = Fml.round1(needNum('carbsG' in patch ? patch.carbsG : next.carbsG, '碳水', 0, 2000));
@@ -489,7 +512,7 @@ function aiEntryFrom(input, t) {
   const checked = Ai.acceptEntry(input);
   if (!checked.ok) C.raise(checked.code || 'VALIDATION', checked.message);
   const row = checked.data;
-  return {
+  const entry = {
     id: newId('de_', t), kind: 'nutrient', meal: P.normalizeMeal(input.meal || 'other'), name: row.name,
     basis: null, qty: null, snap: { carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG },
     carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
@@ -497,6 +520,9 @@ function aiEntryFrom(input, t) {
     portion: row.portion || '', tips: row.tips || '', note: row.note || '', eatenAt: row.eatenAt,
     source: 'ai-text', example: false, foodId: null, v: 2,
   };
+  if (row.portionMeta) entry.portionMeta = row.portionMeta;
+  if (row.nutri) entry.nutri = row.nutri;
+  return entry;
 }
 function addAiEntries(date, list) {
   return C.guard(() => {

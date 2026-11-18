@@ -35,13 +35,14 @@ Page({
       return;
     }
     const board = repo.diet.dayBoard(date);
+    const mark = P.dayEstimateMark(board.entries);
     this.setData({
       title: '饮食',
       dateTitle: P.dayTitle(date, today),
       future,
       canAdd: !future && !repo.isReadOnly(),
       kcalLine: board.recorded ? board.totals.kcal + ' kcal' : '',
-      sub: future ? '还没到这一天' : (board.recorded ? board.entries.length + ' 条' : '还没记饮食'),
+      sub: future ? '还没到这一天' : (board.recorded ? (board.entries.length + ' 条' + (mark ? ' · ' + mark : '')) : '还没记饮食'),
       entries: (board.entries || []).map(e => Object.assign({}, e, { extra: extra(e), macro: macro(e) })),
     });
   },
