@@ -5,6 +5,10 @@ const isCountable = s => isObj(s) && s.done === true && s.type === 'normal';
 const num = v => (typeof v === 'number' && isFinite(v) ? v : 0);
 // Missing / unknown mode is reps. Old records have no mode field and are never migrated.
 function modeOf(ex) { return ex && ex.mode === 'time' ? 'time' : 'reps'; }
+// Volume is training load, not body weight: each countable reps-mode set contributes weightKg × reps once.
+// There is no per-side multiplier. A null weight is bodyweight and adds 0, it is not estimated.
+// Timed sets never enter volume, even when they carry weightKg; their durationSec sums into timeSec instead.
+// Warm-up, undone, and orphan sets are excluded from both.
 function computeSummary(detail) {
   const exercises = (detail && Array.isArray(detail.exercises) ? detail.exercises : []).filter(isObj);
   const setsAll = (detail && Array.isArray(detail.sets) ? detail.sets : []).filter(isObj);
@@ -16,6 +20,23 @@ function computeSummary(detail) {
   return { exerciseCount: exercises.length, setCount: sets.length,
     volumeKg: round1(repsSets.reduce((t, s) => t + (typeof s.weightKg === 'number' ? s.weightKg : 0) * (typeof s.reps === 'number' ? s.reps : 0), 0)),
     timeSec: timeSets.reduce((t, s) => t + (typeof s.durationSec === 'number' && s.durationSec > 0 ? s.durationSec : 0), 0) };
+}
+// Editor cards (including the in-memory failed-save buffer) use the same rules once. Do not add a stored total on top.
+function summaryFromCards(cards) {
+  const exercises = [];
+  const sets = [];
+  (Array.isArray(cards) ? cards : []).forEach(c => {
+    if (!isObj(c) || !c.id) return;
+    exercises.push({ id: c.id, mode: modeOf(c) });
+    (Array.isArray(c.sets) ? c.sets : []).forEach(s => {
+      if (!isObj(s)) return;
+      sets.push({
+        workoutExerciseId: c.id, done: s.done === true, type: s.type,
+        weightKg: s.weightKg, reps: s.reps, durationSec: s.durationSec,
+      });
+    });
+  });
+  return computeSummary({ exercises, sets });
 }
 const byOrder = (a, b) => num(a && a.order) - num(b && b.order);
 const byIndex = (a, b) => num(a && a.index) - num(b && b.index);
@@ -120,5 +141,5 @@ function inspectDetail(detail) {
   });
   return { ok: issues.length === 0, issues, exercises, sets };
 }
-module.exports = { isCountable, modeOf, computeSummary, byOrder, byIndex, sortWorkouts, renumberExercises, renumberSets, assemble, defaultWorkoutName,
+module.exports = { isCountable, modeOf, computeSummary, summaryFromCards, byOrder, byIndex, sortWorkouts, renumberExercises, renumberSets, assemble, defaultWorkoutName,
   isObj, inspectHeader, inspectExercise, inspectSet, splitRecords, inspectDetail };

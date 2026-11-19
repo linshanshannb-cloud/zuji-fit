@@ -1,10 +1,19 @@
 // 「分享当天」的图内容。纯数据，不画布、不读存储。消耗和摄入分开，不合成一个总热量。
 const D = require('./date');
+const F = require('./format');
 const JS = require('./journal-stickers');
 const WEEK = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 const SKIP_MEAL = { '其他记录': 1, '': 1 };
 const ROW_GAP = 16;
 const MAX_H = 8000;
+// 画布导出上限，不是页面 CSS。iOS 上 canvas 单边超过 4096 时 canvasToTempFilePath 会失败或空白；
+// Android 常见到 8192。宽固定 1080，所以高度取单边和 16777216 像素面积里更小的那个。
+const CANVAS_W = 1080;
+const AREA_MAX = 16777216;
+function exportLimit(platform) {
+  const side = /android/i.test(String(platform || '')) ? 8192 : 4096;
+  return Math.min(side, Math.floor(AREA_MAX / CANVAS_W));
+}
 
 function dateParts(date) {
   const d = D.parse(date);
@@ -47,16 +56,24 @@ function trainSub(row) {
 }
 
 function rowSpan(row) {
-  const size = row.large ? 172 : 140;
-  return Math.max(148, size + 8);
+  if (row && row.compact) return 36 + ((row.lines && row.lines.length) || 0) * 34;
+  const size = row && row.large ? 172 : 140;
+  const base = Math.max(148, size + 8);
+  const n = row && row.lines ? row.lines.length : 0;
+  if (!n) return base;
+  return Math.max(base, 128 + n * 34 + 12);
 }
 function rowsSpan(rows) {
   let h = 0;
   (rows || []).forEach((row, i) => { if (i) h += ROW_GAP; h += rowSpan(row); });
   return h;
 }
+function summaryExtra(block) {
+  return block && block.summaryLines && block.summaryLines.length ? block.summaryLines.length * 32 : 0;
+}
 function cardHeight(model) {
   model = model || {};
+  if (model.layout === 'detail') return model.height || 1440;
   let y = 280;
   if (!model.train && !model.diet) return 1440;
   if (model.rest) {
@@ -65,18 +82,24 @@ function cardHeight(model) {
   } else {
     const train = model.train || { empty: true, rows: [] };
     const diet = model.diet || { empty: true, rows: [] };
-    y += 36;
-    if (train.empty) y += 12 + 140;
-    else {
-      y += 8 + rowsSpan(train.rows);
-      if (train.more) y += 40;
+    const showTrain = !train.skip;
+    const showDiet = !diet.skip;
+    if (showTrain) {
+      y += 36 + summaryExtra(train);
+      if (train.empty) y += 12 + 140;
+      else {
+        y += 8 + rowsSpan(train.rows);
+        if (train.more) y += 40;
+      }
     }
-    y += 48;
-    y += 36;
-    if (diet.empty) y += 12 + 140;
-    else {
-      y += 8 + rowsSpan(diet.rows);
-      if (diet.more) y += 40;
+    if (showTrain && showDiet) y += 48;
+    if (showDiet) {
+      y += 36 + summaryExtra(diet);
+      if (diet.empty) y += 12 + 140;
+      else {
+        y += 8 + rowsSpan(diet.rows);
+        if (diet.more) y += 40;
+      }
     }
   }
   return Math.max(1440, y + 120);
@@ -124,11 +147,14 @@ function fitRows(trainRows, dietRows) {
   }
   return { train, diet, trainMore, dietMore };
 }
+
+const Detail = require('./share-detail-layout');
 function buildShareModel(input) {
   input = input || {};
   const parts = dateParts(input.date);
   const train = (input.train || []).slice().sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
   const diet = (input.diet || []).slice().sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+  if (input.mode === 'detail' && (train.length || diet.length)) return Detail.build(input, parts, train, diet);
   const trainRows = train.map(trainRow);
   const dietRows = diet.map(dietRow);
   const fit = fitRows(trainRows, dietRows);
@@ -152,4 +178,4 @@ function buildShareModel(input) {
   };
 }
 
-module.exports = { buildShareModel, dateParts, cardHeight, MAX_H };
+module.exports = { buildShareModel, dateParts, cardHeight, rowSpan, MAX_H, exportLimit };

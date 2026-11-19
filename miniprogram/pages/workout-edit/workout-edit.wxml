@@ -11,6 +11,11 @@
   </view>
   <view wx:if="{{detailMissing}}" class="sub danger">训练详情丢失，只能查看。详情恢复后会正常显示。</view>
   <view wx:elif="{{detailCorrupt}}" class="sub danger">有损坏记录，原数据已保留，暂停保存。</view>
+  <view wx:if="{{!sorting && cards.length && !readOnly}}" class="complete-all hit" bindtap="completeAll">
+    <text class="sub accent">一键全部完成</text>
+    <text class="cap">只勾已填好的次数或时长</text>
+  </view>
+  <view wx:if="{{completeNote}}" class="cap complete-note">{{completeNote}}</view>
   <view wx:if="{{!sorting}}" class="tpl-row hit" bindtap="openTemplates">
     <text class="sub accent">训练模板 ›</text>
     <text class="cap">套用精选或我的模板</text>
@@ -41,6 +46,7 @@
         <view class="dots" bindtap="more" data-id="{{ex.id}}">⋯</view>
       </view>
       </swipe-cell>
+      <text wx:if="{{ex.carriedFrom}}" class="cap carry-note">沿用上次 · {{ex.carriedFromLabel}}</text>
       <block wx:if="{{expanded===ex.id}}">
         <view wx:if="{{ex.note}}" class="sub ex-note">{{ex.note}}</view>
         <view class="mode-row">

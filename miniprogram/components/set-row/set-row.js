@@ -4,15 +4,18 @@ const F = require('../../utils/format');
 const LIM = { weightKg: { step: 2.5, max: 999.9 }, reps: { step: 1, max: 999 }, durationSec: { step: 5, max: 3600 } };
 Component({
   properties: { set: Object, label: String, bodyweight: Boolean, shake: Boolean, readonly: Boolean, mode: { type: String, value: 'reps' } },
-  data: { w: '', r: '', d: '', editing: '' },
+  data: { w: '', r: '', d: '', editing: '', weightReady: false },
   observers: {
+    // 重量用 type="digit"。这个输入框一旦以空值创建，之后 setData 改 value 不会显示出来；次数的 type="number" 会。
+    // 所以要等这次要显示的重量和输入框同一次渲染里一起出现。正在输入的那一栏不被观察器盖掉。
     set(s) {
       if (!s) return;
-      this.setData({
-        w: F.kg(s.weightKg),
-        r: s.reps === null || s.reps === undefined ? '' : String(s.reps),
-        d: s.durationSec === null || s.durationSec === undefined ? '' : String(s.durationSec),
-      });
+      const editing = this.data.editing;
+      const next = { weightReady: true };
+      if (editing !== 'weightKg') next.w = F.kg(s.weightKg);
+      if (editing !== 'reps') next.r = s.reps === null || s.reps === undefined ? '' : String(s.reps);
+      if (editing !== 'durationSec') next.d = s.durationSec === null || s.durationSec === undefined ? '' : String(s.durationSec);
+      this.setData(next);
     },
   },
   lifetimes: { detached() { this.stopRepeat(); } },

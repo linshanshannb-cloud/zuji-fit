@@ -2,7 +2,7 @@
   <view class="no" bindtap="onType"><text class="{{set.type==='warmup'?'warm':''}}">{{set.type==='warmup'?'热':label}}</text></view>
   <view class="stp w {{mode==='time'?'bare':''}}">
     <view wx:if="{{mode!=='time'}}" class="pm" data-f="weightKg" data-d="-1" bindtap="onStep" catchlongpress="onStepLong" bindtouchend="onStepEnd">−</view>
-    <input class="val num {{w===''?'empty':''}}" type="digit" value="{{w}}" placeholder="{{mode==='time' || bodyweight?'自重':'—'}}" placeholder-class="phc" data-f="weightKg" bindfocus="onFocus" bindblur="onBlur" catchlongpress="noop" disabled="{{readonly}}"/>
+    <input wx:if="{{weightReady}}" class="val num {{w===''?'empty':''}}" type="digit" value="{{w}}" placeholder="{{mode==='time' || bodyweight?'自重':'—'}}" placeholder-class="phc" data-f="weightKg" bindfocus="onFocus" bindblur="onBlur" catchlongpress="noop" disabled="{{readonly}}"/>
     <view wx:if="{{mode!=='time'}}" class="pm" data-f="weightKg" data-d="1" bindtap="onStep" catchlongpress="onStepLong" bindtouchend="onStepEnd">+</view>
   </view>
   <view wx:if="{{mode!=='time'}}" class="stp r {{shake?'shake':''}}">

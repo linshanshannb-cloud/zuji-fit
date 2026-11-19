@@ -3,6 +3,7 @@ const K = require('./keys');
 const V = require('./validate');
 const M = require('./model');
 const C = require('./core');
+const F = require('../format');
 const { newId } = require('./ids');
 const exRepo = require('./exercises');
 const E = require('../exercises');
@@ -104,7 +105,9 @@ function getWorkout(id) {
   const d = st.detail || { workoutId: id, exercises: [], sets: [] };
   // Keep the index summary when the detail key is absent so the header is not presented as a real empty workout.
   const summary = st.missing
-    ? { exerciseCount: h.exerciseCount || 0, setCount: h.setCount || 0, volumeKg: h.volumeKg || 0, timeSec: h.timeSec || 0 }
+    ? { exerciseCount: h.exerciseCount || 0, setCount: h.setCount || 0,
+      volumeKg: typeof h.volumeKg === 'number' && isFinite(h.volumeKg) ? h.volumeKg : null,
+      timeSec: typeof h.timeSec === 'number' && isFinite(h.timeSec) ? h.timeSec : 0 }
     : M.computeSummary(d);
   return stamp(M.assemble(Object.assign({}, h, summary, { displayName: h.name || M.defaultWorkoutName(h.date) }), d, exRepo.get), st);
 }
@@ -139,11 +142,15 @@ function betterTime(b, best) { return b && (!best || b.durationSec > best.durati
 function daySummaries(date) {
   return workoutsOn(date).map(w => {
     const v = getWorkout(w.id) || { exercises: [], detailMissing: true, detailCorrupt: false };
+    const fromDetail = !v.detailMissing;
     return Object.assign({}, w, {
-      durationMin: w.startedAt && w.completedAt ? Math.max(1, Math.round((w.completedAt - w.startedAt) / 60000)) : null,
+      exerciseCount: fromDetail ? v.exerciseCount : (w.exerciseCount || 0),
+      setCount: fromDetail ? v.setCount : (w.setCount || 0),
+      volumeKg: fromDetail ? v.volumeKg : (typeof w.volumeKg === 'number' && isFinite(w.volumeKg) ? w.volumeKg : null),
+      timeSec: fromDetail ? (v.timeSec || 0) : (typeof w.timeSec === 'number' && isFinite(w.timeSec) ? w.timeSec : 0),
+      durationMin: F.sessionMinutes(w.startedAt, w.completedAt),
       detailMissing: !!v.detailMissing,
       detailCorrupt: !!v.detailCorrupt,
-      timeSec: v.timeSec || 0,
       top: (v.exercises || []).slice(0, 3).map(e => { const mode = M.modeOf(e); return { name: e.displayName, mode, sets: e.sets.filter(M.isCountable).length, best: bestSet(e.sets, mode) }; }),
       more: Math.max(0, (v.exercises || []).length - 3) });
   });
@@ -182,7 +189,7 @@ function referencedExerciseIds() {
 // ---------- workout lifecycle
 // createDraft: builds the header (id/startedAt/createdAt fixed now). With exerciseIds -> persisted immediately;
 // without -> held in memory until the first addExercise(s) (no empty drafts in storage).
-function createDraft({ date, name = '', note = '', startTimer, exerciseIds = [] } = {}) {
+function createDraft({ date, name = '', note = '', startTimer, exerciseIds = [], carry = false } = {}) {
   return C.guard(() => {
     C.writable();
     const existing = getDraft();
@@ -194,7 +201,7 @@ function createDraft({ date, name = '', note = '', startTimer, exerciseIds = [] 
       exerciseCount: 0, setCount: 0, volumeKg: 0 };
     if (!exerciseIds.length) { pending = h; return C.ok(Object.assign({ persisted: false }, h)); }
     const detail = { workoutId: h.id, exercises: [], sets: [] };
-    exerciseIds.forEach(eid => appendExercise(detail, h, eid));
+    exerciseIds.forEach(eid => appendExercise(detail, h, eid, carry));
     pending = null;
     return C.ok(commit(h, detail));
   });
@@ -274,16 +281,81 @@ function resolveAddable(exerciseId) {
   if (ex.archived) C.raise('ARCHIVED_EXERCISE', '该动作已删除，不能再添加');
   return ex;
 }
-// Appends WorkoutExercise + 1 empty set (weight/reps null) to a detail in place (§F1.4).
-function appendExercise(detail, header, exerciseId) {
+// 上次成绩：只读本地已完成训练，不另存一份记忆。
+// 目标日之前的已完成记录都可入选。同一天只算完成时间早于当前这条的（没有完成时间就用创建时间；时间相同则 id 更小的更早）。
+// 当前这条（含未写入的草稿）排除。日期更晚的训练排除。详情丢失、损坏、没有有效已完成组的，跳过，继续看更早的一条。
+function performanceStamp(h) {
+  if (h && typeof h.completedAt === 'number' && isFinite(h.completedAt)) return h.completedAt;
+  if (h && typeof h.createdAt === 'number' && isFinite(h.createdAt)) return h.createdAt;
+  return 0;
+}
+function earlierPerformance(h, header) {
+  if (!h || !header || h.id === header.id) return false;
+  if (typeof h.date !== 'string' || typeof header.date !== 'string') return false;
+  if (h.date < header.date) return true;
+  if (h.date > header.date) return false;
+  const a = performanceStamp(h), b = performanceStamp(header);
+  if (a !== b) return a < b;
+  return String(h.id) < String(header.id);
+}
+function carriedSet(mode, s) {
+  if (!s || s.done !== true) return null;
+  const weight = V.validateSetWeight(s.weightKg);
+  const reps = V.validateReps(s.reps);
+  const dur = V.validateDuration(s.durationSec);
+  if (!weight.ok || !reps.ok || !dur.ok) return null;
+  const type = s.type === 'warmup' ? 'warmup' : (s.type === 'normal' || s.type == null ? 'normal' : null);
+  if (!type) return null;
+  if (mode === 'time') {
+    if (!(typeof dur.value === 'number' && dur.value >= 1)) return null;
+    return { weightKg: weight.value, reps: null, durationSec: dur.value, type };
+  }
+  if (!(typeof reps.value === 'number' && reps.value >= 1)) return null;
+  return { weightKg: weight.value, reps: reps.value, durationSec: null, type };
+}
+function lastPerformance(exerciseId, header) {
+  if (!exerciseId || !header) return null;
+  const list = headers().filter(w => w && w.status === 'completed' && earlierPerformance(w, header));
+  list.sort((a, b) => {
+    if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+    const ta = performanceStamp(a), tb = performanceStamp(b);
+    if (ta !== tb) return tb - ta;
+    return String(a.id) < String(b.id) ? 1 : -1;
+  });
+  for (let i = 0; i < list.length; i++) {
+    const st = loadDetail(list[i].id);
+    if (st.missing || st.blocked || !st.detail) continue;
+    const exs = (st.detail.exercises || []).filter(e => e && e.exerciseId === exerciseId).slice().sort(M.byOrder);
+    for (let j = exs.length - 1; j >= 0; j--) {
+      const mode = M.modeOf(exs[j]);
+      const rows = (st.detail.sets || []).filter(s => s && s.workoutExerciseId === exs[j].id).slice().sort(M.byIndex)
+        .map(s => carriedSet(mode, s)).filter(Boolean);
+      if (rows.length) return { date: list[i].date, mode, sets: rows };
+    }
+  }
+  return null;
+}
+function pushSets(detail, weId, rows) {
+  rows.forEach((row, i) => {
+    detail.sets.push({
+      id: newId('s_', C.now()), workoutExerciseId: weId, index: i + 1,
+      weightKg: row.weightKg, reps: row.reps, durationSec: row.durationSec,
+      type: row.type === 'warmup' ? 'warmup' : 'normal', done: false, doneAt: null,
+    });
+  });
+}
+// Appends WorkoutExercise + sets. carry 时带入该动作上次已完成的组；否则仍是 1 组空白（§F1.4）。
+function appendExercise(detail, header, exerciseId, carry) {
   const ex = resolveAddable(exerciseId);
   detail.exercises = M.renumberExercises(detail.exercises);
-  const we = { id: newId('we_', C.now()), workoutId: header.id, exerciseId: ex.id, order: detail.exercises.length, note: '', nameSnapshot: ex.nameZh, mode: E.defaultMode(ex) };
+  const prior = carry ? lastPerformance(ex.id, header) : null;
+  const we = { id: newId('we_', C.now()), workoutId: header.id, exerciseId: ex.id, order: detail.exercises.length, note: '', nameSnapshot: ex.nameZh, mode: prior ? prior.mode : E.defaultMode(ex) };
+  if (prior) we.carriedFrom = prior.date;
   detail.exercises.push(we);
-  detail.sets.push({ id: newId('s_', C.now()), workoutExerciseId: we.id, index: 1, weightKg: null, reps: null, durationSec: null, type: 'normal', done: false, doneAt: null });
+  pushSets(detail, we.id, prior ? prior.sets : [{ weightKg: null, reps: null, durationSec: null, type: 'normal' }]);
   return we;
 }
-function addExercises(workoutId, exerciseIds) {
+function addExercises(workoutId, exerciseIds, opts) {
   if (isPending(workoutId)) { // first add: persist header (createdAt/startedAt unchanged) + detail
     const h = pending;
     if (!exerciseIds.length) return C.fail('EMPTY_SELECTION', '请选择动作');
@@ -291,7 +363,7 @@ function addExercises(workoutId, exerciseIds) {
       C.writable();
       if (getDraft()) return C.fail('DRAFT_EXISTS', '已有未完成的训练', { data: getDraft() });
       const detail = { workoutId: h.id, exercises: [], sets: [] };
-      const added = exerciseIds.map(eid => appendExercise(detail, h, eid));
+      const added = exerciseIds.map(eid => appendExercise(detail, h, eid, !!(opts && opts.carry)));
       commit(h, detail);
       return C.ok(added);
     });
@@ -301,35 +373,46 @@ function addExercises(workoutId, exerciseIds) {
   return mutate(workoutId, (detail, header) => {
     exerciseIds.forEach(resolveAddable); // validate all before changing anything
     const d = { workoutId, exercises: detail.exercises.slice(), sets: detail.sets.slice() };
-    const added = exerciseIds.map(id => appendExercise(d, header, id));
+    const added = exerciseIds.map(id => appendExercise(d, header, id, !!(opts && opts.carry)));
     return { detail: Object.assign({}, detail, d), data: added };
   });
 }
-function addExercise(workoutId, exerciseId) {
-  const r = addExercises(workoutId, [exerciseId]);
+function addExercise(workoutId, exerciseId, opts) {
+  const r = addExercises(workoutId, [exerciseId], opts);
   return r.ok ? C.ok(r.data[0]) : r;
 }
 // Add to current draft, or create today's draft (§F5). data: { workoutId, created }
-function addToCurrentDraft(exerciseId) {
+// opts.carry 只用于动作库/搜索/详情这些「新加动作」入口。模板和复制不走这里的带入。
+function addToCurrentDraft(exerciseId, opts) {
   const d = getDraft();
   pending = null;
-  if (d) { const r = addExercise(d.id, exerciseId); return r.ok ? C.ok({ workoutId: d.id, created: false, workoutExercise: r.data }) : r; }
-  const r = createDraft({ date: C.today(), exerciseIds: [exerciseId] });
+  if (d) { const r = addExercise(d.id, exerciseId, opts); return r.ok ? C.ok({ workoutId: d.id, created: false, workoutExercise: r.data }) : r; }
+  const r = createDraft({ date: C.today(), exerciseIds: [exerciseId], carry: !!(opts && opts.carry) });
   return r.ok ? C.ok({ workoutId: r.data.id, created: true }) : r;
 }
 function replaceExercise(workoutId, weId, exerciseId) {
-  return mutate(workoutId, detail => {
+  return mutate(workoutId, (detail, header) => {
     const ex = resolveAddable(exerciseId);
     const prev = findWE(detail, weId);
     const changing = prev.exerciseId !== ex.id;
     const we = Object.assign({}, prev, { exerciseId: ex.id, nameSnapshot: ex.nameZh });
     let sets = detail.sets;
-    // Cross-exercise replace keeps the set rows (and warm-up/normal type) but does not carry weight, reps, duration, or done.
-    // The new exercise's default mode is adopted. Replacing with itself only refreshes nameSnapshot.
+    // 换成另一个动作时，不带走原动作的重量、次数、时长和完成。有该新动作自己的上次记录就用那次的组；没有则保持原来的空组结构。
+    // 换成自己只刷新名称，不覆盖正在填的组。
     if (changing) {
-      we.mode = E.defaultMode(ex);
-      sets = detail.sets.map(s => (s.workoutExerciseId === weId
-        ? Object.assign({}, s, { weightKg: null, reps: null, durationSec: null, done: false, doneAt: null }) : s));
+      const prior = lastPerformance(ex.id, header);
+      if (prior) {
+        we.mode = prior.mode;
+        we.carriedFrom = prior.date;
+        const fresh = [];
+        pushSets({ sets: fresh }, weId, prior.sets);
+        sets = detail.sets.filter(s => s.workoutExerciseId !== weId).concat(fresh);
+      } else {
+        we.mode = E.defaultMode(ex);
+        delete we.carriedFrom;
+        sets = detail.sets.map(s => (s.workoutExerciseId === weId
+          ? Object.assign({}, s, { weightKg: null, reps: null, durationSec: null, done: false, doneAt: null }) : s));
+      }
     }
     return { detail: Object.assign({}, detail, { exercises: replaceIn(detail.exercises, we), sets }), data: we };
   });
@@ -418,6 +501,72 @@ function setSetDone(workoutId, setId, done) {
     if (done && !canComplete(time ? 'time' : 'reps', s)) C.raise(time ? 'DURATION_REQUIRED' : 'REPS_REQUIRED', time ? '请输入时长' : '请先填写次数');
     s.done = !!done; s.doneAt = done ? C.now() : null;
     return { detail: Object.assign({}, detail, { sets: replaceIn(detail.sets, s) }), data: s };
+  });
+}
+// 一键勾选：只标记已填好且能通过现有校验的组。不改重量、次数、时长、热身，不补空白。
+function classifyComplete(detail) {
+  const byEx = {};
+  (detail && detail.exercises || []).forEach(e => { if (e && e.id) byEx[e.id] = e; });
+  const marked = [], skipped = [], already = [];
+  (detail && detail.sets || []).forEach(s => {
+    const ex = s && byEx[s.workoutExerciseId];
+    if (!s || !ex) return;
+    const time = M.modeOf(ex) === 'time';
+    if (s.done === true) { already.push(s.id); return; }
+    if (!canComplete(time ? 'time' : 'reps', s)) {
+      skipped.push({ id: s.id, exercise: ex.nameSnapshot || '动作', index: s.index, reason: time ? '未填时长' : '未填次数' });
+      return;
+    }
+    marked.push(s.id);
+  });
+  return { marked, skipped, already };
+}
+function completeAllNote(plan) {
+  plan = plan || { marked: [], skipped: [], already: [] };
+  const n = plan.marked.length;
+  const missReps = plan.skipped.filter(s => s.reason === '未填次数');
+  const missTime = plan.skipped.filter(s => s.reason === '未填时长');
+  const why = [];
+  if (missReps.length) why.push(missReps.length + ' 组未填次数');
+  if (missTime.length) why.push(missTime.length + ' 组未填时长');
+  const names = plan.skipped.slice(0, 3).map(s => (s.exercise || '动作') + (s.index ? '第' + s.index + '组' : '') + s.reason);
+  const detail = plan.skipped.length && plan.skipped.length <= 3 ? names.join('，') : why.join('，');
+  if (!n && !plan.skipped.length) return '都已经完成了';
+  if (!n) return detail ? '没有可完成的组：' + detail : '没有可完成的组';
+  if (!plan.skipped.length) return '已勾选 ' + n + ' 组';
+  return '已勾选 ' + n + ' 组，还有 ' + detail;
+}
+function completeFilledSets(workoutId) {
+  const header = getHeader(workoutId);
+  if (!header) return C.fail('NOT_FOUND', '训练不存在');
+  if (isPending(workoutId)) return C.ok({ marked: [], skipped: [], already: [] });
+  const st = loadDetail(workoutId);
+  if (st.missing) return C.fail('DETAIL_MISSING', '训练详情丢失，只能查看');
+  if (st.blocked) return C.fail('DATA_CORRUPT', '记录已损坏，已暂停编辑');
+  const plan = classifyComplete(st.detail);
+  if (!plan.marked.length) return C.ok(plan);
+  const want = {};
+  plan.marked.forEach(id => { want[id] = true; });
+  return mutate(workoutId, detail => {
+    const now = C.now();
+    const sets = detail.sets.map(s => {
+      if (!s || !want[s.id] || s.done === true) return s;
+      const time = M.modeOf(findWE(detail, s.workoutExerciseId)) === 'time';
+      if (!canComplete(time ? 'time' : 'reps', s)) return s;
+      return Object.assign({}, s, { done: true, doneAt: now });
+    });
+    return { detail: Object.assign({}, detail, { sets }), data: plan };
+  });
+}
+function undoCompleteFilled(workoutId, ids) {
+  const want = {};
+  (ids || []).forEach(id => { if (id) want[id] = true; });
+  return mutate(workoutId, detail => {
+    const sets = detail.sets.map(s => {
+      if (!s || !want[s.id]) return s;
+      return Object.assign({}, s, { done: false, doneAt: null });
+    });
+    return { detail: Object.assign({}, detail, { sets }), data: Object.keys(want) };
   });
 }
 // Switch an exercise between reps and time. Values already entered are kept.
@@ -600,4 +749,4 @@ module.exports = { healHeaders, getPending, discardPending, daySummaries, person
   getDraft, getHeader, getWorkout, listWorkouts, workoutsOn, completedDates, referencedExerciseIds,
   createDraft, updateWorkout, completeWorkout, deleteWorkout, discardDraft, repeatFrom,
   addExercise, removeExercise, reorderExercises, moveExercise, updateExerciseNote, setExerciseMode,
-  addSet, updateSet, setSetDone, deleteSet, _headers: headers };
+  addSet, updateSet, setSetDone, completeFilledSets, undoCompleteFilled, completeAllNote, deleteSet, _headers: headers };

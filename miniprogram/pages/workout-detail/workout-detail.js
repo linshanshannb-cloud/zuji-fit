@@ -31,7 +31,7 @@ Page({
     this.setData({ missing: false, detailMissing: !!w.detailMissing, detailCorrupt: !!w.detailCorrupt,
       corruptCount: w.integrity && w.integrity.issues ? w.integrity.issues.length : 0, w: {
       name: w.name, date: F.dateLabel(w.date), note: w.note, status: w.status,
-      time: w.startedAt ? F.hm(w.startedAt) + ' 开始' + (w.completedAt ? ' · ' + Math.max(1, Math.round((w.completedAt - w.startedAt) / 60000)) + ' 分钟' : '') : '补录',
+      time: F.sessionLine(w.startedAt, w.completedAt),
       stats: F.strengthStats(w.exerciseCount, w.setCount, w.volumeKg, w.timeSec),
       exercises, md: F.md(w.date), setTotal: exercises.reduce((t, e) => t + e.sets.length, 0) } });
   },
