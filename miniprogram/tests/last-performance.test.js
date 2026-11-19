@@ -248,4 +248,104 @@ test('reopening the editor does not refill from history', () => {
   assert.ok(!fs.readFileSync(path.join(__dirname, '../utils/repo/templates.js'), 'utf8').includes('carry'));
   assert.strictEqual(be.data[K.workoutDetail(draft.id)].sets[0].done, false);
 });
+
+test('weight typed in the editor is stored and shown when the exercise is added again', () => {
+  const { repo, be } = fresh();
+  repo.init();
+  let pageDef = null;
+  let rowDef = null;
+  global.Page = d => { pageDef = d; };
+  global.Component = d => { rowDef = d; };
+  global.wx = {
+    showToast() {}, showModal(o) { if (o.success) o.success({ confirm: true }); },
+    vibrateShort() {}, navigateTo() {}, navigateBack() {}, redirectTo() {},
+    getWindowInfo: () => ({ windowWidth: 375 }),
+    getSystemInfoSync: () => ({ windowWidth: 375 }),
+    getMenuButtonBoundingClientRect: () => ({ left: 280, top: 24, height: 32 }),
+  };
+  function editor() {
+    const file = require.resolve('../pages/workout-edit/workout-edit.js');
+    delete require.cache[file];
+    require(file);
+    const inst = Object.assign({}, pageDef);
+    inst.data = JSON.parse(JSON.stringify(pageDef.data));
+    inst.setData = function (d) { Object.assign(this.data, d); };
+    inst.selectComponent = () => ({ show() {}, start() {} });
+    return inst;
+  }
+  function commitBlur(page, setId, weId, field, raw) {
+    const file = require.resolve('../components/set-row/set-row.js');
+    delete require.cache[file];
+    require(file);
+    const row = Object.assign({ data: JSON.parse(JSON.stringify(rowDef.data)) }, rowDef.methods);
+    let emitted = null;
+    row.setData = function (d) { Object.assign(this.data, d); };
+    row.triggerEvent = (name, detail) => { emitted = { name, detail }; };
+    row.data.set = page.data.cards.flatMap(c => c.sets).find(s => s.id === setId) || {};
+    row.onBlur({ currentTarget: { dataset: { f: field } }, detail: { value: raw } });
+    page.onSetChange({ currentTarget: { dataset: { s: setId, we: weId } }, detail: emitted.detail });
+  }
+  function digitValue(set) {
+    const file = require.resolve('../components/set-row/set-row.js');
+    delete require.cache[file];
+    require(file);
+    const inst = { data: JSON.parse(JSON.stringify(rowDef.data)) };
+    inst.setData = function (d) { Object.assign(this.data, d); };
+    rowDef.observers.set.call(inst, set);
+    assert.strictEqual(inst.data.weightReady, true);
+    return { w: inst.data.w, r: inst.data.r };
+  }
+  const first = repo.workouts.createDraft({ date: '2026-10-17' }).data;
+  const ed = editor();
+  ed.onLoad({ id: first.id });
+  ed.onPicked([BENCH], 'add');
+  let card = ed.data.cards[0];
+  ed.onToggleType({ currentTarget: { dataset: { s: card.sets[0].id, t: 'normal', we: card.id } } });
+  commitBlur(ed, ed.data.cards[0].sets[0].id, ed.data.cards[0].id, 'weightKg', '20');
+  commitBlur(ed, ed.data.cards[0].sets[0].id, ed.data.cards[0].id, 'reps', '10');
+  ed.onToggleDone({ currentTarget: { dataset: { s: ed.data.cards[0].sets[0].id, d: false, we: ed.data.cards[0].id } } });
+  const more = [['62.5', '8'], ['70', '5'], ['0', '12'], ['', '10']];
+  more.forEach(([kg, reps]) => {
+    card = ed.data.cards[0];
+    ed.addSet({ currentTarget: { dataset: { we: card.id } } });
+    const added = ed.data.cards[0].sets[ed.data.cards[0].sets.length - 1];
+    commitBlur(ed, added.id, ed.data.cards[0].id, 'weightKg', kg);
+    commitBlur(ed, added.id, ed.data.cards[0].id, 'reps', reps);
+    ed.onToggleDone({ currentTarget: { dataset: { s: added.id, d: false, we: ed.data.cards[0].id } } });
+  });
+  ed.complete();
+  const sourceId = first.id;
+  const raw = detail(be, sourceId);
+  delete raw.exercises[0].mode;
+  raw.sets.forEach(s => { delete s.durationSec; });
+  be.data[K.workoutDetail(sourceId)] = raw;
+  const before = detail(be, sourceId);
+  assert.deepStrictEqual(before.sets.map(s => [s.weightKg, s.reps, s.done]), [
+    [20, 10, true], [62.5, 8, true], [70, 5, true], [0, 12, true], [null, 10, true],
+  ]);
+  const again = repo.workouts.createDraft({ date: '2026-10-17' }).data;
+  const ed2 = editor();
+  ed2.onLoad({ id: again.id });
+  ed2.onPicked([BENCH], 'add');
+  const sets = ed2.data.cards[0].sets;
+  assert.deepStrictEqual(sets.map(s => [s.type, s.weightKg, s.reps, s.done, s.doneAt]), [
+    ['warmup', 20, 10, false, null],
+    ['normal', 62.5, 8, false, null],
+    ['normal', 70, 5, false, null],
+    ['normal', 0, 12, false, null],
+    ['normal', null, 10, false, null],
+  ]);
+  assert.deepStrictEqual(sets.map(s => digitValue(s)), [
+    { w: '20', r: '10' },
+    { w: '62.5', r: '8' },
+    { w: '70', r: '5' },
+    { w: '0', r: '12' },
+    { w: '', r: '10' },
+  ]);
+  assert.deepStrictEqual(detail(be, sourceId), before);
+  const wxml = fs.readFileSync(path.join(__dirname, '../components/set-row/set-row.wxml'), 'utf8');
+  const weightInput = wxml.split('data-f="weightKg"').find(part => part.includes('type="digit"'));
+  assert.ok(weightInput && weightInput.includes('wx:if="{{weightReady}}"'));
+  assert.ok(wxml.includes('type="number"'));
+});
 });
