@@ -20,7 +20,9 @@ function platform() {
 function strengthSource(w) {
   const full = repo.workouts.getWorkout(w.id);
   return {
-    kind: 'strength', name: w.displayName, minutes: w.durationMin, sets: w.setCount,
+    kind: 'strength',
+    givenName: w.name || '',
+    name: w.displayName, minutes: w.durationMin, sets: w.setCount,
     volumeKg: w.volumeKg, timeSec: w.timeSec, createdAt: w.createdAt || 0,
     detailMissing: !!(full && full.detailMissing),
     exercises: ((full && full.exercises) || []).map(e => ({
@@ -68,9 +70,15 @@ Page({
       const ctx = node.getContext('2d');
       const slices = this.model && this.model.slices && this.model.slices.length ? this.model.slices : [this.model];
       const srcs = [];
+      const add = s => { if (s && srcs.indexOf(s) < 0) srcs.push(s); };
       slices.forEach(slice => {
+        if (slice && slice.layout === 'detail') {
+          add(slice.heroSticker);
+          (slice.blocks || []).forEach(b => add(b.sticker));
+          return;
+        }
         const rows = ((slice.train && slice.train.rows) || []).concat((slice.diet && slice.diet.rows) || []);
-        rows.forEach(row => { if (row.sticker && srcs.indexOf(row.sticker) < 0) srcs.push(row.sticker); });
+        rows.forEach(row => add(row.sticker));
       });
       Promise.all(srcs.map(src => loadImage(node, src).then(img => [src, img]))).then(pairs => {
         if (gen !== this._gen) return;
@@ -89,8 +97,9 @@ Page({
     }
     const slice = slices[i];
     const limit = SD.exportLimit(this.source && this.source.platform);
-    const h = SD.cardHeight(slice);
-    const scale = h > limit ? limit / h : 1;
+    const h = slice.layout === 'detail' ? slice.height : SD.cardHeight(slice);
+    let scale = slice.exportScale || 1;
+    if (Math.max(W, h) * scale > limit) scale = limit / Math.max(W, h);
     const bw = Math.max(1, Math.floor(W * scale));
     const bh = Math.max(1, Math.floor(h * scale));
     node.width = bw;

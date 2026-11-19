@@ -7,7 +7,7 @@
   <view wx:if="{{busy}}" class="wait">正在生成手账…</view>
   <view wx:elif="{{fail}}" class="wait">{{fail}}</view>
   <block wx:else>
-    <view wx:if="{{paths.length>1}}" class="slice-note">这一天比较长，分成 {{paths.length}} 张。保存会全部写入相册，分享时只附上第一张。</view>
+    <view wx:if="{{paths.length>1}}" class="slice-note">共 {{paths.length}} 张。好友只能收到第 1 张，完整内容请保存图片。</view>
     <image wx:for="{{paths}}" wx:for-index="i" wx:key="i" class="preview" src="{{item}}" mode="widthFix" />
   </block>
   <view class="actions">
@@ -17,7 +17,7 @@
       <view wx:elif="{{saved}}" class="tick"></view>
       <text>{{saving ? '保存中…' : (saved ? '已保存' : '保存图片')}}</text>
     </view>
-    <button class="btn btn-pri" hover-class="is-press" hover-stay-time="80" open-type="share" disabled="{{!path}}">发给好友</button>
+    <button class="btn btn-pri" hover-class="is-press" hover-stay-time="80" open-type="share" disabled="{{!path}}">{{paths.length>1?'只发第1张':'发给好友'}}</button>
   </view>
 </view>
 <canvas type="2d" id="card" class="card-canvas"></canvas>
