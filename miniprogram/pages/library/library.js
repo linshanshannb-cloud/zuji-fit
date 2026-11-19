@@ -115,7 +115,7 @@ Page({
   },
   quickAdd(e) {
     if (!ui.canWrite()) return;
-    const r = repo.workouts.addToCurrentDraft(e.currentTarget.dataset.id);
+    const r = repo.workouts.addToCurrentDraft(e.currentTarget.dataset.id, { carry: true });
     if (!ui.handle(r)) return;
     if (r.data.created) return wx.navigateTo({ url: '/pages/workout-edit/workout-edit?id=' + r.data.workoutId });
     wx.showToast({ title: '已加入当前训练', icon: 'none' });

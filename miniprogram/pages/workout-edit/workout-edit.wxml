@@ -46,6 +46,7 @@
         <view class="dots" bindtap="more" data-id="{{ex.id}}">⋯</view>
       </view>
       </swipe-cell>
+      <text wx:if="{{ex.carriedFrom}}" class="cap carry-note">沿用上次 · {{ex.carriedFromLabel}}</text>
       <block wx:if="{{expanded===ex.id}}">
         <view wx:if="{{ex.note}}" class="sub ex-note">{{ex.note}}</view>
         <view class="mode-row">

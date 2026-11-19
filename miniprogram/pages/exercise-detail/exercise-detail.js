@@ -302,7 +302,7 @@ Page({
   },
   addToWorkout() {
     if (!ui.canWrite()) return;
-    const r = repo.workouts.addToCurrentDraft(this.data.ex.id);
+    const r = repo.workouts.addToCurrentDraft(this.data.ex.id, { carry: true });
     if (!ui.handle(r)) return;
     if (r.data.created) return wx.navigateTo({ url: '/pages/workout-edit/workout-edit?id=' + r.data.workoutId });
     this._lastWid = r.data.workoutId;

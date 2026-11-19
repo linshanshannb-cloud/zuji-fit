@@ -27,6 +27,13 @@ function summaryOf(cards) {
   const s = M.summaryFromCards(cards);
   return F.strengthSummary(s.exerciseCount, s.setCount, s.volumeKg, s.timeSec);
 }
+function carryLabel(date) {
+  if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return '';
+  const d = D.parse(date);
+  if (!d || isNaN(d.getTime())) return '';
+  const year = date.slice(0, 4) === D.today().slice(0, 4) ? '' : d.getFullYear() + '年';
+  return year + (d.getMonth() + 1) + '月' + d.getDate() + '日';
+}
 Page({
   data: { id: '', w: null, cards: [], expanded: '', sorting: false, saveState: 'saved', canRetry: false, info: false, form: {}, today: '', shakeSet: '', narrow: false, readOnly: false, detailMissing: false, detailCorrupt: false, completeNote: '' },
   onLoad(o) { this.setData({ id: o.id || '', today: D.today(), narrow: navNarrow(), readOnly: repo.isReadOnly() }); this.reload(); },
@@ -43,6 +50,8 @@ Page({
       part: e.exercise && !e.exercise.unknown ? repo.exercises.zhOf('bodyPart', e.exercise.bodyPart) : '',
       bodyweight: !!(e.exercise && e.exercise.equipment === 'body_weight'),
       mode: e.mode === 'time' ? 'time' : 'reps',
+      carriedFrom: typeof e.carriedFrom === 'string' ? e.carriedFrom : '',
+      carriedFromLabel: carryLabel(e.carriedFrom),
       restLabel: repo.rest.getFor(e.exerciseId) + 's' + (repo.rest.getOverride(e.exerciseId) ? '' : '（默认）'),
       sets: e.sets.map(s => Object.assign({}, s)),
     }));
@@ -150,7 +159,7 @@ Page({
     if (same || !scored) return go();
     wx.showModal({
       title: '替换这个动作？',
-      content: '已录入的重量、次数、时长和完成状态不会带到新动作。',
+      content: '已录入的成绩不会带到新动作。新动作有上次记录时，会填上那次的组，完成勾选是空的。',
       cancelText: '取消', confirmText: '替换',
       success: m => { if (m.confirm) go(); },
     });
@@ -160,7 +169,7 @@ Page({
     if (mode === 'replace') return this.confirmReplace(weId, ids[0]);
     if (!this.pageWritable()) return;
     const id = this.data.id;
-    const op = { key: 'addEx:' + ids.join(',') + ':' + Date.now(), exec: () => repo.workouts.addExercises(id, ids), apply() {} };
+    const op = { key: 'addEx:' + ids.join(',') + ':' + Date.now(), exec: () => repo.workouts.addExercises(id, ids, { carry: true }), apply() {} };
     const r = op.exec();
     if (r.ok) this.setData({ expanded: r.data[r.data.length - 1].id });
     this.run(r, { op });
