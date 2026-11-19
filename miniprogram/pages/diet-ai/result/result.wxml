@@ -17,17 +17,51 @@
       </view>
       <view class="portion-row">
         <view class="step" data-id="{{item.id}}" data-d="-1" catchtap="stepItem">−</view>
-        <input class="portion-in" maxlength="20" value="{{item.portion}}" data-id="{{item.id}}" data-k="portion" bindinput="onItem"/>
+        <text class="portion-tx">{{item.portionText}}</text>
         <view class="step" data-id="{{item.id}}" data-d="1" catchtap="stepItem">+</view>
+      </view>
+      <view class="portion-status">{{item.portionStatus}}</view>
+      <view class="pchips">
+        <view wx:for="{{item.chips}}" wx:for-item="chip" wx:key="id" class="pchip {{chip.on ? 'on' : ''}}" data-id="{{item.id}}" data-chip="{{chip.id}}" catchtap="onChip">{{chip.label}}</view>
+      </view>
+      <view wx:if="{{item.clarify}}" class="clarify">
+        <text>份量还没说清，点上面就能改。</text>
+        <text class="clarify-skip" data-id="{{item.id}}" data-chip="skip" catchtap="onChip">先按估计记</text>
+      </view>
+      <view wx:if="{{item.qtyOpen==='qty'}}" class="qty-box">
+        <input class="qty-in num" type="digit" value="{{item.qtyValue}}" data-id="{{item.id}}" placeholder="数量" bindinput="onQty" bindkeyboardheightchange="onKeyboard"/>
+        <view class="pchips">
+          <view wx:for="{{item.units}}" wx:for-item="unitChip" wx:key="id" class="pchip {{unitChip.on ? 'on' : ''}}" data-id="{{item.id}}" data-chip="{{unitChip.id}}" catchtap="onChip">{{unitChip.label}}</view>
+        </view>
+      </view>
+      <view wx:if="{{item.qtyOpen==='net'}}" class="qty-box">
+        <input class="qty-in num" type="digit" value="{{item.amountValue}}" data-id="{{item.id}}" placeholder="净含量 g" bindinput="onAmount" bindkeyboardheightchange="onKeyboard"/>
+        <text class="unit">g</text>
       </view>
       <view class="food-kcal">
         <input class="food-kcal-n num" type="digit" value="{{item.kcal}}" data-id="{{item.id}}" data-k="kcal" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/>
         <text class="kcal-u">kcal</text>
       </view>
+      <view wx:if="{{item.energyNote}}" class="energy">{{item.energyNote}}</view>
       <view class="food-macros">
         <view class="macro"><text class="lab">碳水</text><input class="macro-in num" type="digit" value="{{item.carbsG}}" data-id="{{item.id}}" data-k="carbsG" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
         <view class="macro"><text class="lab">蛋白质</text><input class="macro-in num" type="digit" value="{{item.proteinG}}" data-id="{{item.id}}" data-k="proteinG" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
         <view class="macro"><text class="lab">脂肪</text><input class="macro-in num" type="digit" value="{{item.fatG}}" data-id="{{item.id}}" data-k="fatG" bindinput="onItem" bindkeyboardheightchange="onKeyboard"/><text class="unit">g</text></view>
+      </view>
+      <view class="more" data-id="{{item.id}}" data-chip="label" catchtap="onChip">{{item.labelOpen ? '收起包装营养' : '包装上有营养表'}}</view>
+      <view wx:if="{{item.labelOpen}}" class="more-box">
+        <view class="pchips">
+          <view class="pchip {{label.mode==='pack' ? 'on' : ''}}" data-m="pack" catchtap="onLabelMode">{{item.labelPack}}</view>
+          <view class="pchip {{label.mode==='100g' ? 'on' : ''}}" data-m="100g" catchtap="onLabelMode">每100g</view>
+        </view>
+        <view class="food-macros">
+          <view class="macro"><text class="lab">热量</text><input class="macro-in num" type="digit" data-k="kcal" value="{{label.kcal}}" bindinput="onLabelNum"/></view>
+          <view class="macro"><text class="lab">碳水</text><input class="macro-in num" type="digit" data-k="carbsG" value="{{label.carbsG}}" bindinput="onLabelNum"/></view>
+          <view class="macro"><text class="lab">蛋白质</text><input class="macro-in num" type="digit" data-k="proteinG" value="{{label.proteinG}}" bindinput="onLabelNum"/></view>
+          <view class="macro"><text class="lab">脂肪</text><input class="macro-in num" type="digit" data-k="fatG" value="{{label.fatG}}" bindinput="onLabelNum"/></view>
+        </view>
+        <view wx:if="{{labelError}}" class="energy">{{labelError}}</view>
+        <view class="more" data-id="{{item.id}}" catchtap="applyLabel">按这个算</view>
       </view>
       <view class="more" data-id="{{item.id}}" bindtap="toggleItem">{{item.open ? '收起' : '纤维、糖、盐、备注'}}</view>
       <view wx:if="{{item.open}}" class="more-box">
@@ -49,8 +83,26 @@
     </view>
     <view class="portion-row">
       <view class="step" data-d="-1" bindtap="stepPortion">−</view>
-      <input class="portion-in" maxlength="20" value="{{portion}}" bindinput="onPortion"/>
+      <text class="portion-tx">{{portionText}}</text>
       <view class="step" data-d="1" bindtap="stepPortion">+</view>
+    </view>
+    <view class="portion-status">{{portionStatus}}</view>
+    <view class="pchips">
+      <view wx:for="{{chips}}" wx:key="id" class="pchip {{item.on ? 'on' : ''}}" data-chip="{{item.id}}" bindtap="onChip">{{item.label}}</view>
+    </view>
+    <view wx:if="{{clarify}}" class="clarify">
+      <text>份量还没说清，点上面就能改。</text>
+      <text class="clarify-skip" data-chip="skip" bindtap="onChip">先按估计记</text>
+    </view>
+    <view wx:if="{{qtyOpen==='qty'}}" class="qty-box">
+      <input class="qty-in num" type="digit" value="{{qtyValue}}" placeholder="数量" bindinput="onQty" bindkeyboardheightchange="onKeyboard"/>
+      <view class="pchips">
+        <view wx:for="{{units}}" wx:key="id" class="pchip {{item.on ? 'on' : ''}}" data-chip="{{item.id}}" bindtap="onChip">{{item.label}}</view>
+      </view>
+    </view>
+    <view wx:if="{{qtyOpen==='net'}}" class="qty-box">
+      <input class="qty-in num" type="digit" value="{{amountValue}}" placeholder="净含量 g" bindinput="onAmount" bindkeyboardheightchange="onKeyboard"/>
+      <text class="unit">g</text>
     </view>
     <view class="when">
       <text class="when-bit" bindtap="cycleMeal">{{mealLabel}}</text>
@@ -69,6 +121,7 @@
     <input class="kcal-n num" type="digit" data-k="kcal" value="{{kcal}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/>
     <text class="kcal-u">kcal</text>
   </view>
+  <view wx:if="{{energyNote}}" class="energy center">{{energyNote}}</view>
 
   <view class="grid">
     <view class="cell">
@@ -95,6 +148,22 @@
       <text class="lab">盐</text>
       <view class="val-line"><input class="val num" type="digit" data-k="saltMg" value="{{saltShown}}" bindinput="onNum" bindkeyboardheightchange="onKeyboard"/><text class="unit">mg</text></view>
     </view>
+  </view>
+
+  <view class="more alone" data-chip="label" bindtap="onChip">{{labelOpen ? '收起包装营养' : '包装上有营养表'}}</view>
+  <view wx:if="{{labelOpen}}" class="tips">
+    <view class="pchips">
+      <view class="pchip {{label.mode==='pack' ? 'on' : ''}}" data-m="pack" bindtap="onLabelMode">{{labelPack}}</view>
+      <view class="pchip {{label.mode==='100g' ? 'on' : ''}}" data-m="100g" bindtap="onLabelMode">每100g</view>
+    </view>
+    <view class="grid">
+      <view class="cell"><text class="lab">热量</text><input class="val num" type="digit" data-k="kcal" value="{{label.kcal}}" bindinput="onLabelNum"/></view>
+      <view class="cell"><text class="lab">碳水</text><input class="val num" type="digit" data-k="carbsG" value="{{label.carbsG}}" bindinput="onLabelNum"/></view>
+      <view class="cell"><text class="lab">蛋白质</text><input class="val num" type="digit" data-k="proteinG" value="{{label.proteinG}}" bindinput="onLabelNum"/></view>
+      <view class="cell"><text class="lab">脂肪</text><input class="val num" type="digit" data-k="fatG" value="{{label.fatG}}" bindinput="onLabelNum"/></view>
+    </view>
+    <view wx:if="{{labelError}}" class="energy">{{labelError}}</view>
+    <view class="more" bindtap="applyLabel">按这个算</view>
   </view>
 
   <view wx:if="{{tips || editing}}" class="tips">

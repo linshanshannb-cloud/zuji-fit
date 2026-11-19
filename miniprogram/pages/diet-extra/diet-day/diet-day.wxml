@@ -14,7 +14,7 @@
         <text class="go">›</text>
       </view>
     </view>
-    <view class="meta">{{item.mealLabel}}<text wx:if="{{item.eatenAt}}"> · {{item.eatenAt}}</text><text wx:if="{{item.portion}}"> · {{item.portion}}</text><text wx:if="{{item.source==='ai-text'}}"> · 估算</text></view>
+    <view class="meta">{{item.mealLabel}}<text wx:if="{{item.eatenAt}}"> · {{item.eatenAt}}</text><text wx:if="{{item.portionText}}"> · {{item.portionText}}</text><text wx:if="{{item.portionNote}}"> · {{item.portionNote}}</text></view>
     <view class="meta">{{item.macro}}</view>
     <view wx:if="{{item.extra}}" class="meta">{{item.extra}}</view>
     <view wx:if="{{item.note}}" class="note">{{item.note}}</view>

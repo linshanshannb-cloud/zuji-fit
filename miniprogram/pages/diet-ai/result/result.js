@@ -4,73 +4,37 @@ const repo = require('../../../utils/repo/index');
 const ui = require('../../../utils/ui');
 const P = require('../../../utils/diet-present');
 const Ai = require('../../../utils/diet-ai');
+const Portion = require('../../../utils/diet-portion');
 const session = require('../session');
 
-const NUM_KEYS = ['kcal', 'carbsG', 'proteinG', 'fatG', 'fiberG', 'sugarG', 'saltMg'];
-const INT_KEYS = { kcal: true, saltMg: true };
-
-function num(v) {
-  if (v == null || v === '') return null;
-  const n = Number(String(v).replace(/,/g, ''));
-  return isFinite(n) ? n : null;
-}
 function comma(v) {
   const s = String(v == null ? '' : v).replace(/,/g, '');
   if (!/^\d+$/.test(s)) return s;
   return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-function scaled(base, key, servings) {
-  if (base[key] == null) return '';
-  const v = base[key] * servings;
-  return INT_KEYS[key] ? String(Math.round(v)) : String(Math.round(v * 10) / 10);
 }
 function whenText(date, time) {
   const today = D.today();
   const day = date === today ? '今天' : ((D.parse(date).getMonth() + 1) + '月' + D.parse(date).getDate() + '日');
   return day + ' ' + (time || '');
 }
-
-function rowFrom(d, i) {
-  const salt = d.saltMg == null || d.saltMg === '' ? '' : String(d.saltMg);
-  const field = (key, empty) => (d[key] == null || d[key] === '' ? (empty ? '' : '') : String(d[key]));
-  return {
-    id: 'f' + i,
-    name: d.name || '',
-    portion: d.portion || '1份',
-    note: d.note || '',
-    tips: d.tips || '',
-    servings: 1,
-    open: false,
-    kcal: field('kcal'),
-    carbsG: field('carbsG'),
-    proteinG: field('proteinG'),
-    fatG: field('fatG'),
-    fiberG: d.fiberG == null || d.fiberG === '' ? '' : String(d.fiberG),
-    sugarG: d.sugarG == null || d.sugarG === '' ? '' : String(d.sugarG),
-    saltMg: salt,
-    saltShown: comma(salt),
-    base: {
-      kcal: num(d.kcal),
-      carbsG: num(d.carbsG),
-      proteinG: num(d.proteinG),
-      fatG: num(d.fatG),
-      fiberG: d.fiberG == null || d.fiberG === '' ? null : num(d.fiberG),
-      sugarG: d.sugarG == null || d.sugarG === '' ? null : num(d.sugarG),
-      saltMg: d.saltMg == null || d.saltMg === '' ? null : num(d.saltMg),
-    },
-  };
+function decorate(state) {
+  const view = Portion.view(state);
+  view.id = state.id;
+  view.name = state.name;
+  view.note = state.note || '';
+  view.tips = state.tips || '';
+  view.open = !!state.open;
+  view.saltShown = comma(view.saltMg);
+  return view;
 }
-function viewRow(row) {
-  return {
-    id: row.id, name: row.name, portion: row.portion, note: row.note, open: !!row.open,
-    kcal: row.kcal, carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
-    fiberG: row.fiberG, sugarG: row.sugarG, saltMg: row.saltMg, saltShown: row.saltShown,
-  };
-}
+const EMPTY_LABEL = { mode: 'pack', kcal: '', carbsG: '', proteinG: '', fatG: '' };
 
 Page({
   data: {
-    name: '', portion: '1份', note: '', tips: '',
+    name: '', note: '', tips: '', portionText: '一份', portionStatus: '', energyNote: '',
+    chips: [], units: [], qtyOpen: '', qtyValue: '', amountValue: '', amountUnit: 'g',
+    clarify: false, labelOpen: false, labelPack: '', labelError: '',
+    label: EMPTY_LABEL,
     kcal: '', carbsG: '', proteinG: '', fatG: '', fiberG: '', sugarG: '', saltMg: '', saltShown: '',
     mealLabel: '', whenText: '', time: '',
     editName: false, editing: false, saving: false, keyboardHeight: 0, dockStyle: '',
@@ -86,75 +50,156 @@ Page({
     }
     this.date = s.date;
     this.meal = s.meal || 'snack';
-    this.rows = list.map(rowFrom);
-    const shared = {
+    this.rows = list.map((row, i) => {
+      const state = Portion.fromAssessed(row);
+      state.id = 'f' + i;
+      state.open = false;
+      return state;
+    });
+    this.shared = {
       time: s.time || '',
       mealLabel: P.mealLabel(this.meal),
       whenText: whenText(s.date, s.time),
     };
     if (this.rows.length > 1) {
-      this.servings = 1;
-      this.base = {};
-      this.setData(Object.assign({ multi: true }, shared, this.itemPatch()));
+      this.state = null;
+      this.syncMulti();
       return;
     }
-    this.adopt(this.rows[0], shared);
+    this.state = this.rows[0];
+    this.syncSingle();
   },
-  itemPatch() {
-    const items = (this.rows || []).map(viewRow);
-    const total = items.reduce((t, row) => t + (num(row.kcal) || 0), 0);
-    return { items, totalKcal: Math.round(total) };
-  },
-  adopt(row, shared) {
-    this.servings = row.servings || 1;
-    this.base = Object.assign({}, row.base);
-    const salt = row.saltMg || '';
+  syncSingle() {
+    const view = decorate(this.state);
     this.setData(Object.assign({
-      multi: false, items: [], totalKcal: Math.round(num(row.kcal) || 0),
-      name: row.name, portion: row.portion, note: row.note, tips: row.tips,
-      kcal: row.kcal, carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
-      fiberG: row.fiberG, sugarG: row.sugarG, saltMg: salt, saltShown: comma(salt),
-    }, shared || {}));
+      multi: false, items: [], totalKcal: Math.round(Number(view.kcal) || 0),
+    }, this.shared, view));
+  },
+  syncMulti() {
+    const items = (this.rows || []).map(decorate);
+    const total = items.reduce((t, row) => t + (Number(row.kcal) || 0), 0);
+    this.setData(Object.assign({ multi: true, items, totalKcal: Math.round(total) }, this.shared));
+  },
+  applyTo(id, next) {
+    if (!next || next.error) {
+      wx.showToast({ title: (next && next.error) || '这个份量不行', icon: 'none' });
+      return;
+    }
+    if (id) {
+      const i = (this.rows || []).findIndex(r => r.id === id);
+      if (i < 0) return;
+      next.state.id = id;
+      next.state.open = this.rows[i].open;
+      next.state.name = this.rows[i].name;
+      next.state.note = this.rows[i].note;
+      next.state.tips = this.rows[i].tips;
+      this.rows[i] = next.state;
+      if (next.state.labelOpen) this.rows.forEach(r => { if (r.id !== id) r.labelOpen = false; });
+      this.syncMulti();
+      return;
+    }
+    next.state.name = this.state.name;
+    next.state.note = this.state.note;
+    next.state.tips = this.state.tips;
+    this.state = next.state;
+    this.syncSingle();
+  },
+  stateOf(id) {
+    if (!id) return this.state;
+    return (this.rows || []).find(r => r.id === id) || null;
   },
   toggleEdit() { this.setData({ editing: !this.data.editing, editName: !this.data.editing }); },
   editName() { this.setData({ editName: true }); },
   editNote() { this.setData({ editing: true }); },
-  onName(e) { this.setData({ name: e.detail.value }); },
-  onPortion(e) { this.setData({ portion: e.detail.value }); },
-  onNote(e) { this.setData({ note: e.detail.value }); },
-  onTips(e) { this.setData({ tips: e.detail.value }); },
+  onName(e) {
+    this.state.name = e.detail.value;
+    this.setData({ name: e.detail.value });
+  },
+  onNote(e) {
+    this.state.note = e.detail.value;
+    this.setData({ note: e.detail.value });
+  },
+  onTips(e) {
+    this.state.tips = e.detail.value;
+    this.setData({ tips: e.detail.value });
+  },
   onNum(e) {
     const k = e.currentTarget.dataset.k;
     const raw = String(e.detail.value || '').replace(/,/g, '');
-    const patch = k === 'saltMg' ? { saltMg: raw, saltShown: comma(raw) } : { [k]: raw };
-    this.setData(patch);
-    const n = num(raw);
-    if (n != null && this.servings) this.base[k] = n / this.servings;
-    else if (raw === '') this.base[k] = null;
+    const next = Portion.editNutrient(this.state, k, raw);
+    if (!next.state) {
+      const patch = k === 'saltMg' ? { saltMg: raw, saltShown: comma(raw) } : { [k]: raw };
+      this.setData(patch);
+      if (next.error && next.error.indexOf('请填写') !== 0) wx.showToast({ title: next.error, icon: 'none' });
+      return;
+    }
+    this.applyTo(null, next);
+  },
+  onChip(e) {
+    const id = e.currentTarget.dataset.id || '';
+    const state = this.stateOf(id);
+    if (!state) return;
+    const chip = e.currentTarget.dataset.chip;
+    if (chip === 'label') this.setData({ label: Object.assign({}, EMPTY_LABEL), labelError: '' });
+    this.applyTo(id, Portion.applyChip(state, chip));
   },
   stepPortion(e) {
-    const d = Number(e.currentTarget.dataset.d);
-    const next = Math.max(1, (this.servings || 1) + d);
-    if (next === this.servings) return;
-    this.servings = next;
-    const patch = { portion: next + '份' };
-    NUM_KEYS.forEach(k => {
-      patch[k] = scaled(this.base, k, next);
-      if (k === 'saltMg') patch.saltShown = comma(patch.saltMg);
-    });
-    this.setData(patch);
+    const dir = Number(e.currentTarget.dataset.d) > 0 ? '1' : '-1';
+    this.applyTo(null, Portion.applyChip(this.state, 'step:' + dir));
+  },
+  onQty(e) {
+    const id = e.currentTarget.dataset.id || '';
+    const state = this.stateOf(id);
+    if (!state) return;
+    const next = Portion.setQtyRaw(state, e.detail.value);
+    if (!next.state) {
+      if (id) {
+        const items = this.data.items.map(item => item.id === id ? Object.assign({}, item, { qtyValue: e.detail.value }) : item);
+        this.setData({ items });
+      } else this.setData({ qtyValue: e.detail.value });
+      if (next.error && String(e.detail.value || '').trim()) wx.showToast({ title: next.error, icon: 'none' });
+      return;
+    }
+    this.applyTo(id, next);
+  },
+  onAmount(e) {
+    const id = e.currentTarget.dataset.id || '';
+    const state = this.stateOf(id);
+    if (!state) return;
+    const next = Portion.setAmountRaw(state, e.detail.value);
+    if (!next.state) {
+      this.setData(id ? {} : { amountValue: e.detail.value });
+      if (next.error && String(e.detail.value || '').trim()) wx.showToast({ title: next.error, icon: 'none' });
+      return;
+    }
+    this.applyTo(id, next);
+  },
+  onLabelMode(e) { this.setData({ 'label.mode': e.currentTarget.dataset.m === '100g' ? '100g' : 'pack', labelError: '' }); },
+  onLabelNum(e) { this.setData({ ['label.' + e.currentTarget.dataset.k]: e.detail.value, labelError: '' }); },
+  applyLabel(e) {
+    const id = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.id) || '';
+    const state = this.stateOf(id);
+    if (!state) return;
+    const next = Portion.applyLabel(state, this.data.label);
+    if (!next.state) { this.setData({ labelError: next.error || '包装营养还不行' }); return; }
+    this.setData({ labelError: '', label: Object.assign({}, EMPTY_LABEL) });
+    this.applyTo(id, next);
   },
   cycleMeal() {
     const order = ['breakfast', 'lunch', 'dinner', 'snack'];
     const i = order.indexOf(this.meal);
     this.meal = order[(i + 1) % order.length];
     this._mealLocked = true;
-    this.setData({ mealLabel: P.mealLabel(this.meal) });
+    this.shared.mealLabel = P.mealLabel(this.meal);
+    this.setData({ mealLabel: this.shared.mealLabel });
   },
   onTime(e) {
     const time = e.detail.value;
     if (!this._mealLocked) this.meal = P.inferMeal(new Date(2000, 0, 1, Number(time.slice(0, 2)), Number(time.slice(3)), 0));
-    this.setData({ time, mealLabel: P.mealLabel(this.meal), whenText: whenText(this.date, time) });
+    this.shared.time = time;
+    this.shared.mealLabel = P.mealLabel(this.meal);
+    this.shared.whenText = whenText(this.date, time);
+    this.setData({ time, mealLabel: this.shared.mealLabel, whenText: this.shared.whenText });
   },
   onKeyboard(e) {
     const h = (e.detail && e.detail.height) || 0;
@@ -165,48 +210,54 @@ Page({
     if (!row) return;
     const k = e.currentTarget.dataset.k;
     const value = e.detail.value;
-    if (k === 'name' || k === 'portion' || k === 'note') row[k] = value;
-    else {
-      const raw = String(value || '').replace(/,/g, '');
-      row[k] = raw;
-      if (k === 'saltMg') row.saltShown = comma(raw);
-      const n = num(raw);
-      if (n != null && row.servings) row.base[k] = n / row.servings;
-      else if (raw === '') row.base[k] = null;
+    if (k === 'name' || k === 'note') {
+      row[k] = value;
+      this.syncMulti();
+      return;
     }
-    this.setData(this.itemPatch());
+    const raw = String(value || '').replace(/,/g, '');
+    const next = Portion.editNutrient(row, k, raw);
+    if (!next.state) {
+      const items = this.data.items.map(item => {
+        if (item.id !== row.id) return item;
+        const copy = Object.assign({}, item);
+        copy[k] = raw;
+        if (k === 'saltMg') copy.saltShown = comma(raw);
+        return copy;
+      });
+      this.setData({ items });
+      if (next.error && next.error.indexOf('请填写') !== 0) wx.showToast({ title: next.error, icon: 'none' });
+      return;
+    }
+    this.applyTo(row.id, next);
   },
   stepItem(e) {
-    const row = (this.rows || []).find(r => r.id === e.currentTarget.dataset.id);
+    const id = e.currentTarget.dataset.id;
+    const row = this.stateOf(id);
     if (!row) return;
-    const next = Math.max(1, (row.servings || 1) + Number(e.currentTarget.dataset.d));
-    if (next === row.servings) return;
-    row.servings = next;
-    row.portion = next + '份';
-    NUM_KEYS.forEach(k => {
-      row[k] = scaled(row.base, k, next);
-      if (k === 'saltMg') row.saltShown = comma(row.saltMg);
-    });
-    this.setData(this.itemPatch());
+    const dir = Number(e.currentTarget.dataset.d) > 0 ? '1' : '-1';
+    this.applyTo(id, Portion.applyChip(row, 'step:' + dir));
   },
   toggleItem(e) {
     const row = (this.rows || []).find(r => r.id === e.currentTarget.dataset.id);
     if (!row) return;
     row.open = !row.open;
-    this.setData(this.itemPatch());
+    this.syncMulti();
   },
   removeItem(e) {
     const id = e.currentTarget.dataset.id;
     this.rows = (this.rows || []).filter(r => r.id !== id);
     if (!this.rows.length) {
+      this.state = null;
       this.setData({ multi: true, items: [], totalKcal: 0 });
       return;
     }
     if (this.rows.length === 1) {
-      this.adopt(this.rows[0]);
+      this.state = this.rows[0];
+      this.syncSingle();
       return;
     }
-    this.setData(this.itemPatch());
+    this.syncMulti();
   },
   cancel() {
     session.clear();
@@ -215,23 +266,14 @@ Page({
   confirm() {
     if (this._busy || this.data.saving) return;
     if (!ui.canWrite()) return;
-    const inputs = this.data.multi
-      ? (this.rows || []).map(row => ({
-        name: row.name, portion: row.portion, note: row.note, tips: row.tips, eatenAt: this.data.time,
-        kcal: row.kcal, carbsG: row.carbsG, proteinG: row.proteinG, fatG: row.fatG,
-        fiberG: row.fiberG, sugarG: row.sugarG, saltMg: row.saltMg,
-      }))
-      : [{
-        name: this.data.name, portion: this.data.portion, note: this.data.note, tips: this.data.tips, eatenAt: this.data.time,
-        kcal: this.data.kcal, carbsG: this.data.carbsG, proteinG: this.data.proteinG, fatG: this.data.fatG,
-        fiberG: this.data.fiberG, sugarG: this.data.sugarG, saltMg: this.data.saltMg,
-      }];
-    if (!inputs.length) { wx.showToast({ title: '至少留一条食物', icon: 'none' }); return; }
+    const states = this.data.multi ? (this.rows || []) : (this.state ? [this.state] : []);
+    if (!states.length) { wx.showToast({ title: '至少留一条食物', icon: 'none' }); return; }
     const ready = [];
-    for (let i = 0; i < inputs.length; i++) {
-      const checked = Ai.acceptEntry(inputs[i]);
+    for (let i = 0; i < states.length; i++) {
+      const input = Portion.toInput(states[i], { eatenAt: this.data.time || this.shared.time });
+      const checked = Ai.acceptEntry(input);
       if (!checked.ok) {
-        const who = inputs.length > 1 ? ((inputs[i].name || '这一条') + '：') : '';
+        const who = states.length > 1 ? ((input.name || '这一条') + '：') : '';
         wx.showToast({ title: who + checked.message, icon: 'none' });
         return;
       }

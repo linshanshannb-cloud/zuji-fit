@@ -17,6 +17,7 @@
           <text class="kcal num">{{item.kcalText}}</text>
         </view>
         <view wx:if="{{item.portionText}}" class="portion">{{item.portionText}}</view>
+        <view wx:if="{{item.portionNote}}" class="portion note">{{item.portionNote}}</view>
         <view class="macros">{{item.macroText}}</view>
       </view>
     </view>
@@ -25,7 +26,38 @@
       <text class="act danger" data-id="{{item.id}}" bindtap="removeEntry">删除</text>
     </view>
     <block wx:if="{{editing===item.id}}">
-      <view wx:if="{{edit.kind==='food'}}" class="field hairline-b"><text class="field-label lab">{{edit.basis==='perServing'?'份数':'重量'}}</text><input class="field-input num" type="digit" data-k="qty" value="{{edit.qty}}" bindinput="onEdit"/><text class="field-unit">{{edit.basis==='perServing'?'份':'g'}}</text></view>
+      <block wx:if="{{edit.kind==='ai'}}">
+        <view class="portion">{{edit.portionText}}</view>
+        <view class="portion note">{{edit.portionStatus}}</view>
+        <view class="pchips">
+          <view wx:for="{{edit.chips}}" wx:for-item="chip" wx:key="id" class="pchip {{chip.on ? 'on' : ''}}" data-chip="{{chip.id}}" catchtap="onAiChip">{{chip.label}}</view>
+        </view>
+        <view wx:if="{{edit.clarify}}" class="portion note">份量还没说清，点上面就能改。也可以先按估计保存。<text class="link" data-chip="skip" catchtap="onAiChip"> 先按估计记</text></view>
+        <view wx:if="{{edit.qtyOpen==='qty'}}" class="field hairline-b"><text class="field-label lab">数量</text><input class="field-input num" type="digit" value="{{edit.qtyValue}}" bindinput="onAiQty"/></view>
+        <view wx:if="{{edit.qtyOpen==='qty'}}" class="pchips">
+          <view wx:for="{{edit.units}}" wx:for-item="unitChip" wx:key="id" class="pchip {{unitChip.on ? 'on' : ''}}" data-chip="{{unitChip.id}}" catchtap="onAiChip">{{unitChip.label}}</view>
+        </view>
+        <view wx:if="{{edit.qtyOpen==='net'}}" class="field hairline-b"><text class="field-label lab">净含量</text><input class="field-input num" type="digit" value="{{edit.amountValue}}" bindinput="onAiAmount"/><text class="field-unit">g</text></view>
+        <view class="field hairline-b"><text class="field-label lab">热量</text><input class="field-input num" type="digit" data-k="kcal" value="{{edit.kcal}}" bindinput="onAiNum"/><text class="field-unit">kcal</text></view>
+        <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{edit.carbsG}}" bindinput="onAiNum"/><text class="field-unit">g</text></view>
+        <view class="field hairline-b"><text class="field-label lab">蛋白质</text><input class="field-input num" type="digit" data-k="proteinG" value="{{edit.proteinG}}" bindinput="onAiNum"/><text class="field-unit">g</text></view>
+        <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{edit.fatG}}" bindinput="onAiNum"/><text class="field-unit">g</text></view>
+        <view wx:if="{{edit.energyNote}}" class="portion note">{{edit.energyNote}}</view>
+        <view class="portion note link" data-chip="label" catchtap="onAiChip">{{edit.labelOpen ? '收起包装营养' : '包装上有营养表'}}</view>
+        <block wx:if="{{edit.labelOpen}}">
+          <view class="pchips">
+            <view class="pchip {{label.mode==='pack' ? 'on' : ''}}" data-m="pack" catchtap="onLabelMode">{{edit.labelPack}}</view>
+            <view class="pchip {{label.mode==='100g' ? 'on' : ''}}" data-m="100g" catchtap="onLabelMode">每100g</view>
+          </view>
+          <view class="field hairline-b"><text class="field-label lab">热量</text><input class="field-input num" type="digit" data-k="kcal" value="{{label.kcal}}" bindinput="onLabelNum"/></view>
+          <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{label.carbsG}}" bindinput="onLabelNum"/></view>
+          <view class="field hairline-b"><text class="field-label lab">蛋白质</text><input class="field-input num" type="digit" data-k="proteinG" value="{{label.proteinG}}" bindinput="onLabelNum"/></view>
+          <view class="field hairline-b"><text class="field-label lab">脂肪</text><input class="field-input num" type="digit" data-k="fatG" value="{{label.fatG}}" bindinput="onLabelNum"/></view>
+          <view wx:if="{{labelError}}" class="portion note">{{labelError}}</view>
+          <view class="portion note link" catchtap="applyAiLabel">按这个算</view>
+        </block>
+      </block>
+      <view wx:elif="{{edit.kind==='food'}}" class="field hairline-b"><text class="field-label lab">{{edit.basis==='perServing'?'份数':'重量'}}</text><input class="field-input num" type="digit" data-k="qty" value="{{edit.qty}}" bindinput="onEdit"/><text class="field-unit">{{edit.basis==='perServing'?'份':'g'}}</text></view>
       <block wx:else>
         <view class="field hairline-b"><text class="field-label lab">名称</text><input class="field-input" data-k="name" value="{{edit.name}}" placeholder="可选" bindinput="onEdit"/></view>
         <view class="field hairline-b"><text class="field-label lab">碳水</text><input class="field-input num" type="digit" data-k="carbsG" value="{{edit.carbsG}}" bindinput="onEdit"/><text class="field-unit">g</text></view>
