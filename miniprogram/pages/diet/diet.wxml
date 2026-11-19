@@ -55,7 +55,10 @@
         <view class="meal-name">{{item.label}}</view>
         <view class="cap ell">{{item.summary}}</view>
       </view>
-      <text class="num meal-kcal">{{item.kcal}} kcal</text>
+      <view class="meal-kcal-col">
+        <text class="num meal-kcal">{{item.kcal}} kcal</text>
+        <text wx:if="{{item.estimateMark}}" class="est-mark">{{item.estimateMark}}</text>
+      </view>
       <text class="chev">›</text>
     </view>
     <view wx:if="{{!hasPlan}}" class="cap goal-hint" bindtap="openGoal">还没有饮食目标。点这里设置。没设目标时，这一天不会被当成吃了 0。</view>

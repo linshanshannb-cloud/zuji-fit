@@ -1,6 +1,7 @@
 // 饮食今日页的纯展示与快照换算。不读存储、不改计划。
 const D = require('./date');
 const Fml = require('./diet-formula');
+const Portion = require('./diet-portion');
 
 const MEALS = [
   { id: 'breakfast', label: '早餐' },
@@ -193,6 +194,11 @@ function presentEntry(e) {
     example: !!e.example,
     kcal: storedKcal(e) == null ? Math.round(Fml.kcalOf(Number(e.carbsG) || 0, Number(e.proteinG) || 0, Number(e.fatG) || 0)) : storedKcal(e),
     portion: e.portion ? String(e.portion) : '',
+    portionText: (e.portion ? String(e.portion) : '') || (e.qty == null ? '' : (e.basis === 'perServing' ? e.qty + ' 份' : e.qty + ' g')),
+    portionNote: Portion.noteFor(e),
+    estimate: Portion.isEstimateEntry(e),
+    portionMeta: e.portionMeta || null,
+    nutri: e.nutri || null,
     fiberG: e.fiberG == null || e.fiberG === '' ? '' : e.fiberG,
     sugarG: e.sugarG == null || e.sugarG === '' ? '' : e.sugarG,
     saltMg: e.saltMg == null || e.saltMg === '' ? '' : e.saltMg,
@@ -215,6 +221,7 @@ function groupMeals(entries) {
       count: list.length,
       summary: mealSummary(list),
       kcal: sum.kcal,
+      estimateMark: Portion.dayEstimateMark(list),
       entries: list.map(presentEntry),
     };
   });
@@ -240,5 +247,5 @@ function migrateEntry(entry) {
 module.exports = {
   MEALS, WEEK, round1, fmtG, mealLabel, normalizeMeal, inferMeal, mealAt, dayTitle, isFoodEntry, basisPhrase,
   summaryBit, mealSummary, deriveSnap, scaleSnap, macroRemain, kcalRemain, dayBadge, intakeView,
-  presentEntry, groupMeals, migrateEntry, storedKcal, sumIntake, compactKcal,
+  presentEntry, groupMeals, migrateEntry, storedKcal, sumIntake, compactKcal, dayEstimateMark: Portion.dayEstimateMark,
 };

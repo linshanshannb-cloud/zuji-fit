@@ -3,6 +3,7 @@ const F = require('../../utils/format');
 const repo = require('../../utils/repo/index');
 const ui = require('../../utils/ui');
 const DM = require('../../utils/daymark');
+const P = require('../../utils/diet-present');
 const JS = require('../../utils/journal-stickers');
 const ymOf = s => { const p = D.parse(s); return { year: p.getFullYear(), month: p.getMonth() + 1 }; };
 Page({
@@ -44,13 +45,15 @@ Page({
       dietEntries = board.entries || [];
       const n = dietEntries.length;
       const futureDay = selected > today;
+      const mark = P.dayEstimateMark(dietEntries);
+      const markBit = mark ? (' · ' + mark) : '';
       diet = {
         show: true,
         recorded: !!board.recorded,
         kcal: board.recorded ? String(board.totals.kcal) : '',
         count: n,
-        tail: board.recorded ? ('kcal · ' + n + ' 条') : (futureDay ? '还没到这一天' : '还没记饮食'),
-        head: board.recorded ? (board.totals.kcal + ' kcal · ' + n + ' 条') : (futureDay ? '还没到这一天' : '还没记饮食'),
+        tail: board.recorded ? ('kcal · ' + n + ' 条' + markBit) : (futureDay ? '还没到这一天' : '还没记饮食'),
+        head: board.recorded ? (board.totals.kcal + ' kcal · ' + n + ' 条' + markBit) : (futureDay ? '还没到这一天' : '还没记饮食'),
       };
       const raw = repo.diet.intakeMarks(grid[0].date, grid[grid.length - 1].date);
       Object.keys(raw).forEach(d => { cals[d] = String(Math.round(Number(raw[d]))); });
@@ -93,7 +96,7 @@ Page({
     }), same, seen);
     const dietRows = this._journal(dietEntries.map((e, i) => ({
       id: e.id, kind: 'diet', name: e.displayName || e.name || '饮食',
-      sub: [e.mealLabel, e.qtyText || (e.portion ? e.portion + ' 份' : '')].filter(Boolean).join(' · '),
+      sub: [e.mealLabel, e.portionText || ''].filter(Boolean).join(' · '),
       kcal: (e.kcal == null ? '' : e.kcal) + ' kcal',
       sticker: JS.foodSticker(e.displayName || e.name), lg: JS.foodLarge(e.displayName || e.name),
     })), same, seen);

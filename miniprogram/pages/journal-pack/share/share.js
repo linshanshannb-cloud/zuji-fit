@@ -26,7 +26,7 @@ Page({
       kind: 'aerobic', name: a.title, activityType: a.activityType, minutes: a.durationMin, kcal: a.estimatedKcal, createdAt: a.createdAt || 0,
     })));
     const diet = (board.entries || []).map((e, i) => ({
-      name: e.displayName || e.name, mealLabel: e.mealLabel, kcal: typeof e.kcal === 'number' ? e.kcal : null, createdAt: e.createdAt || i,
+      name: e.displayName || e.name, mealLabel: e.mealLabel, kcal: typeof e.kcal === 'number' ? e.kcal : null, estimate: !!e.estimate, createdAt: e.createdAt || i,
     }));
     this.model = SD.buildShareModel({ date, train, diet });
   },

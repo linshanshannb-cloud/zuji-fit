@@ -28,9 +28,14 @@ function trainSummary(rows) {
 
 function dietSummary(rows) {
   if (!rows.length) return '还没有记录';
-  let kcal = 0, any = false;
-  rows.forEach(r => { if (pos(r.kcal)) { kcal += r.kcal; any = true; } });
-  return any ? '摄入 ' + kcal + ' kcal' : '';
+  let kcal = 0, any = false, est = 0;
+  rows.forEach(r => {
+    if (pos(r.kcal)) { kcal += r.kcal; any = true; }
+    if (r.estimate) est += 1;
+  });
+  if (!any) return '';
+  const mark = !est ? '' : (est === rows.length ? ' · 估算' : ' · 含估算');
+  return '摄入 ' + kcal + ' kcal' + mark;
 }
 
 function trainSub(row) {

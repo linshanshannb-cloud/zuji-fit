@@ -15,6 +15,14 @@ page { background: #F6F3EE; }
 .name { font-size: 32rpx; font-weight: 600; color: #2C241E; }
 .kcal { font-size: 28rpx; font-weight: 600; color: #2C241E; margin-left: 12rpx; white-space: nowrap; }
 .portion { margin-top: 6rpx; font-size: 26rpx; color: #6B6560; }
+.portion.note { color: #8A8078; }
+.link { text-decoration: underline; }
+.pchips { display: flex; flex-wrap: wrap; margin-top: 8rpx; }
+.pchip {
+  margin: 8rpx 12rpx 0 0; height: 56rpx; padding: 0 20rpx; border-radius: 999rpx; border: 2rpx solid #C8B8AA; color: #5D4E44;
+  font-size: 24rpx; display: inline-flex; align-items: center;
+}
+.pchip.on { background: #5D4E44; color: #fff; border-color: #5D4E44; }
 .macros { margin-top: 8rpx; font-size: 24rpx; color: #5C5854; line-height: 1.4; }
 .acts { margin-top: 12rpx; }
 .act { margin-right: 32rpx; min-height: 64rpx; display: inline-flex; align-items: center; font-size: 26rpx; color: #5C5854; }
