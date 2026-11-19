@@ -28,7 +28,7 @@ function summaryOf(cards) {
   return F.strengthSummary(s.exerciseCount, s.setCount, s.volumeKg, s.timeSec);
 }
 Page({
-  data: { id: '', w: null, cards: [], expanded: '', sorting: false, saveState: 'saved', canRetry: false, info: false, form: {}, today: '', shakeSet: '', narrow: false, readOnly: false, detailMissing: false, detailCorrupt: false },
+  data: { id: '', w: null, cards: [], expanded: '', sorting: false, saveState: 'saved', canRetry: false, info: false, form: {}, today: '', shakeSet: '', narrow: false, readOnly: false, detailMissing: false, detailCorrupt: false, completeNote: '' },
   onLoad(o) { this.setData({ id: o.id || '', today: D.today(), narrow: navNarrow(), readOnly: repo.isReadOnly() }); this.reload(); },
   onShow() { if (this._loaded) this.reload(); this._loaded = true; },
   onUnload() { // leaving before the first exercise: in-memory draft is discarded (DATA_MODEL §4.1). Unsaved edits stay in edit-buffer.
@@ -272,8 +272,42 @@ Page({
   onUndo(e) {
     if (!this.pageWritable()) return;
     const p = e.detail.payload, id = this.data.id;
+    if (p && p.kind === 'completeAll') {
+      const op = { key: 'undoAll:' + Date.now(), exec: () => repo.workouts.undoCompleteFilled(id, p.ids), apply() {} };
+      if (this.run(op.exec(), { op })) this.setData({ completeNote: '已撤销刚才勾选的 ' + (p.ids ? p.ids.length : 0) + ' 组' });
+      return;
+    }
     const op = { key: 'undo:' + Date.now(), exec: () => (p.kind === 'set' ? repo.workouts.restoreSet(id, p.data) : repo.workouts.restoreExercise(id, p.data)), apply() {} };
     this.run(op.exec(), { op });
+  },
+  completeAll() {
+    if (!this.pageWritable()) return;
+    const id = this.data.id;
+    const op = {
+      key: 'doneAll',
+      exec: () => repo.workouts.completeFilledSets(id),
+      apply(cards) {
+        (cards || []).forEach(c => {
+          const time = c.mode === 'time';
+          (c.sets || []).forEach(s => {
+            if (!s || s.done) return;
+            if (time ? s.durationSec >= 1 : s.reps >= 1) s.done = true;
+          });
+        });
+      },
+    };
+    const r = op.exec();
+    const note = r && r.ok ? repo.workouts.completeAllNote(r.data) : '';
+    if (!r || !r.ok) { this.run(r, { op }); return; }
+    if (!r.data.marked.length) {
+      this.setData({ completeNote: note });
+      wx.showToast({ title: r.data.skipped.length ? '没有可完成的组' : '都已经完成了', icon: 'none' });
+      return;
+    }
+    this.run(r, { op });
+    this.setData({ completeNote: note });
+    const undo = this.selectComponent('#undo');
+    if (undo) undo.show('已勾选 ' + r.data.marked.length + ' 组', { kind: 'completeAll', ids: r.data.marked.slice() });
   },
   // ---------- swipe delete
   swipeDelEx(e) { if (this.pageWritable()) this.removeExercise(e.currentTarget.dataset.id); },

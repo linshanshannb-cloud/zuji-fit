@@ -427,6 +427,72 @@ function setSetDone(workoutId, setId, done) {
     return { detail: Object.assign({}, detail, { sets: replaceIn(detail.sets, s) }), data: s };
   });
 }
+// 一键勾选：只标记已填好且能通过现有校验的组。不改重量、次数、时长、热身，不补空白。
+function classifyComplete(detail) {
+  const byEx = {};
+  (detail && detail.exercises || []).forEach(e => { if (e && e.id) byEx[e.id] = e; });
+  const marked = [], skipped = [], already = [];
+  (detail && detail.sets || []).forEach(s => {
+    const ex = s && byEx[s.workoutExerciseId];
+    if (!s || !ex) return;
+    const time = M.modeOf(ex) === 'time';
+    if (s.done === true) { already.push(s.id); return; }
+    if (!canComplete(time ? 'time' : 'reps', s)) {
+      skipped.push({ id: s.id, exercise: ex.nameSnapshot || '动作', index: s.index, reason: time ? '未填时长' : '未填次数' });
+      return;
+    }
+    marked.push(s.id);
+  });
+  return { marked, skipped, already };
+}
+function completeAllNote(plan) {
+  plan = plan || { marked: [], skipped: [], already: [] };
+  const n = plan.marked.length;
+  const missReps = plan.skipped.filter(s => s.reason === '未填次数');
+  const missTime = plan.skipped.filter(s => s.reason === '未填时长');
+  const why = [];
+  if (missReps.length) why.push(missReps.length + ' 组未填次数');
+  if (missTime.length) why.push(missTime.length + ' 组未填时长');
+  const names = plan.skipped.slice(0, 3).map(s => (s.exercise || '动作') + (s.index ? '第' + s.index + '组' : '') + s.reason);
+  const detail = plan.skipped.length && plan.skipped.length <= 3 ? names.join('，') : why.join('，');
+  if (!n && !plan.skipped.length) return '都已经完成了';
+  if (!n) return detail ? '没有可完成的组：' + detail : '没有可完成的组';
+  if (!plan.skipped.length) return '已勾选 ' + n + ' 组';
+  return '已勾选 ' + n + ' 组，还有 ' + detail;
+}
+function completeFilledSets(workoutId) {
+  const header = getHeader(workoutId);
+  if (!header) return C.fail('NOT_FOUND', '训练不存在');
+  if (isPending(workoutId)) return C.ok({ marked: [], skipped: [], already: [] });
+  const st = loadDetail(workoutId);
+  if (st.missing) return C.fail('DETAIL_MISSING', '训练详情丢失，只能查看');
+  if (st.blocked) return C.fail('DATA_CORRUPT', '记录已损坏，已暂停编辑');
+  const plan = classifyComplete(st.detail);
+  if (!plan.marked.length) return C.ok(plan);
+  const want = {};
+  plan.marked.forEach(id => { want[id] = true; });
+  return mutate(workoutId, detail => {
+    const now = C.now();
+    const sets = detail.sets.map(s => {
+      if (!s || !want[s.id] || s.done === true) return s;
+      const time = M.modeOf(findWE(detail, s.workoutExerciseId)) === 'time';
+      if (!canComplete(time ? 'time' : 'reps', s)) return s;
+      return Object.assign({}, s, { done: true, doneAt: now });
+    });
+    return { detail: Object.assign({}, detail, { sets }), data: plan };
+  });
+}
+function undoCompleteFilled(workoutId, ids) {
+  const want = {};
+  (ids || []).forEach(id => { if (id) want[id] = true; });
+  return mutate(workoutId, detail => {
+    const sets = detail.sets.map(s => {
+      if (!s || !want[s.id]) return s;
+      return Object.assign({}, s, { done: false, doneAt: null });
+    });
+    return { detail: Object.assign({}, detail, { sets }), data: Object.keys(want) };
+  });
+}
 // Switch an exercise between reps and time. Values already entered are kept.
 // A done set that lacks the new mode's number is un-ticked (never silently stored as 0).
 function setExerciseMode(workoutId, weId, mode) {
@@ -607,4 +673,4 @@ module.exports = { healHeaders, getPending, discardPending, daySummaries, person
   getDraft, getHeader, getWorkout, listWorkouts, workoutsOn, completedDates, referencedExerciseIds,
   createDraft, updateWorkout, completeWorkout, deleteWorkout, discardDraft, repeatFrom,
   addExercise, removeExercise, reorderExercises, moveExercise, updateExerciseNote, setExerciseMode,
-  addSet, updateSet, setSetDone, deleteSet, _headers: headers };
+  addSet, updateSet, setSetDone, completeFilledSets, undoCompleteFilled, completeAllNote, deleteSet, _headers: headers };

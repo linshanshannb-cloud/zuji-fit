@@ -1,6 +1,9 @@
 .nav-date { font-size: var(--fs-nav); font-weight: 600; }
 .status-line { padding: 8rpx 0 8rpx; }
 .tpl-row { padding-bottom: 8rpx; }
+.complete-all { min-height: 88rpx; display: flex; align-items: center; }
+.complete-all .cap { margin-left: 16rpx; }
+.complete-note { padding-bottom: 8rpx; }
 .tpl-row .cap { margin-left: 16rpx; }
 .ex-card { border: 1px solid var(--c-line); border-radius: var(--r-card); padding: 0 24rpx; margin-top: 24rpx; }
 .ex-head { height: 112rpx; }
