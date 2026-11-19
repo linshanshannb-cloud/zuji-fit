@@ -47,7 +47,7 @@ page { background: #F6F3EE; }
 @keyframes fade-only { from { opacity: 0; } to { opacity: 1; } }
 .entry-text { flex: 1; min-width: 0; margin-left: 24rpx; }
 .entry-name { display: block; font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 32rpx; font-weight: 600; color: #2C241E; }
-.entry-sub { display: block; margin-top: 4rpx; font-size: 24rpx; color: #6B6560; }
+.entry-sub { display: block; margin-top: 4rpx; font-size: 24rpx; line-height: 1.35; color: #6B6560; overflow-wrap: break-word; }
 .entry-kcal { font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 28rpx; font-weight: 600; color: #2C241E; margin-left: 12rpx; }
 .empty-hint { margin-top: 32rpx; text-align: center; font-size: 26rpx; line-height: 1.4; color: #6B6560; }
 .cal-mask { position: fixed; left: 0; right: 0; top: 0; bottom: 0; background: rgba(44, 36, 30, .4); z-index: 60; display: flex; align-items: flex-end; }

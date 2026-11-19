@@ -3,6 +3,7 @@ const K = require('./keys');
 const V = require('./validate');
 const M = require('./model');
 const C = require('./core');
+const F = require('../format');
 const { newId } = require('./ids');
 const exRepo = require('./exercises');
 const E = require('../exercises');
@@ -104,7 +105,9 @@ function getWorkout(id) {
   const d = st.detail || { workoutId: id, exercises: [], sets: [] };
   // Keep the index summary when the detail key is absent so the header is not presented as a real empty workout.
   const summary = st.missing
-    ? { exerciseCount: h.exerciseCount || 0, setCount: h.setCount || 0, volumeKg: h.volumeKg || 0, timeSec: h.timeSec || 0 }
+    ? { exerciseCount: h.exerciseCount || 0, setCount: h.setCount || 0,
+      volumeKg: typeof h.volumeKg === 'number' && isFinite(h.volumeKg) ? h.volumeKg : null,
+      timeSec: typeof h.timeSec === 'number' && isFinite(h.timeSec) ? h.timeSec : 0 }
     : M.computeSummary(d);
   return stamp(M.assemble(Object.assign({}, h, summary, { displayName: h.name || M.defaultWorkoutName(h.date) }), d, exRepo.get), st);
 }
@@ -139,11 +142,15 @@ function betterTime(b, best) { return b && (!best || b.durationSec > best.durati
 function daySummaries(date) {
   return workoutsOn(date).map(w => {
     const v = getWorkout(w.id) || { exercises: [], detailMissing: true, detailCorrupt: false };
+    const fromDetail = !v.detailMissing;
     return Object.assign({}, w, {
-      durationMin: w.startedAt && w.completedAt ? Math.max(1, Math.round((w.completedAt - w.startedAt) / 60000)) : null,
+      exerciseCount: fromDetail ? v.exerciseCount : (w.exerciseCount || 0),
+      setCount: fromDetail ? v.setCount : (w.setCount || 0),
+      volumeKg: fromDetail ? v.volumeKg : (typeof w.volumeKg === 'number' && isFinite(w.volumeKg) ? w.volumeKg : null),
+      timeSec: fromDetail ? (v.timeSec || 0) : (typeof w.timeSec === 'number' && isFinite(w.timeSec) ? w.timeSec : 0),
+      durationMin: F.sessionMinutes(w.startedAt, w.completedAt),
       detailMissing: !!v.detailMissing,
       detailCorrupt: !!v.detailCorrupt,
-      timeSec: v.timeSec || 0,
       top: (v.exercises || []).slice(0, 3).map(e => { const mode = M.modeOf(e); return { name: e.displayName, mode, sets: e.sets.filter(M.isCountable).length, best: bestSet(e.sets, mode) }; }),
       more: Math.max(0, (v.exercises || []).length - 3) });
   });

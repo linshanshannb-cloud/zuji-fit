@@ -20,7 +20,7 @@ Page({
     Object.keys(repo.aerobic.completedDates()).forEach(d => { marks[d] = true; });
     const ws = repo.workouts.daySummaries(selected), as = repo.aerobic.daySummaries(selected);
     const strength = ws.map(w => ({
-      id: w.id, kind: 'strength', title: w.displayName, duration: w.durationMin, detailMissing: w.detailMissing, createdAt: w.createdAt || 0,
+      id: w.id, kind: 'strength', title: w.displayName, duration: w.durationMin, volumeKg: w.volumeKg, timeSec: w.timeSec, detailMissing: w.detailMissing, createdAt: w.createdAt || 0,
       stats: F.strengthStats(w.exerciseCount, w.setCount, w.volumeKg, w.timeSec),
       meta: F.strengthMeta(w.exerciseCount, w.setCount, w.volumeKg, w.timeSec),
       top: w.top.map(t => ({ name: t.name, text: t.sets + '组' + (t.best ? ' · 最佳 ' + F.bestLabel(t.best) : '') })), more: w.more }));
@@ -87,7 +87,7 @@ Page({
       const label = DM.partsLabel(detail && detail.exercises);
       return {
         id: c.id, kind: c.kind, name: (label || '力量') + ' · 力量',
-        sub: c.duration ? c.duration + ' 分钟' : '',
+        sub: F.strengthCardSub(c.volumeKg, c.timeSec, c.duration),
         sticker: JS.trainSticker('strength'), lg: false,
       };
     }), same, seen);

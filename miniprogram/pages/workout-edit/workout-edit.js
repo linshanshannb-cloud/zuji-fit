@@ -1,6 +1,7 @@
 // P3 新建/编辑训练. Every edit is written immediately through the repo (sync storage), so "autosave" = per-edit write.
 const D = require('../../utils/date');
 const F = require('../../utils/format');
+const M = require('../../utils/repo/model');
 const repo = require('../../utils/repo/index');
 const ui = require('../../utils/ui');
 const R = require('../../utils/rest');
@@ -21,6 +22,10 @@ function decorate(cards) {
     c.doneCount = c.sets.filter(s => s && s.done).length;
   });
   return cards;
+}
+function summaryOf(cards) {
+  const s = M.summaryFromCards(cards);
+  return F.strengthSummary(s.exerciseCount, s.setCount, s.volumeKg, s.timeSec);
 }
 Page({
   data: { id: '', w: null, cards: [], expanded: '', sorting: false, saveState: 'saved', canRetry: false, info: false, form: {}, today: '', shakeSet: '', narrow: false, readOnly: false, detailMissing: false, detailCorrupt: false },
@@ -46,10 +51,11 @@ Page({
     let expanded = this.data.expanded;
     if (!cards.some(c => c.id === expanded)) expanded = cards.length ? cards[cards.length - 1].id : '';
     const pending = !detailMissing && !detailCorrupt && buf.has(this.data.id);
+    const summary = (detailMissing || detailCorrupt) ? F.strengthSummary(w.exerciseCount, w.setCount, w.volumeKg, w.timeSec) : summaryOf(cards);
     this.setData({ cards, expanded, detailMissing, detailCorrupt, readOnly: repo.isReadOnly() || detailMissing || detailCorrupt,
       saveState: pending ? 'failed' : 'saved', canRetry: pending,
       w: { id: w.id, status: w.status, persisted: w.persisted !== false, dateLabel: F.dateLabel(w.date), dateShort: F.md(w.date), date: w.date,
-        name: w.name, note: w.note, placeholder: F.md(w.date) + '训练', summary: F.strengthSummary(w.exerciseCount, w.setCount, w.volumeKg, w.timeSec) } });
+        name: w.name, note: w.note, placeholder: F.md(w.date) + '训练', summary } });
   },
   // Run a repo mutation. Success reloads from storage, then replays any still-pending edits on top.
   // Storage failure keeps every failed edit (not just the last) and never flips the status line back to 已自动保存.
@@ -68,7 +74,9 @@ Page({
         const cards = cloneCards(this.data.cards);
         opts.op.apply(cards);
         decorate(cards);
-        this.setData({ cards });
+        const patch = { cards };
+        if (!this.data.detailMissing && !this.data.detailCorrupt && this.data.w) patch.w = Object.assign({}, this.data.w, { summary: summaryOf(cards) });
+        this.setData(patch);
       }
       this.setData({ saveState: 'failed', canRetry: buf.has(id) });
       return false;

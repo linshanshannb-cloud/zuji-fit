@@ -2,8 +2,16 @@
 <view class="page page-pad-bar repeat-pad" wx:if="{{w}}">
   <view wx:if="{{w.name}}" class="sub">{{w.name}}</view>
   <view class="row"><text class="h1">{{w.date}}</text><text class="tag tag-gray" style="margin-left:16rpx">已完成</text></view>
-  <view class="sub" style="margin-top:8rpx">{{w.time}}</view>
-  <view class="row stats"><view wx:for="{{w.stats}}" wx:key="k" class="stat"><view class="sv num">{{item.v}}</view><view class="cap">{{item.k}}</view></view></view>
+  <view class="sub session-line">{{w.time}}</view>
+  <view class="stat-grid">
+    <view wx:for="{{w.stats}}" wx:key="role" class="stat-cell">
+      <view class="stat-box">
+        <view class="sv num">{{item.v}}<text wx:if="{{item.unit}}" class="stat-unit"> {{item.unit}}</text></view>
+        <view class="cap">{{item.k}}</view>
+        <view wx:if="{{item.hint}}" class="stat-hint">{{item.hint}}</view>
+      </view>
+    </view>
+  </view>
   <view wx:if="{{detailMissing}}" class="sub danger">训练详情丢失，只能查看。详情恢复后会正常显示。</view>
   <view wx:elif="{{detailCorrupt}}" class="sub danger">有 {{corruptCount}} 条损坏记录，原数据已保留，暂停编辑。</view>
   <view wx:for="{{w.exercises}}" wx:for-item="ex" wx:key="id" class="section">
