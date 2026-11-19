@@ -49,8 +49,12 @@ function sticker(ctx, img, x, y, size, deg) {
   ctx.restore();
 }
 
-function sectionHead(ctx, y, title, color, summary) {
+function sectionHead(ctx, y, title, color, summary, lines) {
   text(ctx, title, 80, y, '700 28px sans-serif', color, 'left');
+  if (lines && lines.length) {
+    lines.forEach((line, i) => text(ctx, line, 80, y + 40 + i * 32, '500 22px sans-serif', INK, 'left'));
+    return y + 36 + lines.length * 32;
+  }
   if (summary) text(ctx, summary, W - 80, y, '700 24px serif', INK, 'right');
   return y + 36;
 }
@@ -80,6 +84,15 @@ function drawRows(ctx, y, rows, images, opts) {
       ctx.restore();
       y += 16;
     }
+    if (row.compact) {
+      let ly = y + 28;
+      (row.lines || []).forEach(line => {
+        text(ctx, line.text, 80, ly, line.kind === 'ex' ? '700 24px serif' : '400 22px sans-serif', line.kind === 'warm' ? ORANGE : (line.kind === 'ex' ? INK : MUTED), 'left');
+        ly += 34;
+      });
+      y += SD.rowSpan(row);
+      return;
+    }
     const size = opts.large && row.large ? 172 : 140;
     sticker(ctx, images[row.sticker], 80, y, size, row.rot || 0);
     const tx = 80 + size + 28;
@@ -87,7 +100,13 @@ function drawRows(ctx, y, rows, images, opts) {
     text(ctx, row.name, tx, y + (row.tag ? 68 : 56), '700 32px serif', INK, 'left');
     if (row.sub) text(ctx, row.sub, tx, y + (row.tag ? 104 : 96), '400 22px sans-serif', MUTED, 'left');
     if (row.kcalText) text(ctx, row.kcalText, W - 80, y + 68, '700 26px serif', INK, 'right');
-    y += Math.max(148, size + 8);
+    let ly = y + 128;
+    (row.lines || []).forEach(line => {
+      const strong = line.kind === 'ex';
+      text(ctx, line.text, tx, ly, strong ? '700 24px serif' : '400 22px sans-serif', line.kind === 'warm' ? ORANGE : (strong ? INK : MUTED), 'left');
+      ly += 34;
+    });
+    y += SD.rowSpan(row);
   });
   return y;
 }
@@ -111,21 +130,28 @@ function drawShareCard(ctx, model, images) {
     y = emptySlot(ctx, y + 130, '训练还是空的');
     y = emptySlot(ctx, y + 8, '饮食还是空的');
   } else {
-    y = sectionHead(ctx, y, '训练', ORANGE, model.train.summary);
-    if (model.train.empty) y = emptySlot(ctx, y + 12, '还没有记训练');
-    else {
-      y = drawRows(ctx, y + 8, model.train.rows, images, { large: false });
-      if (model.train.more) text(ctx, '等' + model.train.more + '项', 80, y + 28, '400 22px sans-serif', MUTED, 'left');
+    const showTrain = !(model.train && model.train.skip);
+    const showDiet = !(model.diet && model.diet.skip);
+    if (showTrain) {
+      y = sectionHead(ctx, y, '训练', ORANGE, model.train.summaryLines && model.train.summaryLines.length ? '' : model.train.summary, model.train.summaryLines);
+      if (model.train.empty) y = emptySlot(ctx, y + 12, '还没有记训练');
+      else {
+        y = drawRows(ctx, y + 8, model.train.rows, images, { large: false });
+        if (model.train.more) text(ctx, '等' + model.train.more + '项', 80, y + 28, '400 22px sans-serif', MUTED, 'left');
+      }
     }
-    y += 48;
-    y = sectionHead(ctx, y, '饮食', INK, model.diet.summary);
-    if (model.diet.empty) y = emptySlot(ctx, y + 12, '还没有记饮食');
-    else {
-      y = drawRows(ctx, y + 8, model.diet.rows, images, { large: true });
-      if (model.diet.more) text(ctx, '等' + model.diet.more + '项', 80, y + 28, '400 22px sans-serif', MUTED, 'left');
+    if (showTrain && showDiet) y += 48;
+    if (showDiet) {
+      y = sectionHead(ctx, y, '饮食', INK, model.diet.summaryLines && model.diet.summaryLines.length ? '' : model.diet.summary, model.diet.summaryLines);
+      if (model.diet.empty) y = emptySlot(ctx, y + 12, '还没有记饮食');
+      else {
+        y = drawRows(ctx, y + 8, model.diet.rows, images, { large: true });
+        if (model.diet.more) text(ctx, '等' + model.diet.more + '项', 80, y + 28, '400 22px sans-serif', MUTED, 'left');
+      }
     }
   }
   text(ctx, '组迹', 80, height - 48, '700 20px sans-serif', FAINT, 'left');
+  if (model.page && model.page.n > 1) text(ctx, model.page.i + '/' + model.page.n, W / 2, height - 48, '500 20px sans-serif', MUTED, 'center');
   text(ctx, '来自组迹日历', W - 80, height - 48, '400 20px sans-serif', FAINT, 'right');
 }
 

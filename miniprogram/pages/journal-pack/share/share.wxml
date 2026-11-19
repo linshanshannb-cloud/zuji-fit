@@ -1,8 +1,15 @@
 <nav-bar mode="back" title="分享当天"></nav-bar>
 <view class="page share-page">
+  <view class="modes">
+    <view class="mode {{mode==='brief'?'on':''}}" data-mode="brief" bindtap="setMode">精简版</view>
+    <view class="mode {{mode==='detail'?'on':''}}" data-mode="detail" bindtap="setMode">详细版</view>
+  </view>
   <view wx:if="{{busy}}" class="wait">正在生成手账…</view>
   <view wx:elif="{{fail}}" class="wait">{{fail}}</view>
-  <image wx:else class="preview" src="{{path}}" mode="widthFix" />
+  <block wx:else>
+    <view wx:if="{{paths.length>1}}" class="slice-note">这一天比较长，分成 {{paths.length}} 张。保存会全部写入相册，分享时只附上第一张。</view>
+    <image wx:for="{{paths}}" wx:for-index="i" wx:key="i" class="preview" src="{{item}}" mode="widthFix" />
+  </block>
   <view class="actions">
     <view class="btn btn-sec {{!path ? 'is-off' : ''}} {{saving ? 'is-busy' : ''}}"
           hover-class="{{path && !saving ? 'is-press' : 'none'}}" hover-stay-time="80" bindtap="save">

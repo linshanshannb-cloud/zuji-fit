@@ -95,4 +95,4 @@ function strengthCardSub(volumeKg, timeSec, durationMin) {
   if (typeof durationMin === 'number' && isFinite(durationMin) && durationMin > 0) bits.push('用时 ' + durationMin + ' 分钟');
   return bits.join(' · ');
 }
-module.exports = { dateLabel, md, mdSlash, kg, fixed1, thousands, signed, hm, lastTwo, capFirst, dur, bestLabel, showVolume, strengthStats, strengthMeta, strengthSummary, sessionMinutes, sessionLine, strengthCardSub };
+module.exports = { dateLabel, md, mdSlash, kg, fixed1, thousands, signed, hm, lastTwo, capFirst, dur, bestLabel, showVolume, volumeBit, strengthStats, strengthMeta, strengthSummary, sessionMinutes, sessionLine, strengthCardSub };
