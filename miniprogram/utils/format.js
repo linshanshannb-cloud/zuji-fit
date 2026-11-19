@@ -50,8 +50,15 @@ function strengthStats(exerciseCount, setCount, volumeKg, timeSec) {
     { role: 'sets', v: setCount, k: '组' },
   ];
   if (!knownKg(volumeKg)) stats.push({ role: 'volume', v: '缺失', k: '总训练重量', hint: '没有可核对的组数据' });
-  else if (showVolume(volumeKg, timeSec)) stats.push({ role: 'volume', v: thousands(volumeKg), unit: 'kg', k: '总训练重量', hint: '累计负重，不是体重' });
-  if ((Number(timeSec) || 0) > 0) stats.push({ role: 'timed', v: dur(timeSec), k: '计时组累计', hint: '不含休息' });
+  else if (showVolume(volumeKg, timeSec)) stats.push({ role: 'volume', v: thousands(volumeKg), unit: 'kg', k: '总训练重量' });
+  const sec = Math.round(Number(timeSec) || 0);
+  if (sec > 0) {
+    const timed = { role: 'timed', k: '计时组累计', hint: '不含休息' };
+    // Whole minutes use the same secondary unit as kg. Other lengths stay one string (1分30秒).
+    if (sec >= 60 && sec % 60 === 0) { timed.v = String(sec / 60); timed.unit = '分钟'; }
+    else timed.v = dur(sec);
+    stats.push(timed);
+  }
   return stats;
 }
 function strengthBits(exerciseCount, setCount, volumeKg, timeSec, exWord) {

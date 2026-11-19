@@ -66,11 +66,15 @@ test('mixed workout keeps session minutes and timed-set seconds apart, including
   assert.strictEqual(stats[2].v, '38,152');
   assert.strictEqual(stats[2].unit, 'kg');
   assert.strictEqual(stats[2].k, '总训练重量');
-  assert.ok(stats[2].hint.includes('不是体重'));
-  assert.strictEqual(stats[3].v, '8分钟');
+  assert.strictEqual(stats[2].hint, undefined);
+  const partial = F.strengthStats(1, 1, 100, 90);
+  assert.strictEqual(partial.find(s => s.role === 'timed').v, '1分30秒');
+  assert.strictEqual(partial.find(s => s.role === 'timed').unit, undefined);
+  assert.strictEqual(stats[3].v, '8');
+  assert.strictEqual(stats[3].unit, '分钟');
   assert.strictEqual(stats[3].k, '计时组累计');
   assert.ok(stats[3].hint.includes('不含休息'));
-  assert.ok(!stats[2].v.includes('分钟') && !stats[3].v.includes('38'));
+  assert.ok(!stats[2].v.includes('分钟') && !String(stats[3].v).includes('38'));
   assert.strictEqual(F.strengthCardSub(38152, 480, 97), '38,152 kg · 用时 97 分钟');
   assert.strictEqual(F.strengthSummary(8, 37, 38152, 480), '8 个动作 · 37 组 · 38,152 kg · 计时 8分钟');
 });
@@ -166,7 +170,8 @@ test('saved workout: card matches detail, stale header is not rewritten, edit an
   const timed = detail.data.w.stats.find(s => s.role === 'timed');
   assert.strictEqual(vol.v, '800');
   assert.strictEqual(vol.unit, 'kg');
-  assert.strictEqual(timed.v, '2分钟');
+  assert.strictEqual(timed.v, '2');
+  assert.strictEqual(timed.unit, '分钟');
   assert.notStrictEqual(vol.role, timed.role);
 
   const doneBefore = repo.workouts.getWorkout(w.id).exercises.map(e => e.sets.map(s => s.done));
